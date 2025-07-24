@@ -1,0 +1,200 @@
+import React from 'react';
+import {
+  Container,
+  Typography,
+  Box,
+  Grid,
+  Card,
+  CardContent,
+  Avatar,
+  Button,
+  IconButton,
+} from '@mui/material';
+import { Twitter, Instagram, LinkedIn, Language } from '@mui/icons-material';
+import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
+import { useQuery } from '@tanstack/react-query';
+import { motion } from 'framer-motion';
+import { contentService } from '../services/contentService';
+import LoadingSpinner from '../components/common/LoadingSpinner';
+
+const AuthorsPage: React.FC = () => {
+  const { data: authors, isLoading } = useQuery({
+    queryKey: ['authors'],
+    queryFn: contentService.getAuthors,
+  });
+
+  if (isLoading) {
+    return <LoadingSpinner message="Loading authors..." />;
+  }
+
+  const getSocialIcon = (platform: string) => {
+    switch (platform) {
+      case 'twitter': return <Twitter />;
+      case 'instagram': return <Instagram />;
+      case 'linkedin': return <LinkedIn />;
+      case 'website': return <Language />;
+      default: return <Language />;
+    }
+  };
+
+  return (
+    <>
+      <Helmet>
+        <title>Authors - Mokua Literary Blog</title>
+        <meta
+          name="description"
+          content="Meet our talented authors and contributors who bring diverse voices and perspectives to contemporary literature."
+        />
+        <meta property="og:title" content="Authors - Mokua Literary Blog" />
+        <meta
+          property="og:description"
+          content="Meet our talented authors and contributors who bring diverse voices and perspectives to contemporary literature."
+        />
+      </Helmet>
+
+      <Container maxWidth="lg" sx={{ py: 8 }}>
+        <Box sx={{ textAlign: 'center', mb: 8 }}>
+          <Typography
+            variant="h1"
+            sx={{
+              fontSize: { xs: '2.5rem', md: '3.5rem' },
+              fontFamily: '"Playfair Display", serif',
+              fontWeight: 700,
+              mb: 3,
+            }}
+          >
+            Our Authors
+          </Typography>
+          <Typography
+            variant="h6"
+            color="text.secondary"
+            sx={{ maxWidth: 600, mx: 'auto', lineHeight: 1.6 }}
+          >
+            Meet the talented writers and contributors who bring diverse voices 
+            and perspectives to our literary community.
+          </Typography>
+        </Box>
+
+        {authors && authors.length > 0 ? (
+          <Grid container spacing={4}>
+            {authors.map((author, index) => (
+              <Grid item xs={12} sm={6} md={4} key={author.id}>
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                >
+                  <Card
+                    sx={{
+                      height: '100%',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      borderRadius: 2,
+                      boxShadow: 2,
+                      '&:hover': {
+                        boxShadow: 8,
+                        transform: 'translateY(-4px)',
+                      },
+                      transition: 'all 0.3s ease',
+                    }}
+                  >
+                    <CardContent sx={{ flexGrow: 1, p: 4 }}>
+                      <Box sx={{ textAlign: 'center', mb: 3 }}>
+                        <Avatar
+                          src={author.avatar}
+                          alt={author.name}
+                          sx={{
+                            width: 100,
+                            height: 100,
+                            mx: 'auto',
+                            mb: 2,
+                            boxShadow: 2,
+                          }}
+                        />
+                        <Typography
+                          variant="h5"
+                          component={Link}
+                          to={`/author/${author.slug}`}
+                          sx={{
+                            fontFamily: '"Playfair Display", serif',
+                            fontWeight: 600,
+                            textDecoration: 'none',
+                            color: 'text.primary',
+                            '&:hover': { color: 'primary.main' },
+                          }}
+                        >
+                          {author.name}
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+                          {author.postsCount} {author.postsCount === 1 ? 'article' : 'articles'}
+                        </Typography>
+                      </Box>
+
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        sx={{
+                          mb: 3,
+                          display: '-webkit-box',
+                          '-webkit-line-clamp': 4,
+                          '-webkit-box-orient': 'vertical',
+                          overflow: 'hidden',
+                          lineHeight: 1.6,
+                        }}
+                      >
+                        {author.bio}
+                      </Typography>
+
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                          mt: 'auto',
+                        }}
+                      >
+                        <Box sx={{ display: 'flex', gap: 1 }}>
+                          {author.socialLinks.map((link) => (
+                            <IconButton
+                              key={link.platform}
+                              href={link.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              size="small"
+                              color="primary"
+                            >
+                              {getSocialIcon(link.platform)}
+                            </IconButton>
+                          ))}
+                        </Box>
+                        
+                        <Button
+                          component={Link}
+                          to={`/author/${author.slug}`}
+                          variant="outlined"
+                          size="small"
+                          sx={{ borderRadius: 2 }}
+                        >
+                          View Profile
+                        </Button>
+                      </Box>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              </Grid>
+            ))}
+          </Grid>
+        ) : (
+          <Box sx={{ textAlign: 'center', py: 8 }}>
+            <Typography variant="h6" color="text.secondary">
+              No authors found.
+            </Typography>
+          </Box>
+        )}
+      </Container>
+    </>
+  );
+};
+
+export default AuthorsPage;
