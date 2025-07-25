@@ -118,7 +118,7 @@ const ComingSoonPage: React.FC = () => {
             alt={content.image.alt}
             className="coming-soon-book-image"
             onError={(e) => {
-              e.currentTarget.src = 'https://images.pexels.com/photos/46274/pexels-photo-46274.jpeg?auto=compress&w=400&h=600&fit=crop';
+              e.currentTarget.src = '/images/coming-soon-main.jpg';
             }}
           />
         </div>
