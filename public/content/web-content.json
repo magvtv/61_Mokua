@@ -6,10 +6,10 @@
       ],
       "header": {
         "title": "A New Chapter Awaits",
-        "subtitle": "Mokua’s Voice — Stories that Linger Beyond the Page"
+        "subtitle": "Mokua's Voice — Stories that Linger Beyond the Page"
       },
       "content": {
-        "mainText": "Every great tale begins in silence before the world hears its echo. Mokua’s platform is almost here — a place where prose breathes, poetry resonates, and every word feels like a heartbeat.",
+        "mainText": "Every great tale begins in silence before the world hears its echo. Mokua's platform is almost here — a place where prose breathes, poetry resonates, and every word feels like a heartbeat.",
         "highlights": [
           "Be part of the first readers to witness the unveiling.",
           "Reserve your front-row seat to stories that will outlive the season."
@@ -18,11 +18,11 @@
       "form": {
         "placeholder": "your.email@example.com",
         "buttonText": "get notified",
-        "successMessage": "Thank you for stepping into the story early — you’ll be the first to know when we go live.",
+        "successMessage": "Thank you for stepping into the story early — you'll be the first to know when we go live.",
         "errorMessage": "We missed a page. Please try again."
       },
       "image": {
-        "src": "/images/coming-soon-cover.jpg",
+        "src": "/images/coming-soon-cover.svg",
         "alt": "Mokua Literary Platform — Coming Soon"
       }
     }
