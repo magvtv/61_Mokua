@@ -86,10 +86,16 @@
 }
 
 .coming-soon-book-image {
-  width: 220px;
+  width: 13.75em;
   height: auto;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0.625em 1.875em rgba(0, 0, 0, 0.3);
   margin-bottom: 1rem;
+}
+
+@media (min-width: 1024px) {
+  .coming-soon-book-image {
+    width: 23em;
+  }
 }
 
 .coming-soon-content {
