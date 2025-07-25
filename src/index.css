@@ -2,25 +2,68 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Google Fonts import for EB Garamond and Faculty Glyphic */
-@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap'); /* Placeholder for Faculty Glyphic */
+/* Font Variables for easy switching */
+:root {
+  --body-font: 'Hina Mincho', serif;
+  --heading-font: 'Faculty Glyphic', sans-serif;
+}
+
+/* Custom Font Imports */
+@font-face {
+  font-family: 'Faculty Glyphic';
+  src: url('/fonts/Faculty_Glyphic/FacultyGlyphic-Regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'EB Garamond';
+  src: url('/fonts/EB_Garamond/EBGaramond-Regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Hina Mincho';
+  src: url('/fonts/Hina_Mincho/HinaMincho-Regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Baskervville';
+  src: url('/fonts/Baskervville/Baskervville-Regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
 
 .coming-soon-root {
   min-height: 100vh;
-  background: linear-gradient(135deg, #e6e2c3 0%, #b7b49a 100%);
+  background: linear-gradient(135deg, #2E7D8A 0%, #1A202C 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'EB Garamond', serif;
+  font-family: var(--body-font);
+  position: relative;
+  overflow: hidden;
+}
+
+.coming-soon-date {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-family: var(--body-font);
+  font-size: 0.9rem;
+  letter-spacing: 0.05em;
 }
 
 .coming-soon-frame {
-  border: 2px solid #fff;
-  border-radius: 18px;
-  background: rgba(255,255,255,0.08);
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.10);
-  padding: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 0;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  padding: 2rem;
   max-width: 420px;
   width: 100%;
   margin: 1.5rem;
@@ -37,10 +80,9 @@
 }
 
 .coming-soon-book-image {
-  width: 180px;
+  width: 220px;
   height: auto;
-  border-radius: 8px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
   margin-bottom: 1rem;
 }
 
@@ -49,125 +91,165 @@
 }
 
 .coming-soon-nav {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
   display: flex;
-  justify-content: center;
-  gap: 1.5rem;
-  font-size: 1rem;
-  margin-bottom: 1.5rem;
+  gap: 2rem;
+  font-family: var(--body-font);
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.coming-soon-nav-item {
+  cursor: pointer;
+  transition: color 0.3s ease;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.coming-soon-nav-item:hover {
   color: #fff;
-  opacity: 0.8;
 }
 
 .coming-soon-title {
-  font-family: 'Montserrat', serif; /* Replace with Faculty Glyphic when available */
-  font-size: 2rem;
-  font-weight: 700;
+  font-family: var(--heading-font);
+  font-size: 2.5rem;
+  font-weight: normal;
   color: #fff;
   margin-bottom: 1rem;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+}
+
+.coming-soon-subtitle {
+  font-family: var(--body-font);
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 1.5rem;
+  font-weight: normal;
+  letter-spacing: 0.02em;
 }
 
 .coming-soon-description {
   font-size: 1.1rem;
-  color: #f5f5f5;
+  color: rgba(255, 255, 255, 0.8);
   margin-bottom: 2rem;
-  line-height: 1.6;
+  line-height: 1.8;
 }
 
 .coming-soon-signup {
   display: flex;
   gap: 0.5rem;
   justify-content: center;
+  margin-top: 2rem;
 }
 
 .coming-soon-input {
-  padding: 0.6rem 1rem;
-  border: 1px solid #fff;
-  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.3);
   background: transparent;
   color: #fff;
-  font-size: 1rem;
-  font-family: 'EB Garamond', serif;
+  font-size: 0.9rem;
+  font-family: var(--body-font);
   outline: none;
+  min-width: 240px;
 }
 
 .coming-soon-input::placeholder {
-  color: #e0e0e0;
-  opacity: 1;
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .coming-soon-signup-btn {
-  padding: 0.6rem 1.2rem;
-  border: 1px solid #fff;
+  padding: 0.5rem 1.2rem;
+  border: 1px solid rgba(255, 255, 255, 0.3);
   background: transparent;
-  color: #fff;
-  border-radius: 4px;
-  font-size: 1rem;
-  font-family: 'Montserrat', serif;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.9rem;
+  font-family: var(--heading-font);
   cursor: pointer;
-  transition: background 0.2s, color 0.2s;
+  transition: all 0.3s ease;
+  letter-spacing: 0.05em;
+}
+
+.uppercase {
+  text-transform: uppercase;
 }
 
 .coming-soon-signup-btn:hover {
-  background: #fff;
-  color: #b7b49a;
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.5);
+  color: #fff;
 }
 
 .coming-soon-loading,
 .coming-soon-error {
-  color: #fff;
-  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1rem;
   text-align: center;
   padding: 2rem;
-  background: rgba(255,255,255,0.08);
-  border-radius: 8px;
-  border: 2px solid #fff;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .coming-soon-error {
-  color: #ff6b6b;
+  color: #FF6B6B;
 }
 
-.coming-soon-subtitle {
-  font-family: 'EB Garamond', serif;
-  font-size: 1.2rem;
-  color: #fff;
-  opacity: 0.9;
-  margin-bottom: 2rem;
-  font-weight: 400;
-  letter-spacing: 0.02em;
+/* Font switcher classes */
+.font-eb-garamond {
+  --body-font: 'EB Garamond', serif;
 }
 
-@media (min-width: 700px) {
+.font-hina-mincho {
+  --body-font: 'Hina Mincho', serif;
+}
+
+.font-baskervville {
+  --body-font: 'Baskervville', serif;
+}
+
+@media (min-width: 1024px) {
   .coming-soon-frame {
     flex-direction: row;
-    max-width: 900px;
-    gap: 3rem;
+    max-width: 1200px;
+    gap: 4rem;
     padding: 3rem;
-  }
-  .coming-soon-image-section {
-    width: 50%;
     align-items: center;
-    justify-content: flex-end;
   }
-  .coming-soon-content {
-    width: 50%;
-    text-align: left;
-    display: flex;
-    flex-direction: column;
+  
+  .coming-soon-image-section {
+    width: 45%;
+    align-items: center;
     justify-content: center;
-    align-items: flex-start;
   }
+  
+  .coming-soon-book-image {
+    width: 380px;
+    margin-bottom: 0;
+  }
+  
+  .coming-soon-content {
+    width: 55%;
+    text-align: left;
+    padding-right: 2rem;
+  }
+  
   .coming-soon-title {
-    font-size: 2.8rem;
+    font-size: 3.5rem;
   }
+  
   .coming-soon-description {
     font-size: 1.2rem;
   }
+  
   .coming-soon-signup {
     justify-content: flex-start;
   }
-  .coming-soon-subtitle {
-    font-size: 1.4rem;
+  
+  .coming-soon-nav {
+    top: 2rem;
+    right: 2rem;
   }
 }
