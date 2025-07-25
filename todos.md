@@ -55,8 +55,6 @@
 - [] Open Graph: Social media preview optimization
 
 
-- Thinking of having a coming soon page that follows a design i have in mind. let us do that
-
 ## AESTHETIC FEATURES
 1. Have the feel of a book, 
 - Choose font (EB Garamond + Faculty Glyphic from Google fonts -- good idea to install)
@@ -84,6 +82,9 @@
 - Typography: Use Google Fonts for EB Garamond (body) and Faculty Glyphic (headers).
 - Image: Place a book or placeholder image on the left (desktop) or top (mobile).
 - Content: Title, subtitle, description, email signup, and minimal navigation (if any).
+
+## 
+
 
 # TECHNICAL DEBT
 - Use sass + tailwindcss instead of default css files
