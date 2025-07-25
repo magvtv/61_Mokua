@@ -26,3 +26,4 @@ dist-ssr
 
 # design & web concepts
 designs/
+.vercel
