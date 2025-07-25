@@ -36,6 +36,8 @@ const ComingSoonPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [fontClass, setFontClass] = useState('font-hina-mincho');
   const { addNotification } = useAppStore();
 
@@ -72,18 +74,41 @@ const ComingSoonPage: React.FC = () => {
     if (!content) return;
 
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Show loading state
+      setIsSubmitting(true);
+      
+      // Call serverless function
+      const response = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, name }),
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to subscribe');
+      }
+      
+      // Success notification
       addNotification({
         type: 'success',
         message: content.form.successMessage
       });
+      
+      // Reset form
       setEmail('');
+      setName('');
     } catch (err) {
+      // Error notification
       addNotification({
         type: 'error',
-        message: content.form.errorMessage
+        message: err instanceof Error ? err.message : content.form.errorMessage
       });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -151,17 +176,29 @@ const ComingSoonPage: React.FC = () => {
               </React.Fragment>
             ))}
           </p>
-          <form className="coming-soon-signup flex flex-col sm:flex-row gap-2 w-full max-w-md" onSubmit={handleSubmit}>
+          <form className="coming-soon-signup flex flex-col gap-2 w-full max-w-md" onSubmit={handleSubmit}>
+            <input
+              type="text"
+              placeholder="Your Name"
+              className="coming-soon-input"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
             <input
               type="email"
               placeholder={content.form.placeholder}
-              className="coming-soon-input flex-1"
+              className="coming-soon-input"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
             />
-            <button type="submit" className="coming-soon-signup-btn uppercase">
-              {content.form.buttonText}
+            <button
+              type="submit"
+              className="coming-soon-signup-btn uppercase"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? 'Submitting...' : content.form.buttonText}
             </button>
           </form>
           {/* Footer */}
