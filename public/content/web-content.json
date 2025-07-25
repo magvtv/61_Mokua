@@ -1,6 +1,6 @@
 {
     "comingSoon": {
-      "date": "2025.09",
+      "date": "",
       "navigation": [
         { "id": "instagram", "label": "Follow Mokua", "url": "https://instagram.com/mokua" }
       ],
@@ -22,7 +22,7 @@
         "errorMessage": "We missed a page. Please try again."
       },
       "image": {
-        "src": "/images/coming-soon-cover.svg",
+        "src": "",
         "alt": "Mokua Literary Platform — Coming Soon"
       }
     }
