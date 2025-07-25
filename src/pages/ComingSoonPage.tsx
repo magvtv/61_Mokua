@@ -25,6 +25,10 @@ interface ComingSoonContent {
     src: string;
     alt: string;
   };
+  footer: {
+    tagline: string;
+    copyright: string;
+  };
 }
 
 const ComingSoonPage: React.FC = () => {
@@ -160,6 +164,11 @@ const ComingSoonPage: React.FC = () => {
               {content.form.buttonText}
             </button>
           </form>
+          {/* Footer */}
+          <div className="mt-12 text-center lg:text-left w-full">
+            <p className="text-white/80 text-md mb-2">{content.footer.tagline}</p>
+            <p className="text-white/60 text-sm">{content.footer.copyright}</p>
+          </div>
           {/* Font switcher for development */}
           {IS_DEVELOPMENT && (
             <div className="mt-6 flex gap-2 justify-center">
