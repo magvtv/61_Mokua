@@ -153,7 +153,7 @@ const ComingSoonPage: React.FC = () => {
         </div>
         {/* Content */}
         <div className="coming-soon-content w-full lg:w-[55%] flex flex-col justify-center items-center lg:items-start text-center lg:text-left px-4 lg:pr-8">
-          <nav className="coming-soon-nav flex gap-8 mb-8 self-end lg:self-auto">
+          <nav className="coming-soon-nav flex gap-8 my-4 self-end lg:self-auto">
             {content.navigation.map((item) => (
               <a
                 key={item.id}
@@ -166,7 +166,7 @@ const ComingSoonPage: React.FC = () => {
               </a>
             ))}
           </nav>
-          <h1 className="coming-soon-title mb-2">{content.header.title}</h1>
+          <h1 className="coming-soon-title mb-4">{content.header.title}</h1>
           <h2 className="coming-soon-subtitle mb-6">{content.header.subtitle}</h2>
           <p className="coming-soon-description mb-8">
             {content.content.mainText}<br /><br />
