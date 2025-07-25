@@ -1,30 +1,30 @@
 {
-  "comingSoon": {
-    "navigation": [
-      { "id": "auction", "label": "the auction" },
-      { "id": "history", "label": "history" },
-      { "id": "about", "label": "about" }
-    ],
-    "header": {
-      "title": "Artifice, Ruse and Subterfuge",
-      "subtitle": "A Literary Journey Through Words"
-    },
-    "content": {
-      "mainText": "A piece of history among card mechanics and those practicing the art of deception.",
-      "highlights": [
-        "Only a handful of first editions are known to exist.",
-        "Be one of the few who will own a copy."
-      ]
-    },
-    "form": {
-      "placeholder": "your.name@email.com",
-      "buttonText": "sign up",
-      "successMessage": "Thank you for your interest. We'll notify you when we launch.",
-      "errorMessage": "Oops! Something went wrong. Please try again."
-    },
-    "image": {
-      "src": "/images/book-cover.jpg",
-      "alt": "Vintage Book Cover"
+    "comingSoon": {
+      "date": "2025.09",
+      "navigation": [
+        { "id": "instagram", "label": "Follow Mokua", "url": "https://instagram.com/mokua" }
+      ],
+      "header": {
+        "title": "A New Chapter Awaits",
+        "subtitle": "Mokua’s Voice — Stories that Linger Beyond the Page"
+      },
+      "content": {
+        "mainText": "Every great tale begins in silence before the world hears its echo. Mokua’s platform is almost here — a place where prose breathes, poetry resonates, and every word feels like a heartbeat.",
+        "highlights": [
+          "Be part of the first readers to witness the unveiling.",
+          "Reserve your front-row seat to stories that will outlive the season."
+        ]
+      },
+      "form": {
+        "placeholder": "your.email@example.com",
+        "buttonText": "get notified",
+        "successMessage": "Thank you for stepping into the story early — you’ll be the first to know when we go live.",
+        "errorMessage": "We missed a page. Please try again."
+      },
+      "image": {
+        "src": "/images/coming-soon-cover.jpg",
+        "alt": "Mokua Literary Platform — Coming Soon"
+      }
     }
   }
-} 
+  
