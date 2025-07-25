@@ -1,0 +1,30 @@
+{
+  "comingSoon": {
+    "navigation": [
+      { "id": "auction", "label": "the auction" },
+      { "id": "history", "label": "history" },
+      { "id": "about", "label": "about" }
+    ],
+    "header": {
+      "title": "Artifice, Ruse and Subterfuge",
+      "subtitle": "A Literary Journey Through Words"
+    },
+    "content": {
+      "mainText": "A piece of history among card mechanics and those practicing the art of deception.",
+      "highlights": [
+        "Only a handful of first editions are known to exist.",
+        "Be one of the few who will own a copy."
+      ]
+    },
+    "form": {
+      "placeholder": "your.name@email.com",
+      "buttonText": "sign up",
+      "successMessage": "Thank you for your interest. We'll notify you when we launch.",
+      "errorMessage": "Oops! Something went wrong. Please try again."
+    },
+    "image": {
+      "src": "/images/book-cover.jpg",
+      "alt": "Vintage Book Cover"
+    }
+  }
+} 
