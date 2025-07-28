@@ -81,7 +81,7 @@ const Footer: React.FC = () => {
     >
       <Container maxWidth="lg">
         <Grid container spacing={4}>
-          <Grid item xs={12} md={4}>
+          <Grid component="div" item xs={12} md={4}>
             <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
               <IconButton sx={{ color: 'primary.main', p: 0, mr: 1 }}>
                 <MenuBook fontSize="large" />
