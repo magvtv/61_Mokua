@@ -10,7 +10,9 @@
         "preview": "vite preview",
         "server": "cd server && pnpm start",
         "server:dev": "cd server && pnpm dev",
-        "server:install": "cd server && pnpm install"
+        "server:install": "cd server && pnpm install",
+        "start:all": "concurrently \"pnpm dev\" \"pnpm server:dev\"",
+        "install:all": "pnpm install && pnpm server:install"
     },
     "dependencies": {
         "@emotion/react": "^11.14.0",
