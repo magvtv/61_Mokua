@@ -12,7 +12,5 @@
       "runtime": "nodejs18.x"
     }
   },
-  "env": {
-    "MONGODB_URI": "@mongodb_uri"
-  }
+  "buildCommand": "npm run build"
 } 
