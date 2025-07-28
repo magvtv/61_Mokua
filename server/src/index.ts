@@ -26,10 +26,9 @@ connectToDatabase();
 // Setup graceful shutdown
 setupGracefulShutdown();
 
-// Subscribe endpoint
+// API Routes
 app.post('/api/subscribe', rateLimiter, handleSubscribe);
 
-// Get all active subscribers (for admin purposes)
 app.get('/api/subscribers', async (req, res) => {
   try {
     const subscribers = await Subscriber.find({ status: 'active' })
@@ -43,7 +42,6 @@ app.get('/api/subscribers', async (req, res) => {
   }
 });
 
-// Unsubscribe endpoint
 app.post('/api/unsubscribe', async (req, res) => {
   try {
     const { email } = req.body;
@@ -69,7 +67,17 @@ app.post('/api/unsubscribe', async (req, res) => {
   }
 });
 
+// Health check endpoint
+app.get('/api/health', (req, res) => {
+  res.status(200).json({ 
+    status: 'ok', 
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || 'development'
+  });
+});
+
 // Start server
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`🚀 Mokua Server running on port ${PORT}`);
+  console.log(`📡 API endpoints available at http://localhost:${PORT}/api`);
 }); 
