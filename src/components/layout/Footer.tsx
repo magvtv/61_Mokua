@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Container,
@@ -8,7 +8,6 @@ import {
   IconButton,
   TextField,
   Button,
-  useTheme,
 } from '@mui/material';
 import {
   Facebook,
@@ -18,13 +17,55 @@ import {
   MenuBook,
 } from '@mui/icons-material';
 import { Link as RouterLink } from 'react-router-dom';
+import { useAppStore } from '../../stores/useAppStore';
 
 const Footer: React.FC = () => {
-  const theme = useTheme();
+  const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { addNotification } = useAppStore();
 
-  const handleNewsletterSubmit = (event: React.FormEvent) => {
+  const handleNewsletterSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    // Handle newsletter subscription
+    
+    if (!email.trim() || !name.trim()) return;
+    
+    setIsSubmitting(true);
+    
+    try {
+      const response = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+          email, 
+          name,
+          source: 'footer'
+        }),
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to subscribe');
+      }
+      
+      addNotification({
+        type: 'success',
+        message: 'Thank you for subscribing to our newsletter!',
+      });
+      
+      setEmail('');
+      setName('');
+    } catch (error) {
+      addNotification({
+        type: 'error',
+        message: error instanceof Error ? error.message : 'Failed to subscribe. Please try again.',
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -126,17 +167,31 @@ const Footer: React.FC = () => {
               <TextField
                 fullWidth
                 size="small"
-                placeholder="Your email address"
+                placeholder="Your name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
                 sx={{ mb: 2 }}
+                required
+              />
+              <TextField
+                fullWidth
+                size="small"
+                placeholder="Your email address"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                sx={{ mb: 2 }}
+                required
               />
               <Button
                 type="submit"
                 variant="contained"
                 color="primary"
                 fullWidth
+                disabled={isSubmitting || !email.trim() || !name.trim()}
                 sx={{ mb: 2 }}
               >
-                Subscribe
+                {isSubmitting ? 'Subscribing...' : 'Subscribe'}
               </Button>
             </Box>
           </Grid>

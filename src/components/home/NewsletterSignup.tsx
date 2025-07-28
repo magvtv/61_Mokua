@@ -5,7 +5,6 @@ import {
   Typography,
   TextField,
   Button,
-  Grid,
   Card,
   CardContent,
 } from '@mui/material';
@@ -15,19 +14,35 @@ import { useAppStore } from '../../stores/useAppStore';
 
 const NewsletterSignup: React.FC = () => {
   const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { addNotification } = useAppStore();
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     
-    if (!email.trim()) return;
+    if (!email.trim() || !name.trim()) return;
     
     setIsSubmitting(true);
     
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const response = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+          email, 
+          name,
+          source: 'newsletter'
+        }),
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to subscribe');
+      }
       
       addNotification({
         type: 'success',
@@ -35,10 +50,11 @@ const NewsletterSignup: React.FC = () => {
       });
       
       setEmail('');
+      setName('');
     } catch (error) {
       addNotification({
         type: 'error',
-        message: 'Failed to subscribe. Please try again.',
+        message: error instanceof Error ? error.message : 'Failed to subscribe. Please try again.',
       });
     } finally {
       setIsSubmitting(false);
@@ -114,10 +130,22 @@ const NewsletterSignup: React.FC = () => {
               <Box
                 component="form"
                 onSubmit={handleSubmit}
-                sx={{ maxWidth: 400, mx: 'auto' }}
+                sx={{ maxWidth: 500, mx: 'auto' }}
               >
-                <Grid container spacing={2} alignItems="center">
-                  <Grid item xs={12} sm={8}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                  <Box sx={{ display: 'flex', gap: 2, flexDirection: { xs: 'column', sm: 'row' } }}>
+                    <TextField
+                      fullWidth
+                      placeholder="Your name"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      required
+                      sx={{
+                        '& .MuiOutlinedInput-root': {
+                          borderRadius: 2,
+                        },
+                      }}
+                    />
                     <TextField
                       fullWidth
                       type="email"
@@ -131,23 +159,21 @@ const NewsletterSignup: React.FC = () => {
                         },
                       }}
                     />
-                  </Grid>
-                  <Grid item xs={12} sm={4}>
-                    <Button
-                      type="submit"
-                      variant="contained"
-                      fullWidth
-                      size="large"
-                      disabled={isSubmitting || !email.trim()}
-                      sx={{
-                        borderRadius: 2,
-                        py: 1.5,
-                      }}
-                    >
-                      {isSubmitting ? 'Subscribing...' : 'Subscribe'}
-                    </Button>
-                  </Grid>
-                </Grid>
+                  </Box>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    fullWidth
+                    size="large"
+                    disabled={isSubmitting || !email.trim() || !name.trim()}
+                    sx={{
+                      borderRadius: 2,
+                      py: 1.5,
+                    }}
+                  >
+                    {isSubmitting ? 'Subscribing...' : 'Subscribe'}
+                  </Button>
+                </Box>
               </Box>
 
               <Typography
