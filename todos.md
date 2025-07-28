@@ -83,7 +83,8 @@
 - Image: Place a book or placeholder image on the left (desktop) or top (mobile).
 - Content: Title, subtitle, description, email signup, and minimal navigation (if any).
 
-## 
+## Email Subscription Backend
+- []  
 
 
 # TECHNICAL DEBT
