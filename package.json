@@ -8,10 +8,9 @@
         "build": "vite build",
         "lint": "eslint .",
         "preview": "vite preview",
-        "server": "tsx server.ts",
-        "server:dev": "tsx watch server.ts",
-        "server:quiet": "NODE_NO_WARNINGS=1 DOTENV_CONFIG_SILENT=true tsx server.ts",
-        "server:node": "NODE_NO_WARNINGS=1 node --experimental-strip-types server.ts"
+        "server": "cd server && pnpm start",
+        "server:dev": "cd server && pnpm dev",
+        "server:install": "cd server && pnpm install"
     },
     "dependencies": {
         "@emotion/react": "^11.14.0",
