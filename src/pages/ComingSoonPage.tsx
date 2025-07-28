@@ -81,13 +81,17 @@ const ComingSoonPage: React.FC = () => {
       // Show loading state
       setIsSubmitting(true);
       
-      // Call serverless function
+      // Call Mongoose-based server endpoint
       const response = await fetch('/api/subscribe', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, name }),
+        body: JSON.stringify({ 
+          email, 
+          name,
+          source: 'coming-soon'
+        }),
       });
       
       const data = await response.json();
