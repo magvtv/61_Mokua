@@ -1,16 +1,4 @@
 {
-  "$schema": "https://openapi.vercel.sh/vercel.json",
   "version": 2,
-  "functions": {
-    "api/subscribe": {
-      "runtime": "nodejs18.x"
-    },
-    "api/subscribers": {
-      "runtime": "nodejs18.x"
-    },
-    "api/unsubscribe": {
-      "runtime": "nodejs18.x"
-    }
-  },
   "buildCommand": "npm run build"
-} 
+}
