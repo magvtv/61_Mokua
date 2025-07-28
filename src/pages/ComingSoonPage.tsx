@@ -55,9 +55,13 @@ const ComingSoonPage: React.FC = () => {
         const response = await fetch('/content/web-content.json');
         if (!response.ok) throw new Error('Failed to load content');
         const data = await response.json();
+        if (!data.comingSoon) {
+          throw new Error('Coming soon content not found');
+        }
         setContent(data.comingSoon);
         setLoading(false);
       } catch (err) {
+        console.error('Error loading page content:', err);
         setError('Failed to load page content');
         setLoading(false);
       }
