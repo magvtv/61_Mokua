@@ -10,7 +10,7 @@
         "preview": "vite preview",
         "server": "tsx server.ts",
         "server:dev": "tsx watch server.ts",
-        "server:quiet": "NODE_NO_WARNINGS=1 tsx server.ts"
+        "server:quiet": "NODE_NO_WARNINGS=1 DOTENV_CONFIG_SILENT=true tsx server.ts"
     },
     "dependencies": {
         "@emotion/react": "^11.14.0",
