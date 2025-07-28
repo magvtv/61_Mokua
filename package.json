@@ -10,7 +10,8 @@
         "preview": "vite preview",
         "server": "tsx server.ts",
         "server:dev": "tsx watch server.ts",
-        "server:quiet": "NODE_NO_WARNINGS=1 DOTENV_CONFIG_SILENT=true tsx server.ts"
+        "server:quiet": "NODE_NO_WARNINGS=1 DOTENV_CONFIG_SILENT=true tsx server.ts",
+        "server:node": "NODE_NO_WARNINGS=1 node --experimental-strip-types server.ts"
     },
     "dependencies": {
         "@emotion/react": "^11.14.0",
@@ -37,6 +38,7 @@
     },
     "devDependencies": {
         "@eslint/js": "^9.9.1",
+        "@types/body-parser": "^1.19.5",
         "@types/cors": "^2.8.17",
         "@types/express": "^4.17.21",
         "@types/node": "^22.10.2",
