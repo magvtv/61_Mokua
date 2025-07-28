@@ -1,24 +1,26 @@
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
-const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
+import dotenv from 'dotenv';
+import express from 'express';
+import type { Request, Response, NextFunction } from 'express';
+import cors from 'cors';
+import pkg from 'body-parser';
+const { json } = pkg;
+import { connect, disconnect } from 'mongoose';
+
+// Load environment variables
+dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 
 // Middleware
 app.use(cors());
-app.use(bodyParser.json());
+app.use(json());
 
 // MongoDB connection string
 const uri = process.env.MONGODB_URI || "mongodb+srv://<username>:<password>@<cluster>.mongodb.net/newsletter?retryWrites=true&w=majority";
 
 // Connect to MongoDB using Mongoose
-mongoose.connect(uri, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
+connect(uri)
 .then(() => {
   console.log('Successfully connected to MongoDB using Mongoose.');
 })
@@ -27,12 +29,12 @@ mongoose.connect(uri, {
 });
 
 // Import the Subscriber model
-const { Subscriber } = require('./src/models/Subscriber.js');
+import { Subscriber } from './src/models/Subscriber.js';
 
 // Graceful shutdown
 process.on('SIGINT', async () => {
   try {
-    await mongoose.connection.close();
+    await disconnect();
     console.log('MongoDB connection closed.');
     process.exit(0);
   } catch (error) {
@@ -42,12 +44,17 @@ process.on('SIGINT', async () => {
 });
 
 // Rate limiting middleware
-const rateLimit = {};
+interface RateLimitEntry {
+  count: number;
+  resetTime: number;
+}
+
+const rateLimit: Record<string, RateLimitEntry> = {};
 const RATE_LIMIT_WINDOW = 60 * 1000; // 1 minute
 const MAX_REQUESTS = 5; // 5 requests per minute
 
-function rateLimiter(req, res, next) {
-  const ip = req.ip || req.connection.remoteAddress;
+function rateLimiter(req: Request, res: Response, next: NextFunction): void {
+  const ip = req.ip || req.connection.remoteAddress || 'unknown';
   
   if (!rateLimit[ip]) {
     rateLimit[ip] = {
@@ -68,7 +75,8 @@ function rateLimiter(req, res, next) {
   }
 
   if (rateLimit[ip].count >= MAX_REQUESTS) {
-    return res.status(429).json({ message: 'Too many requests, please try again later' });
+    res.status(429).json({ message: 'Too many requests, please try again later' });
+    return;
   }
 
   rateLimit[ip].count++;
@@ -76,7 +84,7 @@ function rateLimiter(req, res, next) {
 }
 
 // Subscribe endpoint using Mongoose
-app.post('/api/subscribe', rateLimiter, async (req, res) => {
+app.post('/api/subscribe', rateLimiter, async (req: Request, res: Response) => {
   try {
     const { email, name, source = 'newsletter' } = req.body;
 
@@ -106,8 +114,9 @@ app.post('/api/subscribe', rateLimiter, async (req, res) => {
     console.error('Subscription error:', error);
     
     // Handle Mongoose validation errors
-    if (error.name === 'ValidationError') {
-      const messages = Object.values(error.errors).map((err) => err.message);
+    if (error instanceof Error && 'name' in error && error.name === 'ValidationError') {
+      const validationError = error as any;
+      const messages = Object.values(validationError.errors).map((err: any) => err.message);
       return res.status(400).json({ 
         message: 'Validation failed', 
         errors: messages 
@@ -115,7 +124,7 @@ app.post('/api/subscribe', rateLimiter, async (req, res) => {
     }
     
     // Handle duplicate email error
-    if (error.code === 11000) {
+    if (error instanceof Error && 'code' in error && error.code === 11000) {
       return res.status(409).json({ message: 'Email already subscribed' });
     }
     
@@ -124,7 +133,7 @@ app.post('/api/subscribe', rateLimiter, async (req, res) => {
 });
 
 // Get all active subscribers (for admin purposes)
-app.get('/api/subscribers', async (req, res) => {
+app.get('/api/subscribers', async (req: Request, res: Response) => {
   try {
     const subscribers = await Subscriber.find({ status: 'active' })
       .select('email name subscribedAt metadata.source')
@@ -138,7 +147,7 @@ app.get('/api/subscribers', async (req, res) => {
 });
 
 // Unsubscribe endpoint
-app.post('/api/unsubscribe', async (req, res) => {
+app.post('/api/unsubscribe', async (req: Request, res: Response) => {
   try {
     const { email } = req.body;
 
@@ -166,4 +175,4 @@ app.post('/api/unsubscribe', async (req, res) => {
 // Start server
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
-});
+}); 
