@@ -80,6 +80,30 @@ export const mockCategories: Category[] = [
     description: 'Conversations with authors, poets, and literary figures',
     color: '#43A047',
     postsCount: 19
+  },
+  {
+    id: '6',
+    name: 'Literary Criticism',
+    slug: 'literary-criticism',
+    description: 'Academic analysis and theoretical approaches to literature',
+    color: '#E91E63',
+    postsCount: 23
+  },
+  {
+    id: '7',
+    name: 'Writing Tips',
+    slug: 'writing-tips',
+    description: 'Practical advice for aspiring writers and creative writing techniques',
+    color: '#9C27B0',
+    postsCount: 15
+  },
+  {
+    id: '8',
+    name: 'Book Lists',
+    slug: 'book-lists',
+    description: 'Curated reading lists and recommendations for different genres and themes',
+    color: '#3F51B5',
+    postsCount: 12
   }
 ];
 
