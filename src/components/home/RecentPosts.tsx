@@ -3,20 +3,19 @@ import {
   Box,
   Container,
   Typography,
-  Grid,
   Pagination,
   Tabs,
   Tab,
 } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { contentService } from '../../services/contentService';
-import PostCard from '../post/PostCard';
+import CompactPostCard from './CompactPostCard';
 import LoadingSpinner from '../common/LoadingSpinner';
 
 const RecentPosts: React.FC = () => {
   const [page, setPage] = useState(1);
   const [categoryFilter, setCategoryFilter] = useState('all');
-  const postsPerPage = 6;
+  const postsPerPage = 9; // Increased to show more posts
 
   const { data: categories } = useQuery({
     queryKey: ['categories'],
@@ -97,13 +96,13 @@ const RecentPosts: React.FC = () => {
 
         {postsData && postsData.posts.length > 0 ? (
           <>
-            <Grid container spacing={4} sx={{ mb: 6 }}>
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3, mb: 6 }}>
               {postsData.posts.map((post) => (
-                <Grid item xs={12} sm={6} lg={4} key={post.id}>
-                  <PostCard post={post} />
-                </Grid>
+                <Box sx={{ width: { xs: '100%', sm: '45%', md: '30%' } }} key={post.id}>
+                  <CompactPostCard post={post} variant="small" />
+                </Box>
               ))}
-            </Grid>
+            </Box>
 
             {totalPages > 1 && (
               <Box sx={{ display: 'flex', justifyContent: 'center' }}>
