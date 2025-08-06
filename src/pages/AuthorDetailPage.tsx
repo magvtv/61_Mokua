@@ -35,20 +35,20 @@ const AuthorDetailPage: React.FC = () => {
   });
 
   if (authorLoading) {
-    return <LoadingSpinner message="Loading author profile..." />;
+    return <LoadingSpinner message="Loading voice profile..." />;
   }
 
   if (!author) {
     return (
       <Container maxWidth="lg" sx={{ py: 8, textAlign: 'center' }}>
         <Typography variant="h4" gutterBottom>
-          Author Not Found
+          Voice Not Found
         </Typography>
         <Typography color="text.secondary" sx={{ mb: 4 }}>
-          The author you're looking for doesn't exist.
+          The voice you're looking for doesn't exist.
         </Typography>
         <Button onClick={() => navigate('/authors')} variant="contained">
-          View All Authors
+          View All Voices
         </Button>
       </Container>
     );
@@ -67,9 +67,9 @@ const AuthorDetailPage: React.FC = () => {
   return (
     <>
       <Helmet>
-        <title>{`${author.name} - Author Profile | Mokua Literary Blog`}</title>
+        <title>{`${author.name} - Voice Profile | Mokua Youth Platform`}</title>
         <meta name="description" content={author.bio} />
-        <meta property="og:title" content={`${author.name} - Author Profile`} />
+        <meta property="og:title" content={`${author.name} - Voice Profile`} />
         <meta property="og:description" content={author.bio} />
         <meta property="og:type" content="profile" />
         {author.avatar && <meta property="og:image" content={author.avatar} />}
@@ -81,7 +81,7 @@ const AuthorDetailPage: React.FC = () => {
           onClick={() => navigate('/authors')}
           sx={{ mb: 4 }}
         >
-          Back to Authors
+          Back to Voices
         </Button>
 
         <motion.div
@@ -143,7 +143,7 @@ const AuthorDetailPage: React.FC = () => {
                   }}
                 >
                   <Typography variant="body2" color="text.secondary">
-                    {author.postsCount} {author.postsCount === 1 ? 'article' : 'articles'}
+                    {author.postsCount} {author.postsCount === 1 ? 'story' : 'stories'}
                   </Typography>
                   
                   <Box sx={{ display: 'flex', gap: 1 }}>
@@ -177,12 +177,12 @@ const AuthorDetailPage: React.FC = () => {
               mb: 2,
             }}
           >
-            Articles by {author.name}
+            Stories by {author.name}
           </Typography>
         </Box>
 
         {postsLoading ? (
-          <LoadingSpinner message="Loading articles..." />
+          <LoadingSpinner message="Loading stories..." />
         ) : authorPosts && authorPosts.length > 0 ? (
           <Grid container spacing={4}>
             {authorPosts.map((post, index) => (
@@ -200,7 +200,7 @@ const AuthorDetailPage: React.FC = () => {
         ) : (
           <Box sx={{ textAlign: 'center', py: 8 }}>
             <Typography variant="h6" color="text.secondary">
-              No articles published yet.
+              No stories published yet.
             </Typography>
           </Box>
         )}

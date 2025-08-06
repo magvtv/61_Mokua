@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   AppBar,
   Toolbar,
@@ -21,7 +21,6 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
-  Collapse,
 } from '@mui/material';
 import {
   Menu as MenuIcon,
@@ -31,7 +30,6 @@ import {
   MenuBook,
   Close,
   ExpandMore,
-  ExpandLess,
   KeyboardArrowDown,
 } from '@mui/icons-material';
 import { Link, useNavigate } from 'react-router-dom';
@@ -42,45 +40,47 @@ import { isFeatureEnabled } from '../../utils/featureFlags';
 // Literature categories data
 const literatureCategories = [
   {
-    label: 'Fiction',
-    path: '/category/fiction',
+    label: 'Youth Affairs',
+    path: '/category/youth-affairs',
     subcategories: [
-      { label: 'Short Stories', path: '/category/fiction/short-stories' },
-      { label: 'Novels', path: '/category/fiction/novels' },
-      { label: 'Flash Fiction', path: '/category/fiction/flash-fiction' },
-      { label: 'Science Fiction', path: '/category/fiction/science-fiction' },
-      { label: 'Fantasy', path: '/category/fiction/fantasy' },
+      { label: 'Mental Health', path: '/category/youth-affairs/mental-health' },
+      { label: 'Drug Abuse', path: '/category/youth-affairs/drug-abuse' },
+      { label: 'Education Challenges', path: '/category/youth-affairs/education' },
+      { label: 'Employment', path: '/category/youth-affairs/employment' },
+      { label: 'Social Media', path: '/category/youth-affairs/social-media' },
     ]
   },
   {
-    label: 'Poetry',
-    path: '/category/poetry',
+    label: 'County News',
+    path: '/category/county-news',
     subcategories: [
-      { label: 'Contemporary', path: '/category/poetry/contemporary' },
-      { label: 'Traditional', path: '/category/poetry/traditional' },
-      { label: 'Free Verse', path: '/category/poetry/free-verse' },
-      { label: 'Haiku', path: '/category/poetry/haiku' },
-      { label: 'Sonnet', path: '/category/poetry/sonnet' },
+      { label: 'Nairobi', path: '/category/county-news/nairobi' },
+      { label: 'Mombasa', path: '/category/county-news/mombasa' },
+      { label: 'Kisumu', path: '/category/county-news/kisumu' },
+      { label: 'Nakuru', path: '/category/county-news/nakuru' },
+      { label: 'Eldoret', path: '/category/county-news/eldoret' },
     ]
   },
   {
-    label: 'Essays',
-    path: '/category/essays',
+    label: 'Health & Wellness',
+    path: '/category/health-wellness',
     subcategories: [
-      { label: 'Literary Criticism', path: '/category/essays/literary-criticism' },
-      { label: 'Personal Essays', path: '/category/essays/personal' },
-      { label: 'Academic', path: '/category/essays/academic' },
-      { label: 'Creative Nonfiction', path: '/category/essays/creative-nonfiction' },
+      { label: 'Sexual Health', path: '/category/health-wellness/sexual-health' },
+      { label: 'HIV/AIDS', path: '/category/health-wellness/hiv-aids' },
+      { label: 'Mental Health', path: '/category/health-wellness/mental-health' },
+      { label: 'Substance Abuse', path: '/category/health-wellness/substance-abuse' },
+      { label: 'Nutrition', path: '/category/health-wellness/nutrition' },
     ]
   },
   {
-    label: 'Reviews',
-    path: '/category/reviews',
+    label: 'Education & Tech',
+    path: '/category/education-tech',
     subcategories: [
-      { label: 'Book Reviews', path: '/category/reviews/books' },
-      { label: 'Film Reviews', path: '/category/reviews/films' },
-      { label: 'Art Reviews', path: '/category/reviews/art' },
-      { label: 'Theater Reviews', path: '/category/reviews/theater' },
+      { label: 'Digital Learning', path: '/category/education-tech/digital-learning' },
+      { label: 'Online Education', path: '/category/education-tech/online-education' },
+      { label: 'Tech Innovation', path: '/category/education-tech/tech-innovation' },
+      { label: 'Career Development', path: '/category/education-tech/career-development' },
+      { label: 'Digital Skills', path: '/category/education-tech/digital-skills' },
     ]
   },
 ];
@@ -132,7 +132,7 @@ const DesktopCategoriesDropdown: React.FC = () => {
           '&:hover': { color: 'primary.main' }
         }}
       >
-        Literature
+        Topics
       </Button>
       
       <Menu
