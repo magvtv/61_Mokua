@@ -106,22 +106,24 @@ const FeaturedPosts: React.FC = () => {
         />
 
         {/* Posts Grid */}
-        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3 }}>
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3, alignItems: 'stretch' }}>
           {filteredPosts.map((post, index) => (
             <Box sx={{ 
               width: { xs: '100%', sm: '45%', md: index === 0 ? '50%' : '25%' },
-              order: index === 0 ? 1 : index + 1
+              order: index === 0 ? 1 : index + 1,
+              display: 'flex'
             }} key={post.id}>
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                style={{ height: '100%' }}
+                style={{ width: '100%', display: 'flex' }}
               >
                 <Box sx={{ 
-                  height: '100%',
+                  width: '100%',
                   maxWidth: { md: 400, lg: 350 },
-                  mx: 'auto'
+                  mx: 'auto',
+                  display: 'flex'
                 }}>
                   <CompactPostCard post={post} variant="medium" />
                 </Box>
