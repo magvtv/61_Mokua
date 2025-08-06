@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   Box,
   Container,
@@ -7,19 +7,21 @@ import {
   Paper,
   useTheme,
   useMediaQuery,
-} from '@mui/material';
-import { StarIconSolid } from '../../utils/icons';
-import { motion } from 'framer-motion';
+} from "@mui/material";
+import { StarIconSolid } from "../../utils/icons";
+import { motion } from "framer-motion";
 
 interface Review {
   id: string;
   user: {
     name: string;
     avatar: string;
+    location: string;
   };
   rating: number;
   comment: string;
   date: string;
+  topic: string;
 }
 
 interface ReviewsSectionProps {
@@ -28,7 +30,7 @@ interface ReviewsSectionProps {
 
 const ReviewsSection: React.FC<ReviewsSectionProps> = ({ reviews }) => {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -46,7 +48,7 @@ const ReviewsSection: React.FC<ReviewsSectionProps> = ({ reviews }) => {
   };
 
   return (
-    <Box sx={{ py: 6, bgcolor: 'background.paper' }}>
+    <Box sx={{ py: 6, bgcolor: "background.paper" }}>
       <Container maxWidth="lg">
         <motion.div
           variants={containerVariants}
@@ -54,43 +56,44 @@ const ReviewsSection: React.FC<ReviewsSectionProps> = ({ reviews }) => {
           whileInView="visible"
           viewport={{ once: true }}
         >
-          <Box sx={{ textAlign: 'center', mb: 6 }}>
+          <Box sx={{ textAlign: "center", mb: 6 }}>
             <Typography
               variant="h3"
               sx={{
                 fontFamily: '"Playfair Display", serif',
                 fontWeight: 600,
                 mb: 2,
-                color: 'text.primary',
+                color: "text.primary",
               }}
             >
-              What Our Readers Say
+              What Our Community Says
             </Typography>
             <Typography
               variant="body1"
               color="text.secondary"
-              sx={{ maxWidth: 600, mx: 'auto' }}
+              sx={{ maxWidth: 600, mx: "auto" }}
             >
-              Discover what literary enthusiasts are saying about our curated collection
+              Real voices from Kenyan youth sharing their thoughts on current affairs, 
+              county news, and social issues affecting our communities
             </Typography>
           </Box>
 
           <Box
             sx={{
-              display: 'flex',
-              flexDirection: isMobile ? 'column' : 'row',
+              display: "flex",
+              flexDirection: isMobile ? "column" : "row",
               gap: 3,
-              justifyContent: 'center',
-              alignItems: 'center',
+              justifyContent: "center",
+              alignItems: "center",
               mb: 4,
             }}
           >
             {/* Overlapping Avatars */}
             <Box
               sx={{
-                display: 'flex',
-                alignItems: 'center',
-                position: 'relative',
+                display: "flex",
+                alignItems: "center",
+                position: "relative",
                 mb: isMobile ? 2 : 0,
               }}
             >
@@ -99,7 +102,7 @@ const ReviewsSection: React.FC<ReviewsSectionProps> = ({ reviews }) => {
                   key={review.id}
                   variants={itemVariants}
                   style={{
-                    position: 'relative',
+                    position: "relative",
                     zIndex: 3 - index,
                     marginLeft: index > 0 ? -15 : 0,
                   }}
@@ -111,7 +114,7 @@ const ReviewsSection: React.FC<ReviewsSectionProps> = ({ reviews }) => {
                       width: 60,
                       height: 60,
                       border: 3,
-                      borderColor: 'background.paper',
+                      borderColor: "background.paper",
                       boxShadow: theme.shadows[2],
                     }}
                   />
@@ -120,8 +123,8 @@ const ReviewsSection: React.FC<ReviewsSectionProps> = ({ reviews }) => {
             </Box>
 
             {/* Rating Display */}
-            <Box sx={{ textAlign: isMobile ? 'center' : 'left' }}>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
+            <Box sx={{ textAlign: isMobile ? "center" : "left" }}>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}>
                 {[...Array(5)].map((_, index) => (
                   <StarIconSolid
                     key={index}
@@ -137,7 +140,7 @@ const ReviewsSection: React.FC<ReviewsSectionProps> = ({ reviews }) => {
                 {reviews.length} Reviews
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                Average rating from our community
+                Average rating from our Kenyan youth community
               </Typography>
             </Box>
           </Box>
@@ -145,10 +148,10 @@ const ReviewsSection: React.FC<ReviewsSectionProps> = ({ reviews }) => {
           {/* Review Cards */}
           <Box
             sx={{
-              display: 'grid',
+              display: "grid",
               gridTemplateColumns: {
-                xs: '1fr',
-                md: 'repeat(3, 1fr)',
+                xs: "1fr",
+                md: "repeat(3, 1fr)",
               },
               gap: 3,
             }}
@@ -157,24 +160,42 @@ const ReviewsSection: React.FC<ReviewsSectionProps> = ({ reviews }) => {
               <motion.div
                 key={review.id}
                 variants={itemVariants}
-                style={{ display: 'flex' }}
+                style={{ display: "flex" }}
               >
                 <Paper
                   elevation={2}
                   sx={{
                     p: 3,
-                    height: '100%',
-                    display: 'flex',
-                    flexDirection: 'column',
+                    height: "100%",
+                    display: "flex",
+                    flexDirection: "column",
                     borderRadius: 2,
-                    '&:hover': {
+                    "&:hover": {
                       boxShadow: theme.shadows[8],
                     },
-                    transition: theme.transitions.create(['box-shadow']),
+                    transition: theme.transitions.create(["box-shadow"]),
                   }}
                 >
+                  {/* Topic Tag */}
+                  <Box sx={{ mb: 2 }}>
+                    <Typography
+                      variant="caption"
+                      sx={{
+                        bgcolor: "primary.main",
+                        color: "primary.contrastText",
+                        px: 1.5,
+                        py: 0.5,
+                        borderRadius: 1,
+                        fontSize: "0.75rem",
+                        fontWeight: 600,
+                      }}
+                    >
+                      {review.topic}
+                    </Typography>
+                  </Box>
+
                   {/* Stars */}
-                  <Box sx={{ display: 'flex', gap: 0.5, mb: 2 }}>
+                  <Box sx={{ display: "flex", gap: 0.5, mb: 2 }}>
                     {[...Array(review.rating)].map((_, starIndex) => (
                       <StarIconSolid
                         key={starIndex}
@@ -194,11 +215,11 @@ const ReviewsSection: React.FC<ReviewsSectionProps> = ({ reviews }) => {
                     sx={{
                       mb: 3,
                       flexGrow: 1,
-                      display: '-webkit-box',
-                      '-webkit-line-clamp': 4,
-                      '-webkit-box-orient': 'vertical',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
+                      display: "-webkit-box",
+                      "-webkit-line-clamp": 4,
+                      "-webkit-box-orient": "vertical",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
                       lineHeight: 1.6,
                     }}
                   >
@@ -206,7 +227,7 @@ const ReviewsSection: React.FC<ReviewsSectionProps> = ({ reviews }) => {
                   </Typography>
 
                   {/* User Info */}
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                     <Avatar
                       src={review.user.avatar}
                       alt={review.user.name}
@@ -217,7 +238,7 @@ const ReviewsSection: React.FC<ReviewsSectionProps> = ({ reviews }) => {
                         {review.user.name}
                       </Typography>
                       <Typography variant="caption" color="text.secondary">
-                        {review.date}
+                        {review.user.location} • {review.date}
                       </Typography>
                     </Box>
                   </Box>

@@ -71,7 +71,7 @@ const HeroSection: React.FC = () => {
           initial="hidden"
           animate="visible"
         >
-          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 6, alignItems: 'center' }}>
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: { xs: 6, md: 4 }, alignItems: 'center' }}>
             <Box sx={{ width: { xs: '100%', md: '45%' } }}>
               <motion.div variants={itemVariants}>
                 <Typography
@@ -99,7 +99,7 @@ const HeroSection: React.FC = () => {
                     fontSize: { xs: '1.1rem', md: '1.3rem' },
                     fontWeight: 400,
                     lineHeight: 1.6,
-                    mb: 4,
+                    mb: { xs: 4, md: 3 },
                     color: 'text.secondary',
                     maxWidth: 500,
                   }}
@@ -111,7 +111,7 @@ const HeroSection: React.FC = () => {
 
               {/* Stats Section */}
               <motion.div variants={itemVariants}>
-                <Box sx={{ display: 'flex', gap: 4, mb: 4, flexWrap: 'wrap' }}>
+                <Box sx={{ display: 'flex', gap: { xs: 4, md: 3 }, mb: { xs: 4, md: 3 }, flexWrap: 'wrap' }}>
                   {stats.map((stat, index) => {
                     const IconComponent = stat.icon;
                     return (
@@ -138,18 +138,18 @@ const HeroSection: React.FC = () => {
               </motion.div>
 
               <motion.div variants={itemVariants}>
-                <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+                <Box sx={{ display: 'flex', gap: { xs: 2, md: 1.5 }, flexWrap: 'wrap' }}>
                   <Button
                     component={Link}
                     to="/category/fiction"
                     variant="contained"
-                    size="large"
+                    size="medium"
                     endIcon={<ArrowForward />}
                     sx={{
                       borderRadius: 2,
-                      px: 4,
-                      py: 1.5,
-                      fontSize: '1.1rem',
+                      px: { xs: 4, md: 3 },
+                      py: { xs: 1.5, md: 1 },
+                      fontSize: { xs: '1.1rem', md: '1rem' },
                     }}
                   >
                     Explore Fiction
@@ -158,12 +158,12 @@ const HeroSection: React.FC = () => {
                     component={Link}
                     to="/submit"
                     variant="outlined"
-                    size="large"
+                    size="medium"
                     sx={{
                       borderRadius: 2,
-                      px: 4,
-                      py: 1.5,
-                      fontSize: '1.1rem',
+                      px: { xs: 4, md: 3 },
+                      py: { xs: 1.5, md: 1 },
+                      fontSize: { xs: '1.1rem', md: '1rem' },
                     }}
                   >
                     Submit Your Work
@@ -174,8 +174,8 @@ const HeroSection: React.FC = () => {
 
             {/* Featured Post Preview */}
             {!isMobile && featuredPosts && featuredPosts.length > 0 && (
-              <Box sx={{ width: { xs: '100%', md: '55%' } }}>
-                <motion.div variants={itemVariants}>
+              <Box sx={{ width: { xs: '100%', md: '55%' }, display: 'flex', alignItems: 'flex-start' }}>
+                <motion.div variants={itemVariants} style={{ width: '100%' }}>
                   <Box sx={{ position: 'relative' }}>
                     <Paper
                       elevation={8}
