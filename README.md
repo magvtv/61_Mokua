@@ -1,144 +1,178 @@
-# 📚 Mokua Literary Blog
+# Mokua Literary Blog
 
-A modern literary publishing platform built as a **Progressive Web Application (PWA)** for [mokua.co.ke](https://mokua.co.ke). This project serves as a digital stage for stories, poems, essays, reviews, and guest submissions.
+A modern, responsive literary blog built with React, TypeScript, and Material-UI. Features a modular monolith architecture with feature flags for easy deployment management.
 
-## 🏗️ **Project Architecture**
+## 🚀 Quick Start
 
-This project follows a **clean separation** between frontend and backend:
+### Prerequisites
+- Node.js 18+ 
+- pnpm (recommended) or npm
+- MongoDB (for newsletter subscriptions)
 
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd 61_Mokua
+   ```
+
+2. **Install dependencies**
+   ```bash
+   pnpm install:all
+   ```
+
+3. **Set up environment variables**
+   Create a `.env` file in the root directory:
+   ```bash
+   # Feature Flags
+   VITE_SHOW_COMING_SOON=false
+   VITE_ENABLE_NEWSLETTER_SIGNUP=true
+   VITE_ENABLE_SEARCH=true
+   VITE_ENABLE_SUBMISSIONS=true
+   
+   # API Configuration
+   VITE_API_BASE_URL=http://localhost:3001
+   
+   # Database Configuration
+   MONGODB_URI=mongodb://localhost:27017/mokua
+   ```
+
+4. **Start development servers**
+   ```bash
+   pnpm start:all
+   ```
+
+## 🏗️ Architecture
+
+### Modular Monolith
+This project follows a **modular monolith** architecture pattern:
+
+- **Single Repository**: All code in one place for easy maintenance
+- **Feature-Based Organization**: Each feature has its own folder
+- **Shared Infrastructure**: Common components, utilities, and API endpoints
+- **Feature Flags**: Environment-based feature toggling
+
+### Project Structure
 ```
-mokua-literary/
-├── 📱 Frontend (React + Vite)
-│   ├── src/           # React components & pages
-│   ├── public/        # Static assets
-│   └── package.json   # Frontend dependencies
-│
-├── 🖥️ Backend (Express + Vercel)
-│   ├── server/        # Local Express server
-│   │   └── src/       # Shared business logic
-│   └── api/           # Vercel serverless functions
-│
-└── 📦 Shared
-    ├── models/        # Database models
-    ├── utils/         # Shared utilities
-    └── types/         # TypeScript interfaces
+src/
+├── components/          # Reusable UI components
+│   ├── common/         # Shared components (Header, Footer, etc.)
+│   ├── home/           # Home page specific components
+│   ├── layout/         # Layout components
+│   └── post/           # Post-related components
+├── pages/              # Page components
+├── stores/             # State management (Zustand)
+├── services/           # API and data services
+├── utils/              # Utility functions and feature flags
+└── types/              # TypeScript type definitions
 ```
 
-## 🚀 **Quick Start**
+## 🎛️ Feature Flags
 
-### **Frontend Development**
+The application uses feature flags to control functionality:
+
+### `VITE_SHOW_COMING_SOON`
+- **`true`**: Shows the coming soon page (landing page with newsletter signup)
+- **`false`**: Shows the full blog application with routing
+
+### `VITE_ENABLE_NEWSLETTER_SIGNUP`
+- **`true`**: Newsletter signup functionality is available
+- **`false`**: Newsletter signup is disabled
+
+### `VITE_ENABLE_SEARCH`
+- **`true`**: Search functionality is available
+- **`false`**: Search is disabled
+
+### `VITE_ENABLE_SUBMISSIONS`
+- **`true`**: Content submission functionality is available
+- **`false`**: Submissions are disabled
+
+## 🚀 Deployment Scenarios
+
+### Development
 ```bash
-# Install dependencies
-pnpm install
-
-# Start frontend dev server
-pnpm dev
-
-# Build for production
-pnpm build
+VITE_SHOW_COMING_SOON=false
+VITE_ENABLE_NEWSLETTER_SIGNUP=true
+VITE_ENABLE_SEARCH=true
+VITE_ENABLE_SUBMISSIONS=true
 ```
 
-### **Backend Development**
+### Staging (Coming Soon)
 ```bash
-# Install server dependencies
-pnpm server:install
-
-# Start local Express server
-pnpm server:dev
-
-# Or start both frontend and backend
-pnpm dev          # Frontend on :5173
-pnpm server:dev   # Backend on :3001
+VITE_SHOW_COMING_SOON=true
+VITE_ENABLE_NEWSLETTER_SIGNUP=true
+VITE_ENABLE_SEARCH=false
+VITE_ENABLE_SUBMISSIONS=false
 ```
 
-## 🔄 **Development vs Production**
-
-| Environment | Backend | Frontend | Database |
-|-------------|---------|----------|----------|
-| **Development** | Express Server (`server/`) | Vite Dev Server | MongoDB Local/Cloud |
-| **Production** | Vercel Functions (`api/`) | Vercel Static | MongoDB Cloud |
-
-## 📁 **Folder Structure**
-
-### **Frontend (`src/`)**
-- `components/` - Reusable UI components
-- `pages/` - Page components
-- `hooks/` - Custom React hooks
-- `stores/` - State management (Zustand)
-- `services/` - API service layer
-- `types/` - TypeScript interfaces
-- `utils/` - Helper functions
-
-### **Backend (`server/` + `api/`)**
-- `server/src/` - Express server & shared logic
-- `api/` - Vercel serverless functions
-- Shared models, utilities, and business logic
-
-## 🎯 **Why This Architecture?**
-
-1. **Clean Separation**: Frontend and backend concerns are completely separated
-2. **Shared Logic**: Business logic is shared between Express and Vercel
-3. **Flexible Deployment**: Choose local dev (Express) or production (Vercel)
-4. **Type Safety**: Full TypeScript support across the entire stack
-5. **Easy Testing**: Can test business logic independently
-
-## 🔧 **Environment Variables**
-
-Create a `.env` file in the root:
-
-```env
-# Database
-MONGODB_URI=your_mongodb_connection_string
-
-# Server
-PORT=3001
-NODE_ENV=development
-
-# Frontend
-VITE_API_URL=http://localhost:3001/api
+### Production (Full Blog)
+```bash
+VITE_SHOW_COMING_SOON=false
+VITE_ENABLE_NEWSLETTER_SIGNUP=true
+VITE_ENABLE_SEARCH=true
+VITE_ENABLE_SUBMISSIONS=true
 ```
 
-## 📦 **Tech Stack**
+## 🛠️ Development
 
-### **Frontend**
-- React 18 + TypeScript
-- Vite (build tool)
-- Material-UI + MUI Icons
-- React Router DOM
-- Zustand (state management)
-- React Query (data fetching)
-- Framer Motion (animations)
+### Available Scripts
 
-### **Backend**
-- Express.js (local development)
-- Vercel Functions (production)
-- Mongoose (MongoDB ODM)
-- TypeScript
-- Rate limiting & validation
+- `pnpm dev` - Start frontend development server
+- `pnpm server:dev` - Start backend development server
+- `pnpm start:all` - Start both frontend and backend
+- `pnpm build` - Build for production
+- `pnpm lint` - Run ESLint
+- `pnpm preview` - Preview production build
 
-### **Infrastructure**
-- Vercel (hosting & deployment)
-- MongoDB Atlas (database)
-- Cloudinary (media storage)
+### Adding New Features
 
-## 🚀 **Deployment**
+1. **Create feature components** in `src/components/`
+2. **Add feature flags** in `src/utils/featureFlags.ts`
+3. **Update routing** in `src/App.tsx` if needed
+4. **Document changes** in `docs/`
 
-### **Frontend**
-- Automatically deployed to Vercel
-- Static files served from CDN
-- Progressive Web App features
+## 📚 Key Features
 
-### **Backend**
-- Vercel serverless functions
-- Automatic scaling
-- Edge network distribution
+### Coming Soon Mode
+- Newsletter signup with MongoDB integration
+- Responsive design with custom fonts
+- Content management via JSON files
+- Rate limiting and error handling
 
-## 📚 **Documentation**
+### Blog Mode
+- Full-featured literary blog
+- Article management and categorization
+- Author profiles and pages
+- Search functionality
+- Contact and submission forms
+- Dark/light theme toggle
 
-- [System Architecture](./docs/SYSTEM_ARCHITECTURE.md)
-- [API Documentation](./docs/API.md)
+## 🔧 Technology Stack
+
+- **Frontend**: React 18, TypeScript, Vite
+- **UI Framework**: Material-UI (MUI)
+- **State Management**: Zustand
+- **Styling**: Tailwind CSS + MUI
+- **Backend**: Express.js, Mongoose
+- **Database**: MongoDB
+- **Deployment**: Vercel
+
+## 📖 Documentation
+
+- [Feature Flags Configuration](./docs/FEATURE_FLAGS.md)
+- [Architecture Decisions](./docs/ARCHITECTURE_DECISIONS.md)
 - [Deployment Guide](./docs/DEPLOYMENT.md)
+- [Email Subscription System](./docs/EMAIL_SUBSCRIPTION.md)
 
----
+## 🤝 Contributing
 
-**Built with ❤️ for the literary community**
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
+
+## 📄 License
+
+This project is licensed under the MIT License.
