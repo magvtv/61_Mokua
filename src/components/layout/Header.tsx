@@ -28,6 +28,7 @@ import {
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppStore } from '../../stores/useAppStore';
 import { motion } from 'framer-motion';
+import { isFeatureEnabled } from '../../utils/featureFlags';
 
 const Header: React.FC = () => {
   const theme = useTheme();
@@ -39,9 +40,8 @@ const Header: React.FC = () => {
     toggleTheme,
     isMobileMenuOpen,
     setMobileMenuOpen,
-    searchQuery,
     setSearchQuery,
-    isSearchOpen,
+    isSearchOpen, 
     setSearchOpen,
   } = useAppStore();
 
@@ -70,6 +70,12 @@ const Header: React.FC = () => {
     { label: 'Reviews', path: '/category/reviews' },
     { label: 'Authors', path: '/authors' },
   ];
+
+  // Filter navigation items based on feature flags
+  const filteredNavigationItems = navigationItems.filter(() => {
+    // Show all navigation items for now, but you can add conditions here
+    return true;
+  });
 
   return (
     <>
@@ -110,7 +116,7 @@ const Header: React.FC = () => {
 
             {!isMobile && (
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mr: 2 }}>
-                {navigationItems.map((item) => (
+                {filteredNavigationItems.map((item) => (
                   <Button
                     key={item.path}
                     component={Link}
@@ -139,13 +145,15 @@ const Header: React.FC = () => {
             )}
 
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <IconButton
-                onClick={() => setSearchOpen(!isSearchOpen)}
-                color="inherit"
-                sx={{ color: 'text.primary' }}
-              >
-                <SearchIcon />
-              </IconButton>
+              {isFeatureEnabled('ENABLE_SEARCH') && (
+                <IconButton
+                  onClick={() => setSearchOpen(!isSearchOpen)}
+                  color="inherit"
+                  sx={{ color: 'text.primary' }}
+                >
+                  <SearchIcon />
+                </IconButton>
+              )}
               
               <IconButton
                 onClick={toggleTheme}
@@ -169,7 +177,7 @@ const Header: React.FC = () => {
           </Toolbar>
           
           {/* Search Bar */}
-          {isSearchOpen && (
+          {isSearchOpen && isFeatureEnabled('ENABLE_SEARCH') && (
             <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
@@ -213,7 +221,7 @@ const Header: React.FC = () => {
       >
         <Box sx={{ width: 280, pt: 2 }}>
           <List>
-            {navigationItems.map((item) => (
+            {filteredNavigationItems.map((item) => (
               <ListItem
                 key={item.path}
                 component={Link}
