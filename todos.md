@@ -53,6 +53,7 @@
 - [] Google Analytics: Track visitor behavior and content performance
 - [] Search Console: Monitor search visibility
 - [] Open Graph: Social media preview optimization
+- [] custom 404 page 
 
 
 ## AESTHETIC FEATURES
@@ -89,3 +90,5 @@
 
 # TECHNICAL DEBT
 - Use sass + tailwindcss instead of default css files
+
+## chat prompts
