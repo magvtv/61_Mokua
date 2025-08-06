@@ -59,7 +59,7 @@ const HomePage: React.FC = () => {
           content="Discover contemporary literature, poetry, and essays. A curated space for emerging voices and timeless works."
         />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://mokua-literary.vercel.app" />
+        <meta property="og:url" content="https://mokua-blog.vercel.app" />
       </Helmet>
 
       <HeroSection />
