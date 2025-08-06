@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Container,
   Typography,
@@ -9,6 +9,12 @@ import {
   Grid,
   Button,
   IconButton,
+  Paper,
+  useTheme,
+  useMediaQuery,
+  List,
+  ListItem,
+  ListItemText,
 } from '@mui/material';
 import {
   Share,
@@ -24,12 +30,38 @@ import { contentService } from '../services/contentService';
 import { formatDate } from '../utils';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import PostCard from '../components/post/PostCard';
-import ReadingProgress from '../components/post/ReadingProgress';
+import BackToTop from '../components/common/BackToTop';
 
 const PostDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
+  const theme = useTheme();
+  const isDesktop = useMediaQuery(theme.breakpoints.up('lg'));
 
+  // Extract headers from content for table of contents
+  const extractHeaders = (content: string) => {
+    const headers: {id: string; text: string; level: number}[] = [];
+    const paragraphs = content?.split('\n\n') || [];
+    
+    paragraphs.forEach((paragraph, idx) => {
+      if (paragraph.startsWith('# ')) {
+        headers.push({id: `section-${idx}`, text: paragraph.replace('# ', ''), level: 1});
+      } else if (paragraph.startsWith('## ')) {
+        headers.push({id: `section-${idx}`, text: paragraph.replace('## ', ''), level: 2});
+      }
+    });
+    
+    return headers;
+  };
+
+  // Scroll to section when clicking on TOC item
+  const scrollToSection = (id: string) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+  
   const { data: post, isLoading } = useQuery({
     queryKey: ['post', slug],
     queryFn: () => contentService.getPost(slug!),
@@ -79,7 +111,7 @@ const PostDetailPage: React.FC = () => {
 
   return (
     <>
-      <ReadingProgress />
+      <BackToTop />
       <Helmet>
         <title>{post.seo?.metaTitle || `${post.title} | Mokua Literary Blog`}</title>
         <meta
@@ -105,7 +137,7 @@ const PostDetailPage: React.FC = () => {
         ))}
       </Helmet>
 
-      <Container maxWidth="md" sx={{ py: 4 }}>
+      <Container maxWidth="lg" sx={{ py: 4 }}>
         <Button
           startIcon={<ArrowBack />}
           onClick={() => navigate(-1)}
@@ -114,7 +146,10 @@ const PostDetailPage: React.FC = () => {
           Back to Articles
         </Button>
 
-        <Box sx={{ mb: 4 }}>
+        <Grid container spacing={4}>
+          {/* Main content */}
+          <Grid item xs={12} lg={isDesktop ? 8 : 12}>
+            <Box sx={{ mb: 4 }}>
           <Chip
             label={post.category.name}
             sx={{
@@ -236,6 +271,7 @@ const PostDetailPage: React.FC = () => {
               fontSize: '1.5rem',
               mt: 4,
               mb: 2,
+              scrollMarginTop: '80px',
             },
             '& h3': {
               fontFamily: '"Playfair Display", serif',
@@ -243,15 +279,42 @@ const PostDetailPage: React.FC = () => {
               fontSize: '1.25rem',
               mt: 3,
               mb: 1.5,
+              scrollMarginTop: '80px',
             },
             mb: 6,
           }}
         >
-          {post.content.split('\n\n').map((paragraph, index) => (
-            <Typography key={index} paragraph>
-              {paragraph}
-            </Typography>
-          ))}
+          {post.content.split('\n\n').map((paragraph, index) => {
+            if (paragraph.startsWith('# ')) {
+              return (
+                <Typography 
+                  key={index} 
+                  variant="h2" 
+                  id={`section-${index}`}
+                  sx={{ scrollMarginTop: '80px' }}
+                >
+                  {paragraph.replace('# ', '')}
+                </Typography>
+              );
+            } else if (paragraph.startsWith('## ')) {
+              return (
+                <Typography 
+                  key={index} 
+                  variant="h3" 
+                  id={`section-${index}`}
+                  sx={{ scrollMarginTop: '80px' }}
+                >
+                  {paragraph.replace('## ', '')}
+                </Typography>
+              );
+            } else {
+              return (
+                <Typography key={index} paragraph>
+                  {paragraph}
+                </Typography>
+              );
+            }
+          })}
         </Typography>
 
         <Box sx={{ mb: 6 }}>
@@ -273,36 +336,33 @@ const PostDetailPage: React.FC = () => {
           </Box>
         </Box>
 
-        <Divider sx={{ mb: 6 }} />
+        <Divider sx={{ mb: 4 }} />
 
-        <Box sx={{ mb: 6, p: 3, bgcolor: 'background.paper', borderRadius: 2 }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 3, mb: 2 }}>
-            <Avatar
-              src={post.author.avatar}
-              alt={post.author.name}
-              sx={{ width: 80, height: 80 }}
-            />
-            <Box>
-              <Typography
-                component={Link}
-                to={`/author/${post.author.slug}`}
-                variant="h6"
-                sx={{
-                  textDecoration: 'none',
-                  color: 'text.primary',
-                  '&:hover': { color: 'primary.main' },
-                }}
-              >
-                {post.author.name}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                Author
-              </Typography>
-            </Box>
+        {/* Compact author info */}
+        <Box sx={{ mb: 4, display: 'flex', alignItems: 'center', gap: 2 }}>
+          <Avatar
+            src={post.author.avatar}
+            alt={post.author.name}
+            sx={{ width: 40, height: 40 }}
+          />
+          <Box>
+            <Typography
+              component={Link}
+              to={`/author/${post.author.slug}`}
+              variant="subtitle2"
+              sx={{
+                textDecoration: 'none',
+                color: 'text.primary',
+                fontWeight: 600,
+                '&:hover': { color: 'primary.main' },
+              }}
+            >
+              {post.author.name}
+            </Typography>
+            <Typography variant="caption" color="text.secondary">
+              Author • {post.author.bio?.substring(0, 60)}{post.author.bio && post.author.bio.length > 60 ? '...' : ''}
+            </Typography>
           </Box>
-          <Typography variant="body2" color="text.secondary">
-            {post.author.bio}
-          </Typography>
         </Box>
 
         {relatedPosts && relatedPosts.length > 0 && (
@@ -317,15 +377,82 @@ const PostDetailPage: React.FC = () => {
             >
               Related Articles
             </Typography>
-            <Grid container spacing={4}>
-              {relatedPosts.map((relatedPost) => (
-                <Grid item xs={12} md={6} key={relatedPost.id}>
-                  <PostCard post={relatedPost} />
-                </Grid>
-              ))}
-            </Grid>
+            <Box 
+              sx={{ 
+                overflowX: 'auto',
+                pb: 2,
+                '&::-webkit-scrollbar': {
+                  height: '8px',
+                },
+                '&::-webkit-scrollbar-track': {
+                  background: '#f1f1f1',
+                  borderRadius: '10px',
+                },
+                '&::-webkit-scrollbar-thumb': {
+                  background: '#888',
+                  borderRadius: '10px',
+                },
+                '&::-webkit-scrollbar-thumb:hover': {
+                  background: '#555',
+                },
+              }}
+            >
+              <Box sx={{ display: 'flex', gap: 2, minWidth: 'max-content' }}>
+                {relatedPosts.map((relatedPost) => (
+                  <Box key={relatedPost.id} sx={{ minWidth: '300px', maxWidth: '350px' }}>
+                    <PostCard post={relatedPost} />
+                  </Box>
+                ))}
+              </Box>
+            </Box>
           </Box>
         )}
+          </Grid>
+
+          {/* Table of Contents - Only visible on desktop */}
+          {isDesktop && post && extractHeaders(post.content).length > 0 && (
+            <Grid item lg={4}>
+              <Paper 
+                elevation={0} 
+                sx={{ 
+                  p: 3, 
+                  position: 'sticky', 
+                  top: 24, 
+                  borderRadius: 2,
+                  border: '1px solid',
+                  borderColor: 'divider',
+                  maxHeight: 'calc(100vh - 48px)',
+                  overflow: 'auto',
+                }}
+              >
+                <Typography variant="h6" gutterBottom fontWeight="bold">
+                  Table of Contents
+                </Typography>
+                <List dense>
+                  {extractHeaders(post.content).map((header) => (
+                    <ListItem 
+                      key={header.id} 
+                      button 
+                      sx={{ 
+                        pl: header.level === 1 ? 1 : 3,
+                        py: 0.5,
+                      }}
+                      onClick={() => scrollToSection(header.id)}
+                    >
+                      <ListItemText 
+                        primary={header.text}
+                        primaryTypographyProps={{
+                          variant: header.level === 1 ? 'subtitle1' : 'body2',
+                          fontWeight: header.level === 1 ? 500 : 400,
+                        }}
+                      />
+                    </ListItem>
+                  ))}
+                </List>
+              </Paper>
+            </Grid>
+          )}
+        </Grid>
       </Container>
     </>
   );
