@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   AppBar,
   Toolbar,
@@ -16,6 +16,12 @@ import {
   TextField,
   useTheme,
   useMediaQuery,
+  Menu,
+  MenuItem,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Collapse,
 } from '@mui/material';
 import {
   Menu as MenuIcon,
@@ -24,11 +30,262 @@ import {
   LightMode,
   MenuBook,
   Close,
+  ExpandMore,
+  ExpandLess,
+  KeyboardArrowDown,
 } from '@mui/icons-material';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppStore } from '../../stores/useAppStore';
 import { motion } from 'framer-motion';
 import { isFeatureEnabled } from '../../utils/featureFlags';
+
+// Literature categories data
+const literatureCategories = [
+  {
+    label: 'Fiction',
+    path: '/category/fiction',
+    subcategories: [
+      { label: 'Short Stories', path: '/category/fiction/short-stories' },
+      { label: 'Novels', path: '/category/fiction/novels' },
+      { label: 'Flash Fiction', path: '/category/fiction/flash-fiction' },
+      { label: 'Science Fiction', path: '/category/fiction/science-fiction' },
+      { label: 'Fantasy', path: '/category/fiction/fantasy' },
+    ]
+  },
+  {
+    label: 'Poetry',
+    path: '/category/poetry',
+    subcategories: [
+      { label: 'Contemporary', path: '/category/poetry/contemporary' },
+      { label: 'Traditional', path: '/category/poetry/traditional' },
+      { label: 'Free Verse', path: '/category/poetry/free-verse' },
+      { label: 'Haiku', path: '/category/poetry/haiku' },
+      { label: 'Sonnet', path: '/category/poetry/sonnet' },
+    ]
+  },
+  {
+    label: 'Essays',
+    path: '/category/essays',
+    subcategories: [
+      { label: 'Literary Criticism', path: '/category/essays/literary-criticism' },
+      { label: 'Personal Essays', path: '/category/essays/personal' },
+      { label: 'Academic', path: '/category/essays/academic' },
+      { label: 'Creative Nonfiction', path: '/category/essays/creative-nonfiction' },
+    ]
+  },
+  {
+    label: 'Reviews',
+    path: '/category/reviews',
+    subcategories: [
+      { label: 'Book Reviews', path: '/category/reviews/books' },
+      { label: 'Film Reviews', path: '/category/reviews/films' },
+      { label: 'Art Reviews', path: '/category/reviews/art' },
+      { label: 'Theater Reviews', path: '/category/reviews/theater' },
+    ]
+  },
+];
+
+// Desktop Categories Dropdown Component
+const DesktopCategoriesDropdown: React.FC = () => {
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const navigate = useNavigate();
+
+  const handleMouseEnter = (event: React.MouseEvent<HTMLElement>) => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMouseLeave = () => {
+    timeoutRef.current = setTimeout(() => {
+      setAnchorEl(null);
+      setHoveredCategory(null);
+    }, 150);
+  };
+
+  const handleCategoryClick = (path: string) => {
+    navigate(path);
+    setAnchorEl(null);
+    setHoveredCategory(null);
+  };
+
+  const handleSubcategoryClick = (path: string) => {
+    navigate(path);
+    setAnchorEl(null);
+    setHoveredCategory(null);
+  };
+
+  return (
+    <Box
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      sx={{ position: 'relative' }}
+    >
+      <Button
+        color="inherit"
+        endIcon={<KeyboardArrowDown />}
+        sx={{ 
+          color: 'text.primary',
+          '&:hover': { color: 'primary.main' }
+        }}
+      >
+        Literature
+      </Button>
+      
+      <Menu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={() => setAnchorEl(null)}
+        MenuListProps={{
+          onMouseEnter: () => {
+            if (timeoutRef.current) {
+              clearTimeout(timeoutRef.current);
+            }
+          },
+          onMouseLeave: handleMouseLeave,
+          style: { padding: 0 }
+        }}
+        PaperProps={{
+          sx: {
+            mt: 1,
+            minWidth: 200,
+            boxShadow: 3,
+            borderRadius: 2,
+          }
+        }}
+        transformOrigin={{ horizontal: 'left', vertical: 'top' }}
+        anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
+      >
+        {literatureCategories.map((category) => (
+          <MenuItem
+            key={category.path}
+            onClick={() => handleCategoryClick(category.path)}
+            onMouseEnter={() => setHoveredCategory(category.label)}
+            onMouseLeave={() => setHoveredCategory(null)}
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              py: 1.5,
+              px: 2,
+              '&:hover': { bgcolor: 'action.hover' },
+              position: 'relative',
+            }}
+          >
+            <Box sx={{ display: 'flex', alignItems: 'center', flex: 1 }}>
+              {category.label}
+            </Box>
+            <KeyboardArrowDown sx={{ fontSize: 16, ml: 1 }} />
+            
+            {/* Submenu */}
+            {hoveredCategory === category.label && (
+              <Box
+                sx={{
+                  position: 'absolute',
+                  left: '100%',
+                  top: 0,
+                  bgcolor: 'background.paper',
+                  boxShadow: 3,
+                  borderRadius: 2,
+                  minWidth: 200,
+                  zIndex: 1300,
+                  border: 1,
+                  borderColor: 'divider',
+                }}
+              >
+                {category.subcategories.map((subcategory) => (
+                  <MenuItem
+                    key={subcategory.path}
+                    onClick={() => handleSubcategoryClick(subcategory.path)}
+                    sx={{
+                      py: 1.5,
+                      px: 2,
+                      '&:hover': { bgcolor: 'action.hover' },
+                    }}
+                  >
+                    {subcategory.label}
+                  </MenuItem>
+                ))}
+              </Box>
+            )}
+          </MenuItem>
+        ))}
+      </Menu>
+    </Box>
+  );
+};
+
+// Mobile Categories Accordion Component
+const MobileCategoriesAccordion: React.FC<{ onClose: () => void }> = ({ onClose }) => {
+  const [expanded, setExpanded] = useState<string | false>(false);
+  const navigate = useNavigate();
+
+  const handleChange = (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
+    setExpanded(isExpanded ? panel : false);
+  };
+
+  const handleCategoryClick = (path: string) => {
+    navigate(path);
+    onClose();
+  };
+
+  const handleSubcategoryClick = (path: string) => {
+    navigate(path);
+    onClose();
+  };
+
+  return (
+    <Box sx={{ width: '100%' }}>
+      {literatureCategories.map((category) => (
+        <Accordion
+          key={category.path}
+          expanded={expanded === category.path}
+          onChange={handleChange(category.path)}
+          sx={{
+            '&:before': { display: 'none' },
+            boxShadow: 'none',
+            borderBottom: 1,
+            borderColor: 'divider',
+          }}
+        >
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            onClick={() => handleCategoryClick(category.path)}
+            sx={{
+              '&:hover': { bgcolor: 'action.hover' },
+              cursor: 'pointer',
+            }}
+          >
+            <Typography>{category.label}</Typography>
+          </AccordionSummary>
+          <AccordionDetails sx={{ pt: 0, pb: 1 }}>
+            <List dense sx={{ py: 0 }}>
+              {category.subcategories.map((subcategory) => (
+                <ListItem
+                  key={subcategory.path}
+                  onClick={() => handleSubcategoryClick(subcategory.path)}
+                  sx={{
+                    py: 0.5,
+                    '&:hover': { bgcolor: 'action.hover' },
+                    cursor: 'pointer',
+                  }}
+                >
+                  <ListItemText 
+                    primary={subcategory.label}
+                    primaryTypographyProps={{ fontSize: '0.875rem' }}
+                  />
+                </ListItem>
+              ))}
+            </List>
+          </AccordionDetails>
+        </Accordion>
+      ))}
+    </Box>
+  );
+};
 
 const Header: React.FC = () => {
   const theme = useTheme();
@@ -64,10 +321,6 @@ const Header: React.FC = () => {
 
   const navigationItems = [
     { label: 'Home', path: '/' },
-    { label: 'Fiction', path: '/category/fiction' },
-    { label: 'Poetry', path: '/category/poetry' },
-    { label: 'Essays', path: '/category/essays' },
-    { label: 'Reviews', path: '/category/reviews' },
     { label: 'Authors', path: '/authors' },
   ];
 
@@ -130,6 +383,10 @@ const Header: React.FC = () => {
                     {item.label}
                   </Button>
                 ))}
+                
+                {/* Desktop Categories Dropdown */}
+                <DesktopCategoriesDropdown />
+                
                 <Button
                   component={Link}
                   to="/contact"
@@ -236,6 +493,17 @@ const Header: React.FC = () => {
                 <ListItemText primary={item.label} />
               </ListItem>
             ))}
+            
+            {/* Mobile Categories Accordion */}
+            <ListItem sx={{ display: 'block', p: 0 }}>
+              <Box sx={{ px: 2, py: 1 }}>
+                <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1 }}>
+                  Literature Categories
+                </Typography>
+                <MobileCategoriesAccordion onClose={() => setMobileMenuOpen(false)} />
+              </Box>
+            </ListItem>
+            
             <ListItem
               component={Link}
               to="/contact"
