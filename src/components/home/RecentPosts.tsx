@@ -96,9 +96,9 @@ const RecentPosts: React.FC = () => {
 
         {postsData && postsData.posts.length > 0 ? (
           <>
-            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3, mb: 6 }}>
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3, mb: 6, alignItems: 'stretch' }}>
               {postsData.posts.map((post) => (
-                <Box sx={{ width: { xs: '100%', sm: '45%', md: '30%' } }} key={post.id}>
+                <Box sx={{ width: { xs: '100%', sm: '45%', md: '30%' }, display: 'flex' }} key={post.id}>
                   <CompactPostCard post={post} variant="small" />
                 </Box>
               ))}
