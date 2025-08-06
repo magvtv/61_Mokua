@@ -58,7 +58,7 @@ const FeaturedPosts: React.FC = () => {
   }
 
   return (
-    <Box sx={{ py: 8 }}>
+    <Box sx={{ py: 8, bgcolor: 'background.default' }}>
       <Container maxWidth="lg">
         <Box
           sx={{
@@ -108,7 +108,10 @@ const FeaturedPosts: React.FC = () => {
         {/* Posts Grid */}
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3 }}>
           {filteredPosts.map((post, index) => (
-            <Box sx={{ width: { xs: '100%', sm: '45%', md: '30%' } }} key={post.id}>
+            <Box sx={{ 
+              width: { xs: '100%', sm: '45%', md: index === 0 ? '50%' : '25%' },
+              order: index === 0 ? 1 : index + 1
+            }} key={post.id}>
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}

@@ -46,7 +46,7 @@ const RecentPosts: React.FC = () => {
   const totalPages = postsData ? Math.ceil(postsData.total / postsPerPage) : 0;
 
   return (
-    <Box sx={{ py: 8, bgcolor: 'background.paper' }}>
+    <Box sx={{ py: 8, bgcolor: 'background.default' }}>
       <Container maxWidth="lg">
         <Typography
           variant="h2"

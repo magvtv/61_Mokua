@@ -59,7 +59,7 @@ const HeroSection: React.FC = () => {
   return (
     <Box
       sx={{
-        background: `linear-gradient(135deg, ${theme.palette.primary.main}08 0%, ${theme.palette.secondary.main}05 100%)`,
+        background: `linear-gradient(135deg, ${theme.palette.primary.main}05 0%, ${theme.palette.secondary.main}03 100%)`,
         py: { xs: 8, md: 12 },
         position: 'relative',
         overflow: 'hidden',
@@ -72,7 +72,7 @@ const HeroSection: React.FC = () => {
           animate="visible"
         >
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 6, alignItems: 'center' }}>
-            <Box sx={{ width: { xs: '100%', md: '50%' } }}>
+            <Box sx={{ width: { xs: '100%', md: '45%' } }}>
               <motion.div variants={itemVariants}>
                 <Typography
                   variant="h1"
@@ -174,7 +174,7 @@ const HeroSection: React.FC = () => {
 
             {/* Featured Post Preview */}
             {!isMobile && featuredPosts && featuredPosts.length > 0 && (
-              <Box sx={{ width: { xs: '100%', md: '50%' } }}>
+              <Box sx={{ width: { xs: '100%', md: '55%' } }}>
                 <motion.div variants={itemVariants}>
                   <Box sx={{ position: 'relative' }}>
                     <Paper
@@ -182,9 +182,20 @@ const HeroSection: React.FC = () => {
                       sx={{
                         p: 3,
                         borderRadius: 3,
-                        background: `linear-gradient(135deg, ${theme.palette.background.paper} 0%, ${theme.palette.background.default} 100%)`,
+                        background: `linear-gradient(135deg, ${theme.palette.background.paper} 0%, ${theme.palette.primary.main}08 100%)`,
                         border: 1,
                         borderColor: 'divider',
+                        position: 'relative',
+                        '&::before': {
+                          content: '""',
+                          position: 'absolute',
+                          top: 0,
+                          left: 0,
+                          right: 0,
+                          height: '4px',
+                          background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+                          borderRadius: '12px 12px 0 0',
+                        }
                       }}
                     >
                       <Typography
