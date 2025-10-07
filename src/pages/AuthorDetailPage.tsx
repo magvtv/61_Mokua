@@ -15,7 +15,7 @@ import { Helmet } from 'react-helmet-async';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import { contentService } from '../services/contentService';
-import PostCard from '../components/post/PostCard';
+import CompactPostCard from '../components/home/CompactPostCard';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 
 const AuthorDetailPage: React.FC = () => {
@@ -192,7 +192,7 @@ const AuthorDetailPage: React.FC = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
                 >
-                  <PostCard post={post} />
+                  <CompactPostCard post={post} variant="large" showExcerpt />
                 </motion.div>
               </Grid>
             ))}
