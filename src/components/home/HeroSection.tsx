@@ -71,7 +71,7 @@ const HeroSection: React.FC = () => {
           initial="hidden"
           animate="visible"
         >
-          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: { xs: 6, md: 4 }, alignItems: 'center' }}>
+          <Box sx={{ display: 'flex', flexWrap: { xs: 'wrap', md: 'nowrap' }, gap: { xs: 6, md: 4 }, alignItems: 'flex-start' }}>
             <Box sx={{ width: { xs: '100%', md: '45%' } }}>
               <motion.div variants={itemVariants}>
                 <Typography
@@ -209,7 +209,7 @@ const HeroSection: React.FC = () => {
                       >
                         Featured Story
                       </Typography>
-                      <CompactPostCard post={featuredPosts[0]} variant="large" />
+                      <CompactPostCard post={featuredPosts[0]} variant="medium" />
                     </Paper>
                   </Box>
                 </motion.div>
