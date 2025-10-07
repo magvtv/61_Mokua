@@ -26,7 +26,7 @@ const SEOHead: React.FC<SEOHeadProps> = ({
   section,
   tags = [],
 }) => {
-  const siteUrl = 'https://mokua-literary.vercel.app';
+  const siteUrl = 'https://mokua-blog.vercel.app';
   const fullUrl = url ? `${siteUrl}${url}` : siteUrl;
   const keywordsString = keywords.join(', ');
 

@@ -6,14 +6,20 @@ import {
   Button,
   useTheme,
   useMediaQuery,
-  Grid,
+  Paper,
 } from '@mui/material';
+
 import { ArrowForward } from '@mui/icons-material';
+import { 
+  BookOpenIcon, 
+  UserGroupIcon, 
+  ChartBarIcon 
+} from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
 import { contentService } from '../../services/contentService';
-import PostCard from '../post/PostCard';
+import CompactPostCard from './CompactPostCard';
 import LoadingSpinner from '../common/LoadingSpinner';
 
 const HeroSection: React.FC = () => {
@@ -40,6 +46,12 @@ const HeroSection: React.FC = () => {
     visible: { opacity: 1, y: 0 },
   };
 
+  const stats = [
+    { icon: BookOpenIcon, value: '500+', label: 'Articles' },
+    { icon: UserGroupIcon, value: '10K+', label: 'Readers' },
+    { icon: ChartBarIcon, value: '95%', label: 'Satisfaction' },
+  ];
+
   if (isLoading) {
     return <LoadingSpinner message="Loading featured content..." />;
   }
@@ -47,8 +59,8 @@ const HeroSection: React.FC = () => {
   return (
     <Box
       sx={{
-        background: `linear-gradient(135deg, ${theme.palette.primary.main}15 0%, ${theme.palette.secondary.main}10 100%)`,
-        py: { xs: 6, md: 10 },
+        background: `linear-gradient(135deg, ${theme.palette.primary.main}05 0%, ${theme.palette.secondary.main}03 100%)`,
+        py: { xs: 8, md: 12 },
         position: 'relative',
         overflow: 'hidden',
       }}
@@ -59,8 +71,8 @@ const HeroSection: React.FC = () => {
           initial="hidden"
           animate="visible"
         >
-          <Grid container spacing={6} alignItems="center">
-            <Grid item xs={12} md={6}>
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: { xs: 6, md: 4 }, alignItems: 'center' }}>
+            <Box sx={{ width: { xs: '100%', md: '45%' } }}>
               <motion.div variants={itemVariants}>
                 <Typography
                   variant="h1"
@@ -87,7 +99,7 @@ const HeroSection: React.FC = () => {
                     fontSize: { xs: '1.1rem', md: '1.3rem' },
                     fontWeight: 400,
                     lineHeight: 1.6,
-                    mb: 4,
+                    mb: { xs: 4, md: 3 },
                     color: 'text.secondary',
                     maxWidth: 500,
                   }}
@@ -97,19 +109,47 @@ const HeroSection: React.FC = () => {
                 </Typography>
               </motion.div>
 
+              {/* Stats Section */}
               <motion.div variants={itemVariants}>
-                <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+                <Box sx={{ display: 'flex', gap: { xs: 4, md: 3 }, mb: { xs: 4, md: 3 }, flexWrap: 'wrap' }}>
+                  {stats.map((stat, index) => {
+                    const IconComponent = stat.icon;
+                    return (
+                      <Box key={index} sx={{ textAlign: 'center' }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
+                          <IconComponent
+                            style={{
+                              color: theme.palette.primary.main,
+                              width: 20,
+                              height: 20
+                            }}
+                          />
+                          <Typography variant="h4" sx={{ fontWeight: 700, color: 'primary.main' }}>
+                            {stat.value}
+                          </Typography>
+                        </Box>
+                        <Typography variant="body2" color="text.secondary">
+                          {stat.label}
+                        </Typography>
+                      </Box>
+                    );
+                  })}
+                </Box>
+              </motion.div>
+
+              <motion.div variants={itemVariants}>
+                <Box sx={{ display: 'flex', gap: { xs: 2, md: 1.5 }, flexWrap: 'wrap' }}>
                   <Button
                     component={Link}
                     to="/category/fiction"
                     variant="contained"
-                    size="large"
+                    size="medium"
                     endIcon={<ArrowForward />}
                     sx={{
                       borderRadius: 2,
-                      px: 4,
-                      py: 1.5,
-                      fontSize: '1.1rem',
+                      px: { xs: 4, md: 3 },
+                      py: { xs: 1.5, md: 1 },
+                      fontSize: { xs: '1.1rem', md: '1rem' },
                     }}
                   >
                     Explore Fiction
@@ -118,34 +158,68 @@ const HeroSection: React.FC = () => {
                     component={Link}
                     to="/submit"
                     variant="outlined"
-                    size="large"
+                    size="medium"
                     sx={{
                       borderRadius: 2,
-                      px: 4,
-                      py: 1.5,
-                      fontSize: '1.1rem',
+                      px: { xs: 4, md: 3 },
+                      py: { xs: 1.5, md: 1 },
+                      fontSize: { xs: '1.1rem', md: '1rem' },
                     }}
                   >
                     Submit Your Work
                   </Button>
                 </Box>
               </motion.div>
-            </Grid>
+            </Box>
 
+            {/* Featured Post Preview */}
             {!isMobile && featuredPosts && featuredPosts.length > 0 && (
-              <Grid item xs={12} md={6}>
-                <motion.div variants={itemVariants}>
+              <Box sx={{ width: { xs: '100%', md: '55%' }, display: 'flex', alignItems: 'flex-start' }}>
+                <motion.div variants={itemVariants} style={{ width: '100%' }}>
                   <Box sx={{ position: 'relative' }}>
-                    <PostCard post={featuredPosts[0]} featured />
+                    <Paper
+                      elevation={8}
+                      sx={{
+                        p: 3,
+                        borderRadius: 3,
+                        background: `linear-gradient(135deg, ${theme.palette.background.paper} 0%, ${theme.palette.primary.main}08 100%)`,
+                        border: 1,
+                        borderColor: 'divider',
+                        position: 'relative',
+                        '&::before': {
+                          content: '""',
+                          position: 'absolute',
+                          top: 0,
+                          left: 0,
+                          right: 0,
+                          height: '4px',
+                          background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+                          borderRadius: '12px 12px 0 0',
+                        }
+                      }}
+                    >
+                      <Typography
+                        variant="h6"
+                        sx={{
+                          fontFamily: '"Playfair Display", serif',
+                          fontWeight: 600,
+                          mb: 2,
+                          color: 'primary.main',
+                        }}
+                      >
+                        Featured Story
+                      </Typography>
+                      <CompactPostCard post={featuredPosts[0]} variant="large" />
+                    </Paper>
                   </Box>
                 </motion.div>
-              </Grid>
+              </Box>
             )}
-          </Grid>
+          </Box>
         </motion.div>
       </Container>
 
-      {/* Decorative elements */}
+      {/* Enhanced Decorative Elements */}
       <Box
         sx={{
           position: 'absolute',
@@ -168,6 +242,18 @@ const HeroSection: React.FC = () => {
           borderRadius: '50%',
           background: `linear-gradient(45deg, ${theme.palette.primary.main}15, ${theme.palette.secondary.main}15)`,
           filter: 'blur(30px)',
+        }}
+      />
+      <Box
+        sx={{
+          position: 'absolute',
+          top: '50%',
+          right: '10%',
+          width: 100,
+          height: 100,
+          borderRadius: '50%',
+          background: `linear-gradient(45deg, ${theme.palette.warning.main}10, ${theme.palette.info.main}10)`,
+          filter: 'blur(20px)',
         }}
       />
     </Box>

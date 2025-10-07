@@ -25,7 +25,7 @@ const AuthorsPage: React.FC = () => {
   });
 
   if (isLoading) {
-    return <LoadingSpinner message="Loading authors..." />;
+    return <LoadingSpinner message="Loading our voices..." />;
   }
 
   const getSocialIcon = (platform: string) => {
@@ -41,15 +41,15 @@ const AuthorsPage: React.FC = () => {
   return (
     <>
       <Helmet>
-        <title>Authors - Mokua Literary Blog</title>
+        <title>Our Voices - Mokua Youth Platform</title>
         <meta
           name="description"
-          content="Meet our talented authors and contributors who bring diverse voices and perspectives to contemporary literature."
+          content="Meet the passionate Kenyan voices covering youth affairs, county news, health issues, and social trends affecting Gen Z across Kenya."
         />
-        <meta property="og:title" content="Authors - Mokua Literary Blog" />
+        <meta property="og:title" content="Our Voices - Mokua Youth Platform" />
         <meta
           property="og:description"
-          content="Meet our talented authors and contributors who bring diverse voices and perspectives to contemporary literature."
+          content="Meet the passionate Kenyan voices covering youth affairs, county news, health issues, and social trends affecting Gen Z across Kenya."
         />
       </Helmet>
 
@@ -64,15 +64,15 @@ const AuthorsPage: React.FC = () => {
               mb: 3,
             }}
           >
-            Our Authors
+            Our Voices
           </Typography>
           <Typography
             variant="h6"
             color="text.secondary"
             sx={{ maxWidth: 600, mx: 'auto', lineHeight: 1.6 }}
           >
-            Meet the talented writers and contributors who bring diverse voices 
-            and perspectives to our literary community.
+            Meet the passionate Kenyan voices covering youth affairs, county news, 
+            health issues, and social trends affecting Gen Z across Kenya's 47 counties.
           </Typography>
         </Box>
 
@@ -127,7 +127,7 @@ const AuthorsPage: React.FC = () => {
                           {author.name}
                         </Typography>
                         <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-                          {author.postsCount} {author.postsCount === 1 ? 'article' : 'articles'}
+                          {author.postsCount} {author.postsCount === 1 ? 'story' : 'stories'}
                         </Typography>
                       </Box>
 
@@ -188,7 +188,7 @@ const AuthorsPage: React.FC = () => {
         ) : (
           <Box sx={{ textAlign: 'center', py: 8 }}>
             <Typography variant="h6" color="text.secondary">
-              No authors found.
+              No voices found.
             </Typography>
           </Box>
         )}

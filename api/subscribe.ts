@@ -64,14 +64,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     // Create or update subscriber
     const subscriber = existingSubscriber || new Subscriber();
     subscriber.email = email.toLowerCase();
-    subscriber.name = name || 'Anonymous'; // Provide default name
+    subscriber.name = name || '';
     subscriber.status = 'active';
     subscriber.subscribedAt = new Date();
     subscriber.metadata = {
-      source: 'coming-soon', // Use valid enum value
+      source: 'website',
       ipAddress: ip as string,
+      userAgent: req.headers['user-agent'] || '',
       lastModified: new Date()
-      // Remove userAgent as it's not in schema
     };
 
     await subscriber.save();
@@ -80,27 +80,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(200).json({ message: 'Successfully subscribed!' });
   } catch (error) {
     console.error('Subscribe error:', error);
-    
-    // More specific error handling
-    if (error instanceof Error) {
-      if (error.message.includes('duplicate key') || error.message.includes('Email already')) {
-        return res.status(409).json({ message: 'Email already subscribed' });
-      }
-      if (error.message.includes('validation failed')) {
-        return res.status(400).json({ message: 'Invalid data provided' });
-      }
-      if (error.message.includes('MONGODB_URI')) {
-        return res.status(503).json({ message: 'Database connection error' });
-      }
-    }
-    
     return res.status(500).json({ message: 'Internal server error' });
-  } finally {
-    // Ensure disconnection even if error occurs
-    try {
-      await disconnect();
-    } catch (disconnectError) {
-      console.error('Disconnect error:', disconnectError);
-    }
   }
 }

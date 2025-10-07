@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   AppBar,
   Toolbar,
@@ -16,6 +16,11 @@ import {
   TextField,
   useTheme,
   useMediaQuery,
+  Menu,
+  MenuItem,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
 } from '@mui/material';
 import {
   Menu as MenuIcon,
@@ -24,10 +29,263 @@ import {
   LightMode,
   MenuBook,
   Close,
+  ExpandMore,
+  KeyboardArrowDown,
 } from '@mui/icons-material';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppStore } from '../../stores/useAppStore';
 import { motion } from 'framer-motion';
+import { isFeatureEnabled } from '../../utils/featureFlags';
+
+// Literature categories data
+const literatureCategories = [
+  {
+    label: 'Youth Affairs',
+    path: '/category/youth-affairs',
+    subcategories: [
+      { label: 'Mental Health', path: '/category/youth-affairs/mental-health' },
+      { label: 'Drug Abuse', path: '/category/youth-affairs/drug-abuse' },
+      { label: 'Education Challenges', path: '/category/youth-affairs/education' },
+      { label: 'Employment', path: '/category/youth-affairs/employment' },
+      { label: 'Social Media', path: '/category/youth-affairs/social-media' },
+    ]
+  },
+  {
+    label: 'County News',
+    path: '/category/county-news',
+    subcategories: [
+      { label: 'Nairobi', path: '/category/county-news/nairobi' },
+      { label: 'Mombasa', path: '/category/county-news/mombasa' },
+      { label: 'Kisumu', path: '/category/county-news/kisumu' },
+      { label: 'Nakuru', path: '/category/county-news/nakuru' },
+      { label: 'Eldoret', path: '/category/county-news/eldoret' },
+    ]
+  },
+  {
+    label: 'Health & Wellness',
+    path: '/category/health-wellness',
+    subcategories: [
+      { label: 'Sexual Health', path: '/category/health-wellness/sexual-health' },
+      { label: 'HIV/AIDS', path: '/category/health-wellness/hiv-aids' },
+      { label: 'Mental Health', path: '/category/health-wellness/mental-health' },
+      { label: 'Substance Abuse', path: '/category/health-wellness/substance-abuse' },
+      { label: 'Nutrition', path: '/category/health-wellness/nutrition' },
+    ]
+  },
+  {
+    label: 'Education & Tech',
+    path: '/category/education-tech',
+    subcategories: [
+      { label: 'Digital Learning', path: '/category/education-tech/digital-learning' },
+      { label: 'Online Education', path: '/category/education-tech/online-education' },
+      { label: 'Tech Innovation', path: '/category/education-tech/tech-innovation' },
+      { label: 'Career Development', path: '/category/education-tech/career-development' },
+      { label: 'Digital Skills', path: '/category/education-tech/digital-skills' },
+    ]
+  },
+];
+
+// Desktop Categories Dropdown Component
+const DesktopCategoriesDropdown: React.FC = () => {
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const navigate = useNavigate();
+
+  const handleMouseEnter = (event: React.MouseEvent<HTMLElement>) => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMouseLeave = () => {
+    timeoutRef.current = setTimeout(() => {
+      setAnchorEl(null);
+      setHoveredCategory(null);
+    }, 150);
+  };
+
+  const handleCategoryClick = (path: string) => {
+    navigate(path);
+    setAnchorEl(null);
+    setHoveredCategory(null);
+  };
+
+  const handleSubcategoryClick = (path: string) => {
+    navigate(path);
+    setAnchorEl(null);
+    setHoveredCategory(null);
+  };
+
+  return (
+    <Box
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      sx={{ position: 'relative' }}
+    >
+      <Button
+        color="inherit"
+        endIcon={<KeyboardArrowDown />}
+        sx={{ 
+          color: 'text.primary',
+          '&:hover': { color: 'primary.main' }
+        }}
+      >
+        Topics
+      </Button>
+      
+      <Menu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={() => setAnchorEl(null)}
+        MenuListProps={{
+          onMouseEnter: () => {
+            if (timeoutRef.current) {
+              clearTimeout(timeoutRef.current);
+            }
+          },
+          onMouseLeave: handleMouseLeave,
+          style: { padding: 0 }
+        }}
+        PaperProps={{
+          sx: {
+            mt: 1,
+            minWidth: 200,
+            boxShadow: 3,
+            borderRadius: 2,
+          }
+        }}
+        transformOrigin={{ horizontal: 'left', vertical: 'top' }}
+        anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
+      >
+        {literatureCategories.map((category) => (
+          <MenuItem
+            key={category.path}
+            onClick={() => handleCategoryClick(category.path)}
+            onMouseEnter={() => setHoveredCategory(category.label)}
+            onMouseLeave={() => setHoveredCategory(null)}
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              py: 1.5,
+              px: 2,
+              '&:hover': { bgcolor: 'action.hover' },
+              position: 'relative',
+            }}
+          >
+            <Box sx={{ display: 'flex', alignItems: 'center', flex: 1 }}>
+              {category.label}
+            </Box>
+            <KeyboardArrowDown sx={{ fontSize: 16, ml: 1 }} />
+            
+            {/* Submenu */}
+            {hoveredCategory === category.label && (
+              <Box
+                sx={{
+                  position: 'absolute',
+                  left: '100%',
+                  top: 0,
+                  bgcolor: 'background.paper',
+                  boxShadow: 3,
+                  borderRadius: 2,
+                  minWidth: 200,
+                  zIndex: 1300,
+                  border: 1,
+                  borderColor: 'divider',
+                }}
+              >
+                {category.subcategories.map((subcategory) => (
+                  <MenuItem
+                    key={subcategory.path}
+                    onClick={() => handleSubcategoryClick(subcategory.path)}
+                    sx={{
+                      py: 1.5,
+                      px: 2,
+                      '&:hover': { bgcolor: 'action.hover' },
+                    }}
+                  >
+                    {subcategory.label}
+                  </MenuItem>
+                ))}
+              </Box>
+            )}
+          </MenuItem>
+        ))}
+      </Menu>
+    </Box>
+  );
+};
+
+// Mobile Categories Accordion Component
+const MobileCategoriesAccordion: React.FC<{ onClose: () => void }> = ({ onClose }) => {
+  const [expanded, setExpanded] = useState<string | false>(false);
+  const navigate = useNavigate();
+
+  const handleChange = (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
+    setExpanded(isExpanded ? panel : false);
+  };
+
+  const handleCategoryClick = (path: string) => {
+    navigate(path);
+    onClose();
+  };
+
+  const handleSubcategoryClick = (path: string) => {
+    navigate(path);
+    onClose();
+  };
+
+  return (
+    <Box sx={{ width: '100%' }}>
+      {literatureCategories.map((category) => (
+        <Accordion
+          key={category.path}
+          expanded={expanded === category.path}
+          onChange={handleChange(category.path)}
+          sx={{
+            '&:before': { display: 'none' },
+            boxShadow: 'none',
+            borderBottom: 1,
+            borderColor: 'divider',
+          }}
+        >
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            onClick={() => handleCategoryClick(category.path)}
+            sx={{
+              '&:hover': { bgcolor: 'action.hover' },
+              cursor: 'pointer',
+            }}
+          >
+            <Typography>{category.label}</Typography>
+          </AccordionSummary>
+          <AccordionDetails sx={{ pt: 0, pb: 1 }}>
+            <List dense sx={{ py: 0 }}>
+              {category.subcategories.map((subcategory) => (
+                <ListItem
+                  key={subcategory.path}
+                  onClick={() => handleSubcategoryClick(subcategory.path)}
+                  sx={{
+                    py: 0.5,
+                    '&:hover': { bgcolor: 'action.hover' },
+                    cursor: 'pointer',
+                  }}
+                >
+                  <ListItemText 
+                    primary={subcategory.label}
+                    primaryTypographyProps={{ fontSize: '0.875rem' }}
+                  />
+                </ListItem>
+              ))}
+            </List>
+          </AccordionDetails>
+        </Accordion>
+      ))}
+    </Box>
+  );
+};
 
 const Header: React.FC = () => {
   const theme = useTheme();
@@ -40,7 +298,7 @@ const Header: React.FC = () => {
     isMobileMenuOpen,
     setMobileMenuOpen,
     setSearchQuery,
-    isSearchOpen,
+    isSearchOpen, 
     setSearchOpen,
   } = useAppStore();
 
@@ -63,11 +321,14 @@ const Header: React.FC = () => {
 
   const navigationItems = [
     { label: 'Home', path: '/' },
-    { label: 'Think-pieces', path: '/category/think-pieces' },
-    { label: 'Short stories', path: '/category/short-stories' },
-    { label: 'Poetry', path: '/category/poetry' },
-    { label: 'Real Life', path: '/category/real-life' },
+    { label: 'Authors', path: '/authors' },
   ];
+
+  // Filter navigation items based on feature flags
+  const filteredNavigationItems = navigationItems.filter(() => {
+    // Show all navigation items for now, but you can add conditions here
+    return true;
+  });
 
   return (
     <>
@@ -103,12 +364,12 @@ const Header: React.FC = () => {
                 fontWeight: 700,
               }}
             >
-              Rise Above
+              Mokua Literary
             </Typography>
 
             {!isMobile && (
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mr: 2 }}>
-                {navigationItems.map((item) => (
+                {filteredNavigationItems.map((item) => (
                   <Button
                     key={item.path}
                     component={Link}
@@ -122,6 +383,10 @@ const Header: React.FC = () => {
                     {item.label}
                   </Button>
                 ))}
+                
+                {/* Desktop Categories Dropdown */}
+                <DesktopCategoriesDropdown />
+                
                 <Button
                   component={Link}
                   to="/contact"
@@ -137,13 +402,15 @@ const Header: React.FC = () => {
             )}
 
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <IconButton
-                onClick={() => setSearchOpen(!isSearchOpen)}
-                color="inherit"
-                sx={{ color: 'text.primary' }}
-              >
-                <SearchIcon />
-              </IconButton>
+              {isFeatureEnabled('ENABLE_SEARCH') && (
+                <IconButton
+                  onClick={() => setSearchOpen(!isSearchOpen)}
+                  color="inherit"
+                  sx={{ color: 'text.primary' }}
+                >
+                  <SearchIcon />
+                </IconButton>
+              )}
               
               <IconButton
                 onClick={toggleTheme}
@@ -167,7 +434,7 @@ const Header: React.FC = () => {
           </Toolbar>
           
           {/* Search Bar */}
-          {isSearchOpen && (
+          {isSearchOpen && isFeatureEnabled('ENABLE_SEARCH') && (
             <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
@@ -211,7 +478,7 @@ const Header: React.FC = () => {
       >
         <Box sx={{ width: 280, pt: 2 }}>
           <List>
-            {navigationItems.map((item) => (
+            {filteredNavigationItems.map((item) => (
               <ListItem
                 key={item.path}
                 component={Link}
@@ -226,6 +493,17 @@ const Header: React.FC = () => {
                 <ListItemText primary={item.label} />
               </ListItem>
             ))}
+            
+            {/* Mobile Categories Accordion */}
+            <ListItem sx={{ display: 'block', p: 0 }}>
+              <Box sx={{ px: 2, py: 1 }}>
+                <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1 }}>
+                  Literature Categories
+                </Typography>
+                <MobileCategoriesAccordion onClose={() => setMobileMenuOpen(false)} />
+              </Box>
+            </ListItem>
+            
             <ListItem
               component={Link}
               to="/contact"

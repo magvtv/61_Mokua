@@ -1,14 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Box,
   Container,
   Typography,
   Link,
   IconButton,
-  TextField,
-  Button,
 } from '@mui/material';
-//
 import {
   Facebook,
   Twitter,
@@ -17,57 +14,8 @@ import {
   MenuBook,
 } from '@mui/icons-material';
 import { Link as RouterLink } from 'react-router-dom';
-import { useAppStore } from '../../stores/useAppStore';
 
 const Footer: React.FC = () => {
-  const [email, setEmail] = useState('');
-  const [name, setName] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const { addNotification } = useAppStore();
-
-  const handleNewsletterSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
-    
-    if (!email.trim() || !name.trim()) return;
-    
-    setIsSubmitting(true);
-    
-    try {
-      const response = await fetch('/api/subscribe', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ 
-          email, 
-          name,
-          source: 'footer'
-        }),
-      });
-      
-      const data = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(data.message || 'Failed to subscribe');
-      }
-      
-      addNotification({
-        type: 'success',
-        message: 'Thank you for subscribing to our newsletter!',
-      });
-      
-      setEmail('');
-      setName('');
-    } catch (error) {
-      addNotification({
-        type: 'error',
-        message: error instanceof Error ? error.message : 'Failed to subscribe. Please try again.',
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
   return (
     <Box
       component="footer"
@@ -80,14 +28,9 @@ const Footer: React.FC = () => {
       }}
     >
       <Container maxWidth="lg">
-        <Box
-          sx={{
-            display: 'grid',
-            gridTemplateColumns: { xs: '1fr', md: '1fr 1fr 1fr' },
-            gap: 4,
-          }}
-        >
-          <Box>
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 4, alignItems: 'flex-start' }}>
+          {/* Brand Section */}
+          <Box sx={{ width: { xs: '100%', md: '40%' } }}>
             <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
               <IconButton sx={{ color: 'primary.main', p: 0, mr: 1 }}>
                 <MenuBook fontSize="large" />
@@ -99,117 +42,126 @@ const Footer: React.FC = () => {
                   fontWeight: 700,
                 }}
               >
-                Rise Above
+                Mokua Literary
               </Typography>
             </Box>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-              We live and die by the stories we tell
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 3, lineHeight: 1.6, maxWidth: 300 }}>
+              A curated space for contemporary literature, poetry, and literary criticism. 
+              Discover emerging voices and timeless works that shape our understanding of the world.
             </Typography>
             <Box sx={{ display: 'flex', gap: 1 }}>
-              <IconButton size="small" color="primary">
+              <IconButton size="small" color="primary" aria-label="Facebook">
                 <Facebook />
               </IconButton>
-              <IconButton size="small" color="primary">
+              <IconButton size="small" color="primary" aria-label="Twitter">
                 <Twitter />
               </IconButton>
-              <IconButton size="small" color="primary">
+              <IconButton size="small" color="primary" aria-label="Instagram">
                 <Instagram />
               </IconButton>
-              <IconButton size="small" color="primary">
+              <IconButton size="small" color="primary" aria-label="LinkedIn">
                 <LinkedIn />
               </IconButton>
             </Box>
           </Box>
 
-          <Box>
-            <Typography variant="h6" gutterBottom>
-              Explore
-            </Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-              <Link component={RouterLink} to="/" color="inherit" underline="hover">
-                Home
-              </Link>
-              <Link component={RouterLink} to="/category/think-pieces" color="inherit" underline="hover">
-                Think-pieces
-              </Link>
-              <Link component={RouterLink} to="/category/short-stories" color="inherit" underline="hover">
-                Short stories
-              </Link>
-              <Link component={RouterLink} to="/category/poetry" color="inherit" underline="hover">
-                Poetry
-              </Link>
-              <Link component={RouterLink} to="/category/real-life" color="inherit" underline="hover">
-                Real Life
-              </Link>
+          {/* Navigation Sections */}
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 4, flex: 1 }}>
+            {/* Explore Section */}
+            <Box sx={{ minWidth: { xs: '100%', sm: '200px' } }}>
+              <Typography variant="h6" gutterBottom sx={{ fontWeight: 600 }}>
+                Explore
+              </Typography>
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
+                <Link component={RouterLink} to="/category/fiction" color="inherit" underline="hover" sx={{ fontSize: '0.9rem' }}>
+                  Fiction
+                </Link>
+                <Link component={RouterLink} to="/category/poetry" color="inherit" underline="hover" sx={{ fontSize: '0.9rem' }}>
+                  Poetry
+                </Link>
+                <Link component={RouterLink} to="/category/essays" color="inherit" underline="hover" sx={{ fontSize: '0.9rem' }}>
+                  Essays
+                </Link>
+                <Link component={RouterLink} to="/category/reviews" color="inherit" underline="hover" sx={{ fontSize: '0.9rem' }}>
+                  Reviews
+                </Link>
+                <Link component={RouterLink} to="/category/interviews" color="inherit" underline="hover" sx={{ fontSize: '0.9rem' }}>
+                  Interviews
+                </Link>
+              </Box>
             </Box>
-          </Box>
 
-          <Box>
-            <Typography variant="h6" gutterBottom>
-              Community
-            </Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-              <Link component={RouterLink} to="/authors" color="inherit" underline="hover">
-                Authors
-              </Link>
-              <Link component={RouterLink} to="/submit" color="inherit" underline="hover">
-                Submit Work
-              </Link>
-              <Link component={RouterLink} to="/contact" color="inherit" underline="hover">
-                Contact
-              </Link>
-              <Link component={RouterLink} to="/about" color="inherit" underline="hover">
-                About
-              </Link>
+            {/* Community Section */}
+            <Box sx={{ minWidth: { xs: '100%', sm: '200px' } }}>
+              <Typography variant="h6" gutterBottom sx={{ fontWeight: 600 }}>
+                Community
+              </Typography>
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
+                <Link component={RouterLink} to="/authors" color="inherit" underline="hover" sx={{ fontSize: '0.9rem' }}>
+                  Authors
+                </Link>
+                <Link component={RouterLink} to="/submit" color="inherit" underline="hover" sx={{ fontSize: '0.9rem' }}>
+                  Submit Work
+                </Link>
+                <Link component={RouterLink} to="/about" color="inherit" underline="hover" sx={{ fontSize: '0.9rem' }}>
+                  About
+                </Link>
+                <Link component={RouterLink} to="/contact" color="inherit" underline="hover" sx={{ fontSize: '0.9rem' }}>
+                  Contact
+                </Link>
+              </Box>
             </Box>
-          </Box>
 
-          <Box>
-            <Typography variant="h6" gutterBottom>
-              Stay in the loop
-            </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-              Subscribe for updates on new posts, events, and featured stories.
-            </Typography>
-            <Box component="form" onSubmit={handleNewsletterSubmit}>
-              <TextField
-                fullWidth
-                size="small"
-                placeholder="Your name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                sx={{ mb: 2 }}
-                required
-              />
-              <TextField
-                fullWidth
-                size="small"
-                placeholder="Your email address"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                sx={{ mb: 2 }}
-                required
-              />
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                fullWidth
-                disabled={isSubmitting || !email.trim() || !name.trim()}
-                sx={{ mb: 2 }}
-              >
-                {isSubmitting ? 'Subscribing...' : 'Subscribe'}
-              </Button>
+            {/* Resources Section */}
+            <Box sx={{ minWidth: { xs: '100%', sm: '200px' } }}>
+              <Typography variant="h6" gutterBottom sx={{ fontWeight: 600 }}>
+                Resources
+              </Typography>
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
+                <Link component={RouterLink} to="/writing-tips" color="inherit" underline="hover" sx={{ fontSize: '0.9rem' }}>
+                  Writing Tips
+                </Link>
+                <Link component={RouterLink} to="/literary-events" color="inherit" underline="hover" sx={{ fontSize: '0.9rem' }}>
+                  Literary Events
+                </Link>
+                <Link component={RouterLink} to="/book-clubs" color="inherit" underline="hover" sx={{ fontSize: '0.9rem' }}>
+                  Book Clubs
+                </Link>
+                <Link component={RouterLink} to="/reading-lists" color="inherit" underline="hover" sx={{ fontSize: '0.9rem' }}>
+                  Reading Lists
+                </Link>
+              </Box>
+            </Box>
+
+            {/* Legal Section */}
+            <Box sx={{ minWidth: { xs: '100%', sm: '200px' } }}>
+              <Typography variant="h6" gutterBottom sx={{ fontWeight: 600 }}>
+                Legal
+              </Typography>
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
+                <Link component={RouterLink} to="/privacy" color="inherit" underline="hover" sx={{ fontSize: '0.9rem' }}>
+                  Privacy Policy
+                </Link>
+                <Link component={RouterLink} to="/terms" color="inherit" underline="hover" sx={{ fontSize: '0.9rem' }}>
+                  Terms of Service
+                </Link>
+                <Link component={RouterLink} to="/cookies" color="inherit" underline="hover" sx={{ fontSize: '0.9rem' }}>
+                  Cookie Policy
+                </Link>
+                <Link component={RouterLink} to="/accessibility" color="inherit" underline="hover" sx={{ fontSize: '0.9rem' }}>
+                  Accessibility
+                </Link>
+              </Box>
             </Box>
           </Box>
         </Box>
 
+        {/* Copyright Section */}
         <Box
           sx={{
             borderTop: 1,
             borderColor: 'divider',
-            pt: 3,
+            pt: 4,
             mt: 4,
             textAlign: 'center',
           }}
