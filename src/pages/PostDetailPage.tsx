@@ -244,6 +244,8 @@ const PostDetailPage: React.FC = () => {
               borderRadius: 2,
               overflow: 'hidden',
               boxShadow: 2,
+              maxWidth: 960,
+              mx: 'auto'
             }}
           >
             <img
@@ -252,7 +254,7 @@ const PostDetailPage: React.FC = () => {
               style={{
                 width: '100%',
                 height: 'auto',
-                maxHeight: '500px',
+                maxHeight: '520px',
                 objectFit: 'cover',
               }}
             />

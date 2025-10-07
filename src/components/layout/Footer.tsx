@@ -19,13 +19,13 @@ const Footer: React.FC = () => {
   return (
     <Box
       component="footer"
-      sx={{
-        bgcolor: 'background.paper',
+      sx={(theme) => ({
         borderTop: 1,
         borderColor: 'divider',
-        py: 6,
-        mt: 8,
-      }}
+        py: 8,
+        mt: 10,
+        background: `linear-gradient(135deg, ${theme.palette.mode === 'dark' ? theme.palette.primary.dark : theme.palette.primary.light}10 0%, ${theme.palette.mode === 'dark' ? theme.palette.secondary.dark : theme.palette.secondary.light}08 100%)`,
+      })}
     >
       <Container maxWidth="lg">
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 4, alignItems: 'flex-start' }}>
@@ -147,7 +147,7 @@ const Footer: React.FC = () => {
           }}
         >
           <Typography variant="body2" color="text.secondary">
-            © 2024 Mokua Literary Blog. All rights reserved. Built with passion for literature.
+            {new Date().getFullYear()} © Rise Above. All rights reserved. Built with passion for literature.
           </Typography>
         </Box>
       </Container>
