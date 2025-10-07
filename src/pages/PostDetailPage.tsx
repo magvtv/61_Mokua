@@ -176,6 +176,8 @@ const PostDetailPage: React.FC = () => {
               fontWeight: 700,
               lineHeight: 1.25,
               mb: { xs: 2, md: 3 },
+              wordBreak: 'break-word',
+              overflowWrap: 'anywhere',
             }}
           >
             {post.title}
@@ -189,6 +191,8 @@ const PostDetailPage: React.FC = () => {
               lineHeight: 1.7,
               fontSize: { xs: '1rem', md: '1.125rem' },
               mb: { xs: 3, md: 4 },
+              wordBreak: 'break-word',
+              overflowWrap: 'anywhere',
             }}
           >
             {post.excerpt}
@@ -390,29 +394,23 @@ const PostDetailPage: React.FC = () => {
             >
               Related Articles
             </Typography>
-            <Box 
-              sx={{ 
+            <Box
+              sx={{
                 overflowX: 'auto',
                 pb: 2,
-                '&::-webkit-scrollbar': {
-                  height: '8px',
-                },
-                '&::-webkit-scrollbar-track': {
-                  background: '#f1f1f1',
-                  borderRadius: '10px',
-                },
-                '&::-webkit-scrollbar-thumb': {
-                  background: '#888',
-                  borderRadius: '10px',
-                },
-                '&::-webkit-scrollbar-thumb:hover': {
-                  background: '#555',
-                },
+                WebkitOverflowScrolling: 'touch',
               }}
             >
-              <Box sx={{ display: 'flex', gap: 2, minWidth: 'max-content' }}>
+              <Box
+                sx={{
+                  display: 'grid',
+                  gridAutoFlow: 'column',
+                  gridAutoColumns: { xs: '80%', sm: '320px' },
+                  gap: 2,
+                }}
+              >
                 {relatedPosts.map((relatedPost) => (
-                  <Box key={relatedPost.id} sx={{ minWidth: '300px', maxWidth: '350px' }}>
+                  <Box key={relatedPost.id}>
                     <PostCard post={relatedPost} />
                   </Box>
                 ))}
