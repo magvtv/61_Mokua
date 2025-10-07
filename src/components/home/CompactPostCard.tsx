@@ -8,7 +8,10 @@ import {
   Chip,
   Avatar,
   useTheme,
+  alpha,
+  IconButton,
 } from '@mui/material';
+import { BookmarkBorder, AccessTime, TrendingUp } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Post } from '../../types';
@@ -16,25 +19,46 @@ import { formatDate } from '../../utils';
 
 interface CompactPostCardProps {
   post: Post;
-  imagePosition?: 'left' | 'top';
-  size?: 'small' | 'medium';
+  variant?: 'small' | 'medium' | 'large';
   showExcerpt?: boolean;
 }
 
 const CompactPostCard: React.FC<CompactPostCardProps> = ({
   post,
-  imagePosition = 'left',
-  size = 'medium',
+  variant = 'medium',
   showExcerpt = true,
 }) => {
   const theme = useTheme();
-  const isLeftImage = imagePosition === 'left';
-  const isSmall = size === 'small';
+  const [isBookmarked, setIsBookmarked] = React.useState(false);
+
+  const cardVariants = {
+    small: {
+      imageHeight: 180,
+      titleLines: 2,
+      excerptLines: 2,
+      padding: 2,
+    },
+    medium: {
+      imageHeight: 220,
+      titleLines: 2,
+      excerptLines: 3,
+      padding: 2.5,
+    },
+    large: {
+      imageHeight: 280,
+      titleLines: 3,
+      excerptLines: 4,
+      padding: 3,
+    },
+  };
+
+  const config = cardVariants[variant];
 
   return (
     <motion.div
-      whileHover={{ y: -2, scale: 1.01 }}
-      transition={{ duration: 0.3, ease: 'easeOut' }}
+      whileHover={{ y: -8 }}
+      transition={{ duration: 0.3, type: 'spring', stiffness: 300 }}
+      style={{ height: '100%' }}
     >
       <Card
         component={Link}
@@ -42,127 +66,248 @@ const CompactPostCard: React.FC<CompactPostCardProps> = ({
         sx={{
           height: '100%',
           display: 'flex',
-          flexDirection: isLeftImage ? 'row' : 'column',
+          flexDirection: 'column',
           textDecoration: 'none',
           color: 'inherit',
-          borderRadius: 2,
+          borderRadius: 3,
           overflow: 'hidden',
           boxShadow: 'none',
-          border: '1px solid',
-          borderColor: theme.palette.divider,
+          border: `1px solid ${alpha(theme.palette.divider, 0.1)}`,
+          position: 'relative',
+          background: `linear-gradient(135deg, ${alpha(theme.palette.background.paper, 1)} 0%, ${alpha(theme.palette.primary.main, 0.02)} 100%)`,
           '&:hover': {
-            boxShadow: theme.shadows[2],
-            borderColor: 'transparent',
-            transform: 'translateY(-4px)',
+            boxShadow: `0 12px 40px ${alpha(theme.palette.primary.main, 0.15)}`,
+            borderColor: alpha(theme.palette.primary.main, 0.3),
+            '& .post-image': {
+              transform: 'scale(1.05)',
+            },
+            '& .post-overlay': {
+              opacity: 1,
+            },
           },
-          transition: theme.transitions.create(['box-shadow']),
+          transition: theme.transitions.create(['box-shadow', 'border-color']),
         }}
       >
+        {/* Image Section */}
         {post.featuredImage && (
-          <CardMedia
-            component="img"
-            image={post.featuredImage}
-            alt={post.title}
-            sx={{
-              width: isLeftImage ? { xs: 100, sm: isSmall ? 90 : 130 } : '100%',
-              height: isLeftImage 
-                ? '100%' 
-                : { xs: 130, sm: isSmall ? 110 : 150 },
-              objectFit: 'cover',
-            }}
-          />
+          <Box sx={{ position: 'relative', overflow: 'hidden' }}>
+            <CardMedia
+              component="img"
+              image={post.featuredImage}
+              alt={post.title}
+              className="post-image"
+              sx={{
+                height: config.imageHeight,
+                objectFit: 'cover',
+                transition: 'transform 0.5s ease',
+              }}
+            />
+            
+            {/* Gradient Overlay */}
+            <Box
+              className="post-overlay"
+              sx={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                background: `linear-gradient(to bottom, ${alpha('#000', 0)} 0%, ${alpha('#000', 0.6)} 100%)`,
+                opacity: 0,
+                transition: 'opacity 0.3s',
+                display: 'flex',
+                alignItems: 'flex-end',
+                p: 2,
+              }}
+            >
+              <Chip
+                label={post.category.name}
+                size="small"
+                sx={{
+                  bgcolor: alpha(post.category.color || theme.palette.primary.main, 0.9),
+                  color: '#fff',
+                  fontWeight: 600,
+                  backdropFilter: 'blur(10px)',
+                }}
+              />
+            </Box>
+
+            {/* Featured Badge */}
+            {post.featured && (
+              <Box
+                sx={{
+                  position: 'absolute',
+                  top: 12,
+                  left: 12,
+                  bgcolor: alpha(theme.palette.warning.main, 0.95),
+                  color: '#fff',
+                  px: 1.5,
+                  py: 0.5,
+                  borderRadius: 2,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 0.5,
+                  fontSize: '0.75rem',
+                  fontWeight: 600,
+                }}
+              >
+                <TrendingUp sx={{ fontSize: 14 }} />
+                Featured
+              </Box>
+            )}
+
+            {/* Bookmark Button */}
+            <IconButton
+              onClick={(e) => {
+                e.preventDefault();
+                setIsBookmarked(!isBookmarked);
+              }}
+              sx={{
+                position: 'absolute',
+                top: 12,
+                right: 12,
+                bgcolor: alpha('#fff', 0.9),
+                backdropFilter: 'blur(10px)',
+                '&:hover': {
+                  bgcolor: '#fff',
+                  transform: 'scale(1.1)',
+                },
+                transition: 'all 0.2s',
+              }}
+              size="small"
+            >
+              <BookmarkBorder 
+                sx={{ 
+                  fontSize: 18,
+                  color: isBookmarked ? theme.palette.primary.main : 'text.secondary'
+                }} 
+              />
+            </IconButton>
+          </Box>
         )}
         
+        {/* Content Section */}
         <CardContent 
           sx={{ 
             flexGrow: 1, 
-            p: isSmall ? 1.5 : 2,
-            width: isLeftImage ? { xs: 'calc(100% - 100px)', sm: isSmall ? 'calc(100% - 90px)' : 'calc(100% - 130px)' } : '100%',
+            p: config.padding,
             display: 'flex',
             flexDirection: 'column',
-            justifyContent: isLeftImage ? 'center' : 'flex-start',
           }}
         >
-          <Box sx={{ mb: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <Chip
-              label={post.category.name}
-              size="small"
-              sx={{
-                              bgcolor: `${post.category.color}30`,
-              color: post.category.color,
-              fontWeight: 600,
-                height: isSmall ? 20 : 24,
-                fontSize: isSmall ? '0.65rem' : '0.75rem',
-                '& .MuiChip-label': {
-                  px: isSmall ? 0.8 : 1.2,
-                }
-              }}
-            />
-            <Typography variant="caption" color="text.secondary">
-              {post.readingTime} min
+          {/* Category & Reading Time */}
+          {!post.featuredImage && (
+            <Box sx={{ mb: 1.5, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <Chip
+                label={post.category.name}
+                size="small"
+                sx={{
+                  bgcolor: alpha(post.category.color || theme.palette.primary.main, 0.1),
+                  color: post.category.color || theme.palette.primary.main,
+                  fontWeight: 600,
+                }}
+              />
+            </Box>
+          )}
+
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1.5 }}>
+            <AccessTime sx={{ fontSize: 14, color: 'text.secondary' }} />
+            <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 500 }}>
+              {post.readingTime} min read
             </Typography>
           </Box>
           
+          {/* Title */}
           <Typography
-            variant={isSmall ? 'subtitle2' : 'subtitle1'}
+            variant={variant === 'small' ? 'h6' : variant === 'large' ? 'h5' : 'h6'}
             component="h3"
-            gutterBottom
             sx={{
-              fontFamily: '"EB Garamond", serif',
-              fontWeight: 600,
+              fontFamily: '"Playfair Display", serif',
+              fontWeight: 700,
               lineHeight: 1.3,
               display: '-webkit-box',
-              '-webkit-line-clamp': 2,
+              '-webkit-line-clamp': config.titleLines,
               '-webkit-box-orient': 'vertical',
               overflow: 'hidden',
-              mb: showExcerpt ? 1 : 2,
+              mb: showExcerpt ? 1.5 : 2,
+              color: 'text.primary',
+              fontSize: variant === 'small' ? '1.1rem' : variant === 'large' ? '1.5rem' : '1.25rem',
             }}
           >
             {post.title}
           </Typography>
           
+          {/* Excerpt */}
           {showExcerpt && (
             <Typography
               variant="body2"
               color="text.secondary"
               sx={{
-                mb: 1.5,
+                mb: 2,
                 display: '-webkit-box',
-                '-webkit-line-clamp': isSmall ? 2 : 3,
+                '-webkit-line-clamp': config.excerptLines,
                 '-webkit-box-orient': 'vertical',
                 overflow: 'hidden',
-                lineHeight: 1.4,
-                fontSize: isSmall ? '0.75rem' : '0.875rem',
+                lineHeight: 1.6,
+                fontSize: variant === 'large' ? '0.95rem' : '0.875rem',
               }}
             >
               {post.excerpt}
             </Typography>
           )}
           
+          {/* Tags */}
+          {post.tags && post.tags.length > 0 && variant !== 'small' && (
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.75, mb: 2 }}>
+              {post.tags.slice(0, 3).map((tag) => (
+                <Chip
+                  key={tag}
+                  label={tag}
+                  size="small"
+                  variant="outlined"
+                  sx={{
+                    fontSize: '0.7rem',
+                    height: 22,
+                    borderColor: alpha(theme.palette.primary.main, 0.3),
+                    color: 'text.secondary',
+                    '&:hover': {
+                      borderColor: theme.palette.primary.main,
+                      bgcolor: alpha(theme.palette.primary.main, 0.05),
+                    }
+                  }}
+                />
+              ))}
+            </Box>
+          )}
+          
+          {/* Author */}
           <Box
             sx={{
               display: 'flex',
               alignItems: 'center',
               mt: 'auto',
+              pt: 2,
+              borderTop: `1px solid ${alpha(theme.palette.divider, 0.1)}`,
             }}
           >
             <Avatar
               src={post.author.avatar}
               alt={post.author.name}
-              sx={{ width: isSmall ? 24 : 28, height: isSmall ? 24 : 28, mr: 1 }}
+              sx={{ 
+                width: variant === 'small' ? 32 : 36, 
+                height: variant === 'small' ? 32 : 36, 
+                mr: 1.5,
+                border: `2px solid ${alpha(theme.palette.primary.main, 0.1)}`,
+              }}
             />
-            <Box>
+            <Box sx={{ flexGrow: 1 }}>
               <Typography 
-                variant="caption" 
-                color="text.primary" 
+                variant="body2" 
                 sx={{ 
                   fontWeight: 600,
-                  fontSize: isSmall ? '0.65rem' : '0.75rem',
-                  display: 'block',
-                  '&:hover': {
-                    textDecoration: 'underline',
-                    color: 'primary.main'
-                  }
+                  fontSize: variant === 'small' ? '0.8rem' : '0.875rem',
+                  color: 'text.primary',
+                  mb: 0.25,
                 }}
               >
                 {post.author.name}
@@ -171,7 +316,7 @@ const CompactPostCard: React.FC<CompactPostCardProps> = ({
                 variant="caption" 
                 color="text.secondary"
                 sx={{
-                  fontSize: isSmall ? '0.6rem' : '0.7rem',
+                  fontSize: '0.75rem',
                 }}
               >
                 {formatDate(post.publishedAt)}
