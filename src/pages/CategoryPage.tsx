@@ -15,6 +15,14 @@ import { contentService } from '../services/contentService';
 import PostCard from '../components/post/PostCard';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 
+// Add mapping for new categories
+const CATEGORY_TITLES: Record<string, string> = {
+  'think-pieces': 'Think-pieces',
+  'short-stories': 'Short stories',
+  'poetry': 'Poetry',
+  'real-life': 'Real Life',
+};
+
 const CategoryPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
