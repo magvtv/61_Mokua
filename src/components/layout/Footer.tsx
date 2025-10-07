@@ -5,6 +5,8 @@ import {
   Typography,
   Link,
   IconButton,
+  TextField,
+  Button,
 } from '@mui/material';
 import {
   Facebook,
@@ -42,12 +44,11 @@ const Footer: React.FC = () => {
                   fontWeight: 700,
                 }}
               >
-                Mokua Literary
+                Rise Above
               </Typography>
             </Box>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 3, lineHeight: 1.6, maxWidth: 300 }}>
-              A curated space for contemporary literature, poetry, and literary criticism. 
-              Discover emerging voices and timeless works that shape our understanding of the world.
+              We live and die by the stories we tell
             </Typography>
             <Box sx={{ display: 'flex', gap: 1 }}>
               <IconButton size="small" color="primary" aria-label="Facebook">
@@ -73,20 +74,20 @@ const Footer: React.FC = () => {
                 Explore
               </Typography>
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
-                <Link component={RouterLink} to="/category/fiction" color="inherit" underline="hover" sx={{ fontSize: '0.9rem' }}>
-                  Fiction
+                <Link component={RouterLink} to="/" color="inherit" underline="hover" sx={{ fontSize: '0.9rem' }}>
+                  Home
+                </Link>
+                <Link component={RouterLink} to="/category/think-pieces" color="inherit" underline="hover" sx={{ fontSize: '0.9rem' }}>
+                  Think-pieces
+                </Link>
+                <Link component={RouterLink} to="/category/short-stories" color="inherit" underline="hover" sx={{ fontSize: '0.9rem' }}>
+                  Short stories
                 </Link>
                 <Link component={RouterLink} to="/category/poetry" color="inherit" underline="hover" sx={{ fontSize: '0.9rem' }}>
                   Poetry
                 </Link>
-                <Link component={RouterLink} to="/category/essays" color="inherit" underline="hover" sx={{ fontSize: '0.9rem' }}>
-                  Essays
-                </Link>
-                <Link component={RouterLink} to="/category/reviews" color="inherit" underline="hover" sx={{ fontSize: '0.9rem' }}>
-                  Reviews
-                </Link>
-                <Link component={RouterLink} to="/category/interviews" color="inherit" underline="hover" sx={{ fontSize: '0.9rem' }}>
-                  Interviews
+                <Link component={RouterLink} to="/category/real-life" color="inherit" underline="hover" sx={{ fontSize: '0.9rem' }}>
+                  Real Life
                 </Link>
               </Box>
             </Box>
@@ -112,24 +113,20 @@ const Footer: React.FC = () => {
               </Box>
             </Box>
 
-            {/* Resources Section */}
+            {/* Newsletter Section */}
             <Box sx={{ minWidth: { xs: '100%', sm: '200px' } }}>
               <Typography variant="h6" gutterBottom sx={{ fontWeight: 600 }}>
-                Resources
+                Stay in the loop
               </Typography>
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
-                <Link component={RouterLink} to="/writing-tips" color="inherit" underline="hover" sx={{ fontSize: '0.9rem' }}>
-                  Writing Tips
-                </Link>
-                <Link component={RouterLink} to="/literary-events" color="inherit" underline="hover" sx={{ fontSize: '0.9rem' }}>
-                  Literary Events
-                </Link>
-                <Link component={RouterLink} to="/book-clubs" color="inherit" underline="hover" sx={{ fontSize: '0.9rem' }}>
-                  Book Clubs
-                </Link>
-                <Link component={RouterLink} to="/reading-lists" color="inherit" underline="hover" sx={{ fontSize: '0.9rem' }}>
-                  Reading Lists
-                </Link>
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                Subscribe for updates on new posts, events, and featured stories.
+              </Typography>
+              <Box component="form" action="/api/subscribe" method="post"
+                sx={{ display: 'flex', flexDirection: 'column', gap: 1.5, maxWidth: 360 }}
+              >
+                <TextField name="name" size="small" placeholder="Your name" required />
+                <TextField name="email" size="small" placeholder="Your email address" type="email" required />
+                <Button type="submit" variant="contained">Subscribe</Button>
               </Box>
             </Box>
 
