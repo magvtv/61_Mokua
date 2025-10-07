@@ -65,70 +65,10 @@ export const mockAuthors: Author[] = [
 ];
 
 export const mockCategories: Category[] = [
-  {
-    id: "1",
-    name: "Youth Affairs",
-    slug: "youth-affairs",
-    description: "Current trends, challenges, and opportunities affecting Kenyan youth across different counties",
-    color: "#2E7D8A",
-    postsCount: 45
-  },
-  {
-    id: "2",
-    name: "County News",
-    slug: "county-news",
-    description: "Local news and developments from various Kenyan counties, focusing on youth impact",
-    color: "#FF8F00",
-    postsCount: 32
-  },
-  {
-    id: "3",
-    name: "Health & Wellness",
-    slug: "health-wellness",
-    description: "Mental health, sexual health, drug abuse, and wellness topics relevant to Kenyan youth",
-    color: "#FF6B6B",
-    postsCount: 28
-  },
-  {
-    id: "4",
-    name: "Education & Tech",
-    slug: "education-tech",
-    description: "Digital learning, education technology, and career development for young Kenyans",
-    color: "#8E24AA",
-    postsCount: 67
-  },
-  {
-    id: "5",
-    name: "Social Issues",
-    slug: "social-issues",
-    description: "Investigative reports on social challenges affecting Kenyan communities",
-    color: "#43A047",
-    postsCount: 19
-  },
-  {
-    id: "6",
-    name: "Lifestyle & Culture",
-    slug: "lifestyle-culture",
-    description: "Gen Z lifestyle, cultural trends, and social media influences in Kenya",
-    color: "#E91E63",
-    postsCount: 23
-  },
-  {
-    id: "7",
-    name: "Entrepreneurship",
-    slug: "entrepreneurship",
-    description: "Youth entrepreneurship, digital business, and economic opportunities in Kenya",
-    color: "#9C27B0",
-    postsCount: 15
-  },
-  {
-    id: "8",
-    name: "Investigative Reports",
-    slug: "investigative-reports",
-    description: "In-depth investigations into critical issues affecting Kenyan youth and communities",
-    color: "#3F51B5",
-    postsCount: 12
-  }
+  { id: "1", name: "Think-pieces", slug: "think-pieces", description: "Opinion and essays on contemporary issues", color: "#2E7D8A", postsCount: 45 },
+  { id: "2", name: "Short stories", slug: "short-stories", description: "Original short fiction", color: "#FF8F00", postsCount: 32 },
+  { id: "3", name: "Poetry", slug: "poetry", description: "Poems and spoken word", color: "#FF6B6B", postsCount: 28 },
+  { id: "4", name: "Real Life", slug: "real-life", description: "Lived experiences and human interest", color: "#8E24AA", postsCount: 67 }
 ];
 
 export const mockPosts: Post[] = [

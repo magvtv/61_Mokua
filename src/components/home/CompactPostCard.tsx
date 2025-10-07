@@ -245,14 +245,16 @@ const CompactPostCard: React.FC<CompactPostCardProps> = ({
               sx={{
                 mb: 2,
                 display: '-webkit-box',
-                '-webkit-line-clamp': config.excerptLines,
+                '-webkit-line-clamp': 2,
                 '-webkit-box-orient': 'vertical',
                 overflow: 'hidden',
                 lineHeight: 1.6,
                 fontSize: variant === 'large' ? '0.95rem' : '0.875rem',
               }}
             >
-              {post.excerpt}
+              {post.excerpt && post.excerpt.length > 50
+                ? `${post.excerpt.slice(0, 50)}…`
+                : post.excerpt}
             </Typography>
           )}
           

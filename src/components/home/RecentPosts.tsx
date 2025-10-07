@@ -83,13 +83,10 @@ const RecentPosts: React.FC = () => {
               }}
             >
               <Tab label="All" value="all" />
-              {categories.map((category) => (
-                <Tab
-                  key={category.id}
-                  label={category.name}
-                  value={category.slug}
-                />
-              ))}
+              <Tab label="Think-pieces" value="think-pieces" />
+              <Tab label="Short stories" value="short-stories" />
+              <Tab label="Poetry" value="poetry" />
+              <Tab label="Real Life" value="real-life" />
             </Tabs>
           </Box>
         )}
