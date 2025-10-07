@@ -6,11 +6,11 @@ import {
   Pagination,
   Tabs,
   Tab,
+  Skeleton,
 } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { contentService } from '../../services/contentService';
 import CompactPostCard from './CompactPostCard';
-import LoadingSpinner from '../common/LoadingSpinner';
 
 const RecentPosts: React.FC = () => {
   const [page, setPage] = useState(1);
@@ -38,10 +38,6 @@ const RecentPosts: React.FC = () => {
     setCategoryFilter(newValue);
     setPage(1);
   };
-
-  if (isLoading) {
-    return <LoadingSpinner message="Loading recent posts..." />;
-  }
 
   const totalPages = postsData ? Math.ceil(postsData.total / postsPerPage) : 0;
 
@@ -91,7 +87,18 @@ const RecentPosts: React.FC = () => {
           </Box>
         )}
 
-        {postsData && postsData.posts.length > 0 ? (
+        {isLoading ? (
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3, mb: 6, alignItems: 'stretch' }}>
+            {Array.from({ length: postsPerPage }).map((_, i) => (
+              <Box sx={{ width: { xs: '100%', sm: '45%', md: '30%' }, display: 'flex', flexDirection: 'column' }} key={i}>
+                <Skeleton variant="rectangular" height={180} sx={{ mb: 2, borderRadius: 2 }} />
+                <Skeleton variant="text" width="60%" sx={{ mb: 1 }} />
+                <Skeleton variant="text" width="80%" />
+                <Skeleton variant="text" width="40%" sx={{ mt: 1 }} />
+              </Box>
+            ))}
+          </Box>
+        ) : postsData && postsData.posts.length > 0 ? (
           <>
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3, mb: 6, alignItems: 'stretch' }}>
               {postsData.posts.map((post) => (

@@ -89,7 +89,7 @@ const FeaturedPosts: React.FC = () => {
           
           <Button
             component={Link}
-            to="/category/fiction"
+            to="/"
             variant="outlined"
             endIcon={<ArrowForward />}
             sx={{ borderRadius: 2 }}

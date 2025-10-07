@@ -65,9 +65,15 @@ const Footer: React.FC = () => {
           </Box>
 
           {/* Navigation Sections */}
-          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 4, flex: 1 }}>
+          <Box sx={{
+            flex: 1,
+            display: 'grid',
+            gap: 4,
+            gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: 'repeat(3, 1fr)' },
+            alignItems: 'start'
+          }}>
             {/* Explore Section */}
-            <Box sx={{ minWidth: { xs: '100%', sm: '200px' } }}>
+            <Box>
               <Typography variant="h6" gutterBottom sx={{ fontWeight: 600 }}>
                 Explore
               </Typography>
@@ -91,7 +97,7 @@ const Footer: React.FC = () => {
             </Box>
 
             {/* Community Section */}
-            <Box sx={{ minWidth: { xs: '100%', sm: '200px' } }}>
+            <Box>
               <Typography variant="h6" gutterBottom sx={{ fontWeight: 600 }}>
                 Community
               </Typography>
@@ -114,11 +120,11 @@ const Footer: React.FC = () => {
             {/* Newsletter Section removed (handled by NewsletterSignup component higher on page) */}
 
             {/* Legal Section */}
-            <Box sx={{ minWidth: { xs: '100%', sm: '200px' } }}>
+            <Box>
               <Typography variant="h6" gutterBottom sx={{ fontWeight: 600 }}>
                 Legal
               </Typography>
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.25 }}>
                 <Link component={RouterLink} to="/privacy" color="inherit" underline="hover" sx={{ fontSize: '0.9rem' }}>
                   Privacy Policy
                 </Link>

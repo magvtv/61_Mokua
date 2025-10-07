@@ -103,8 +103,9 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({
                 borderColor: category.color,
                 fontWeight: 500,
                 '&:hover': {
-                  bgcolor: selectedCategory === category.slug ? category.color : category.color,
+                  bgcolor: category.color,
                   color: 'white',
+                  borderColor: category.color,
                 },
               }}
             />

@@ -3,14 +3,14 @@ import {
   Container,
   Typography,
   Box,
-  Grid,
   Avatar,
   IconButton,
   Button,
   Divider,
 } from '@mui/material';
+import Grid from '@mui/material/Grid';
 import { Twitter, Instagram, LinkedIn, Language, ArrowBack } from '@mui/icons-material';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
@@ -92,14 +92,14 @@ const AuthorDetailPage: React.FC = () => {
           <Box sx={{ mb: 6 }}>
             <Grid container spacing={4} alignItems="center">
               <Grid item xs={12} md={3}>
-                <Box sx={{ textAlign: { xs: 'center', md: 'left' } }}>
+                <Box sx={{ textAlign: 'center' }}>
                   <Avatar
                     src={author.avatar}
                     alt={author.name}
                     sx={{
                       width: { xs: 150, md: 200 },
                       height: { xs: 150, md: 200 },
-                      mx: { xs: 'auto', md: 0 },
+                      mx: 'auto',
                       mb: 2,
                       boxShadow: 4,
                     }}
@@ -192,7 +192,7 @@ const AuthorDetailPage: React.FC = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
                 >
-                  <CompactPostCard post={post} variant="large" showExcerpt />
+                  <CompactPostCard post={post} variant="medium" showExcerpt />
                 </motion.div>
               </Grid>
             ))}
