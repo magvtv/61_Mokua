@@ -374,8 +374,13 @@ const Header: React.FC = () => {
         open={isMobileMenuOpen}
         onClose={() => setMobileMenuOpen(false)}
       >
-        <Box sx={{ width: 280, pt: 2 }}>
+        <Box sx={{ width: 300, pt: 2 }}>
           <List>
+            <ListItem sx={{ px: 2, py: 1 }}>
+              <Typography variant="subtitle2" color="text.secondary">
+                Articles
+              </Typography>
+            </ListItem>
             {filteredNavigationItems.map((item) => (
               <ListItem
                 key={item.path}
@@ -391,12 +396,20 @@ const Header: React.FC = () => {
                 <ListItemText primary={item.label} />
               </ListItem>
             ))}
+
+            {/* Calendar quick action */}
+            <ListItem
+              onClick={() => setMobileMenuOpen(false)}
+              sx={{ '&:hover': { bgcolor: 'action.hover' }, cursor: 'pointer' }}
+            >
+              <ListItemText primary="Calendar" onClick={() => setSearchOpen(false)} />
+            </ListItem>
             
-            {/* Mobile Categories Accordion */}
+            {/* Browse topics */}
             <ListItem sx={{ display: 'block', p: 0 }}>
               <Box sx={{ px: 2, py: 1 }}>
                 <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1 }}>
-                  Literature Categories
+                  Browse topics
                 </Typography>
                 <MobileCategoriesAccordion onClose={() => setMobileMenuOpen(false)} />
               </Box>
