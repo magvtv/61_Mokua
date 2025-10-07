@@ -3,6 +3,7 @@ import { Helmet } from "react-helmet-async";
 import HeroSection from "../components/home/HeroSection";
 import FeaturedPosts from "../components/home/FeaturedPosts";
 import RecentPosts from "../components/home/RecentPosts";
+import CalendarWidget from "../components/home/CalendarWidget";
 import NewsletterSignup from "../components/home/NewsletterSignup";
 import ReviewsSection from "../components/home/ReviewsSection";
 
@@ -71,7 +72,14 @@ const HomePage: React.FC = () => {
       <HeroSection />
       <FeaturedPosts />
       <ReviewsSection reviews={mockReviews} />
-      <RecentPosts />
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 24 }}>
+        <div>
+          <RecentPosts />
+        </div>
+        <div style={{ maxWidth: 360, margin: '0 auto' }}>
+          <CalendarWidget />
+        </div>
+      </div>
       <NewsletterSignup />
     </>
   );
