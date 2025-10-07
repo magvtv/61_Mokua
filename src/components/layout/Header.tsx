@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import {
   AppBar,
   Toolbar,
@@ -16,8 +16,6 @@ import {
   TextField,
   useTheme,
   useMediaQuery,
-  Menu,
-  MenuItem,
   Accordion,
   AccordionSummary,
   AccordionDetails,
@@ -30,7 +28,6 @@ import {
   MenuBook,
   Close,
   ExpandMore,
-  KeyboardArrowDown,
 } from '@mui/icons-material';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppStore } from '../../stores/useAppStore';
@@ -87,145 +84,14 @@ const literatureCategories = [
   },
 ];
 
-// Desktop Categories Dropdown Component
-const DesktopCategoriesDropdown: React.FC = () => {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const navigate = useNavigate();
-
-  const handleMouseEnter = (event: React.MouseEvent<HTMLElement>) => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleMouseLeave = () => {
-    timeoutRef.current = setTimeout(() => {
-      setAnchorEl(null);
-      setHoveredCategory(null);
-    }, 150);
-  };
-
-  const handleCategoryClick = (path: string) => {
-    navigate(path);
-    setAnchorEl(null);
-    setHoveredCategory(null);
-  };
-
-  const handleSubcategoryClick = (path: string) => {
-    navigate(path);
-    setAnchorEl(null);
-    setHoveredCategory(null);
-  };
-
-  return (
-    <Box
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      sx={{ position: 'relative' }}
-    >
-      <Button
-        color="inherit"
-        endIcon={<KeyboardArrowDown />}
-        sx={{ 
-          color: 'text.primary',
-          '&:hover': { color: 'primary.main' }
-        }}
-      >
-        Topics
-      </Button>
-      
-      <Menu
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={() => setAnchorEl(null)}
-        MenuListProps={{
-          onMouseEnter: () => {
-            if (timeoutRef.current) {
-              clearTimeout(timeoutRef.current);
-            }
-          },
-          onMouseLeave: handleMouseLeave,
-          style: { padding: 0 }
-        }}
-        PaperProps={{
-          sx: {
-            mt: 1,
-            minWidth: 200,
-            boxShadow: 3,
-            borderRadius: 2,
-          }
-        }}
-        transformOrigin={{ horizontal: 'left', vertical: 'top' }}
-        anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
-      >
-        {literatureCategories.map((category) => (
-          <MenuItem
-            key={category.path}
-            onClick={() => handleCategoryClick(category.path)}
-            onMouseEnter={() => setHoveredCategory(category.label)}
-            onMouseLeave={() => setHoveredCategory(null)}
-            sx={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              py: 1.5,
-              px: 2,
-              '&:hover': { bgcolor: 'action.hover' },
-              position: 'relative',
-            }}
-          >
-            <Box sx={{ display: 'flex', alignItems: 'center', flex: 1 }}>
-              {category.label}
-            </Box>
-            <KeyboardArrowDown sx={{ fontSize: 16, ml: 1 }} />
-            
-            {/* Submenu */}
-            {hoveredCategory === category.label && (
-              <Box
-                sx={{
-                  position: 'absolute',
-                  left: '100%',
-                  top: 0,
-                  bgcolor: 'background.paper',
-                  boxShadow: 3,
-                  borderRadius: 2,
-                  minWidth: 200,
-                  zIndex: 1300,
-                  border: 1,
-                  borderColor: 'divider',
-                }}
-              >
-                {category.subcategories.map((subcategory) => (
-                  <MenuItem
-                    key={subcategory.path}
-                    onClick={() => handleSubcategoryClick(subcategory.path)}
-                    sx={{
-                      py: 1.5,
-                      px: 2,
-                      '&:hover': { bgcolor: 'action.hover' },
-                    }}
-                  >
-                    {subcategory.label}
-                  </MenuItem>
-                ))}
-              </Box>
-            )}
-          </MenuItem>
-        ))}
-      </Menu>
-    </Box>
-  );
-};
+// DesktopCategoriesDropdown removed (unused)
 
 // Mobile Categories Accordion Component
 const MobileCategoriesAccordion: React.FC<{ onClose: () => void }> = ({ onClose }) => {
   const [expanded, setExpanded] = useState<string | false>(false);
   const navigate = useNavigate();
 
-  const handleChange = (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
+  const handleChange = (panel: string) => (_e: React.SyntheticEvent, isExpanded: boolean) => {
     setExpanded(isExpanded ? panel : false);
   };
 
@@ -412,7 +278,7 @@ const Header: React.FC = () => {
                   PaperProps={{ sx: { p: 2, borderRadius: 2 } }}
                 >
                   <Box sx={{ width: 280 }}>
-                    <CalendarWidget initialDate={new Date()} onDateClick={(d)=>{
+                    <CalendarWidget initialDate={new Date()} onDateClick={() => {
                       handleCloseCalendar();
                       // Optional: navigate to filtered view by date in future
                     }} />

@@ -104,6 +104,7 @@ const CompactPostCard: React.FC<CompactPostCardProps> = ({
             />
             
             {/* Gradient Overlay */}
+            {post.category?.name && (
             <Box
               className="post-overlay"
               sx={{
@@ -121,16 +122,17 @@ const CompactPostCard: React.FC<CompactPostCardProps> = ({
               }}
             >
               <Chip
-                label={post.category.name}
+                label={post.category?.name}
                 size="small"
                 sx={{
-                  bgcolor: alpha(post.category.color || theme.palette.primary.main, 0.9),
+                  bgcolor: alpha(post.category?.color || theme.palette.primary.main, 0.9),
                   color: '#fff',
                   fontWeight: 600,
                   backdropFilter: 'blur(10px)',
                 }}
               />
             </Box>
+            )}
 
             {/* Featured Badge */}
             {post.featured && (
@@ -196,14 +198,14 @@ const CompactPostCard: React.FC<CompactPostCardProps> = ({
           }}
         >
           {/* Category & Reading Time */}
-          {!post.featuredImage && (
+          {!post.featuredImage && post.category?.name && (
             <Box sx={{ mb: 1.5, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <Chip
-                label={post.category.name}
+                label={post.category?.name}
                 size="small"
                 sx={{
-                  bgcolor: alpha(post.category.color || theme.palette.primary.main, 0.1),
-                  color: post.category.color || theme.palette.primary.main,
+                  bgcolor: alpha(post.category?.color || theme.palette.primary.main, 0.1),
+                  color: post.category?.color || theme.palette.primary.main,
                   fontWeight: 600,
                 }}
               />
