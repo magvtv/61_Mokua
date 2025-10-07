@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Box, Typography, IconButton, Tooltip, Paper, useTheme, alpha } from '@mui/material';
+import { Box, Typography, IconButton, Tooltip, Paper, useTheme, alpha, Dialog, DialogContent, useMediaQuery } from '@mui/material';
 import { ChevronLeft, ChevronRight, Circle } from '@mui/icons-material';
 import { format, startOfMonth, endOfMonth, startOfWeek, endOfWeek, addDays, addMonths, isSameMonth, isSameDay, parseISO } from 'date-fns';
 import { recentPosts } from '../../services/mockData';
@@ -14,6 +14,8 @@ const CalendarWidget: React.FC<CalendarWidgetProps> = ({ initialDate, onDateClic
   const theme = useTheme();
   const [currentMonth, setCurrentMonth] = React.useState<Date>(initialDate ?? new Date());
   const [direction, setDirection] = React.useState<number>(0);
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const [open, setOpen] = React.useState(false);
 
   const postDates = useMemo(() => {
     const map = new Map<string, number>();
@@ -67,7 +69,7 @@ const CalendarWidget: React.FC<CalendarWidgetProps> = ({ initialDate, onDateClic
     })
   };
 
-  return (
+  const calendarPaper = (
     <Paper
       elevation={0}
       sx={{
@@ -279,6 +281,21 @@ const CalendarWidget: React.FC<CalendarWidgetProps> = ({ initialDate, onDateClic
       </Box>
     </Paper>
   );
+
+  if (isMobile) {
+    return (
+      <Box>
+        <IconButton size="small" onClick={() => setOpen(true)} sx={{ border: 1, borderColor: 'divider', borderRadius: 2 }}>
+          <Typography variant="caption">Open calendar</Typography>
+        </IconButton>
+        <Dialog open={open} onClose={() => setOpen(false)} fullScreen>
+          <DialogContent sx={{ p: 2 }}>{calendarPaper}</DialogContent>
+        </Dialog>
+      </Box>
+    );
+  }
+
+  return calendarPaper;
 };
 
 export default CalendarWidget;

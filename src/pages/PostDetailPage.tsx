@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import {
   Container,
   Typography,
@@ -6,7 +6,6 @@ import {
   Chip,
   Avatar,
   Divider,
-  Grid,
   Button,
   IconButton,
   Paper,
@@ -29,7 +28,7 @@ import { Helmet } from 'react-helmet-async';
 import { useQuery } from '@tanstack/react-query';
 import { contentService } from '../services/contentService';
 import { formatDate } from '../utils';
-import LoadingSpinner from '../components/common/LoadingSpinner';
+// LoadingSpinner no longer used after skeletons
 import PostCard from '../components/post/PostCard';
 import BackToTop from '../components/common/BackToTop';
 
@@ -156,9 +155,9 @@ const PostDetailPage: React.FC = () => {
           Back to Articles
         </Button>
 
-        <Grid container spacing={4}>
+        <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', lg: isDesktop ? '2fr 1fr' : '1fr' }, gap: 4 }}>
           {/* Main content */}
-          <Grid item xs={12} lg={isDesktop ? 8 : 12}>
+          <Box>
             <Box sx={{ mb: 4 }}>
           <Chip
             label={post.category.name}
@@ -350,29 +349,29 @@ const PostDetailPage: React.FC = () => {
 
         <Divider sx={{ mb: 4 }} />
 
-        {/* Compact author info */}
-        <Box sx={{ mb: 4, display: 'flex', alignItems: 'center', gap: 2 }}>
-          <Avatar
-            src={post.author.avatar}
-            alt={post.author.name}
-            sx={{ width: 40, height: 40 }}
-          />
-          <Box>
+        {/* Author credentials block */}
+        <Box sx={{
+          display: 'flex',
+          alignItems: { xs: 'flex-start', sm: 'center' },
+          gap: 2,
+          p: 2,
+          border: '1px solid',
+          borderColor: 'divider',
+          borderRadius: 2,
+          mb: 6
+        }}>
+          <Avatar src={post.author.avatar} alt={post.author.name} sx={{ width: 56, height: 56 }} />
+          <Box sx={{ flex: 1 }}>
             <Typography
               component={Link}
               to={`/author/${post.author.slug}`}
-              variant="subtitle2"
-              sx={{
-                textDecoration: 'none',
-                color: 'text.primary',
-                fontWeight: 600,
-                '&:hover': { color: 'primary.main' },
-              }}
+              variant="subtitle1"
+              sx={{ textDecoration: 'none', color: 'text.primary', fontWeight: 700, '&:hover': { color: 'primary.main' } }}
             >
               {post.author.name}
             </Typography>
-            <Typography variant="caption" color="text.secondary">
-              Author • {post.author.bio?.substring(0, 60)}{post.author.bio && post.author.bio.length > 60 ? '...' : ''}
+            <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+              {post.author.bio}
             </Typography>
           </Box>
         </Box>
@@ -419,11 +418,13 @@ const PostDetailPage: React.FC = () => {
             </Box>
           </Box>
         )}
-          </Grid>
+
+          {/* close main column */}
+          </Box>
 
           {/* Table of Contents - Only visible on desktop */}
           {isDesktop && post && extractHeaders(post.content).length > 0 && (
-            <Grid item lg={4}>
+            <Box>
               <Paper 
                 elevation={0} 
                 sx={{ 
@@ -458,9 +459,9 @@ const PostDetailPage: React.FC = () => {
                   ))}
                 </List>
               </Paper>
-            </Grid>
+            </Box>
           )}
-        </Grid>
+        </Box>
       </Container>
     </>
   );

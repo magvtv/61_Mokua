@@ -3,7 +3,6 @@ import {
   Container,
   Typography,
   Box,
-  Grid,
   Card,
   CardContent,
   Avatar,
@@ -17,7 +16,6 @@ import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import { Skeleton } from '@mui/material';
 import { contentService } from '../services/contentService';
-import LoadingSpinner from '../components/common/LoadingSpinner';
 
 const AuthorsPage: React.FC = () => {
   const { data: authors, isLoading } = useQuery({
@@ -32,22 +30,20 @@ const AuthorsPage: React.FC = () => {
           <Skeleton variant="text" width="40%" height={48} sx={{ mx: 'auto', mb: 2 }} />
           <Skeleton variant="text" width="60%" sx={{ mx: 'auto' }} />
         </Box>
-        <Grid container spacing={4}>
+        <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: '1fr 1fr 1fr' }, gap: 4 }}>
           {Array.from({ length: 6 }).map((_, i) => (
-            <Grid item xs={12} sm={6} md={4} key={i}>
-              <Card sx={{ p: 4 }}>
-                <Box sx={{ textAlign: 'center', mb: 3 }}>
-                  <Skeleton variant="circular" width={100} height={100} sx={{ mx: 'auto', mb: 2 }} />
-                  <Skeleton variant="text" width="60%" sx={{ mx: 'auto' }} />
-                  <Skeleton variant="text" width="40%" sx={{ mx: 'auto' }} />
-                </Box>
-                <Skeleton variant="text" height={20} sx={{ mb: 1 }} />
-                <Skeleton variant="text" height={20} sx={{ mb: 1 }} />
-                <Skeleton variant="text" height={20} />
-              </Card>
-            </Grid>
+            <Card key={i} sx={{ p: 4 }}>
+              <Box sx={{ textAlign: 'center', mb: 3 }}>
+                <Skeleton variant="circular" width={100} height={100} sx={{ mx: 'auto', mb: 2 }} />
+                <Skeleton variant="text" width="60%" sx={{ mx: 'auto' }} />
+                <Skeleton variant="text" width="40%" sx={{ mx: 'auto' }} />
+              </Box>
+              <Skeleton variant="text" height={20} sx={{ mb: 1 }} />
+              <Skeleton variant="text" height={20} sx={{ mb: 1 }} />
+              <Skeleton variant="text" height={20} />
+            </Card>
           ))}
-        </Grid>
+        </Box>
       </Container>
     );
   }
@@ -101,9 +97,9 @@ const AuthorsPage: React.FC = () => {
         </Box>
 
         {authors && authors.length > 0 ? (
-          <Grid container spacing={4}>
+          <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: '1fr 1fr 1fr' }, gap: 4 }}>
             {authors.map((author, index) => (
-              <Grid item xs={12} sm={6} md={4} key={author.id}>
+              <Box key={author.id}>
                 <motion.div
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -206,9 +202,9 @@ const AuthorsPage: React.FC = () => {
                     </CardContent>
                   </Card>
                 </motion.div>
-              </Grid>
+              </Box>
             ))}
-          </Grid>
+          </Box>
         ) : (
           <Box sx={{ textAlign: 'center', py: 8 }}>
             <Typography variant="h6" color="text.secondary">
