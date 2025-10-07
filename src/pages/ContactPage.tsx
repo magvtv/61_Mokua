@@ -3,14 +3,12 @@ import {
   Container,
   Typography,
   Box,
-  Grid,
   Card,
-  CardContent,
   TextField,
   Button,
   IconButton,
 } from '@mui/material';
-import { Email, Phone, LocationOn, Twitter, Instagram, LinkedIn } from '@mui/icons-material';
+import { Email, Phone, LocationOn, Twitter, Instagram, LinkedIn, ArrowForward } from '@mui/icons-material';
 import { Helmet } from 'react-helmet-async';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -52,7 +50,7 @@ const ContactPage: React.FC = () => {
       });
       
       reset();
-    } catch (error) {
+    } catch {
       addNotification({
         type: 'error',
         message: 'Failed to send message. Please try again.',
@@ -84,48 +82,52 @@ const ContactPage: React.FC = () => {
   return (
     <>
       <Helmet>
-        <title>Contact Us - Mokua Literary Blog</title>
+        <title>Contact Us - Rise Above</title>
         <meta
           name="description"
-          content="Get in touch with the Mokua Literary Blog team. We'd love to hear from you about submissions, collaborations, or general inquiries."
+          content="Get in touch with the Rise Above team. We welcome submissions, collaborations, and general inquiries."
         />
-        <meta property="og:title" content="Contact Us - Mokua Literary Blog" />
+        <meta property="og:title" content="Contact Us - Rise Above" />
         <meta
           property="og:description"
-          content="Get in touch with the Mokua Literary Blog team. We'd love to hear from you."
+          content="Reach the Rise Above editors and contributors."
         />
       </Helmet>
-
-      <Container maxWidth="lg" sx={{ py: 8 }}>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <Box sx={{ textAlign: 'center', mb: 8 }}>
+      {/* Hero Section */}
+      <Box
+        sx={(theme) => ({
+          background: `linear-gradient(135deg, ${theme.palette.primary.main}10 0%, ${theme.palette.secondary.main}08 100%)`,
+          borderBottom: 1,
+          borderColor: 'divider',
+        })}
+      >
+        <Container maxWidth="lg" sx={{ py: { xs: 8, md: 10 } }}>
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
             <Typography
               variant="h1"
               sx={{
-                fontSize: { xs: '2.5rem', md: '3.5rem' },
+                fontSize: { xs: '2.5rem', md: '3.25rem', lg: '3.75rem' },
                 fontFamily: '"Playfair Display", serif',
                 fontWeight: 700,
-                mb: 3,
+                lineHeight: 1.15,
+                mb: 2,
+                textAlign: 'center',
               }}
             >
               Get in Touch
             </Typography>
-            <Typography
-              variant="h6"
-              color="text.secondary"
-              sx={{ maxWidth: 600, mx: 'auto', lineHeight: 1.6 }}
-            >
-              We'd love to hear from you. Send us a message and we'll respond as soon as possible.
+            <Typography variant="h6" color="text.secondary" sx={{ maxWidth: 800, mx: 'auto', textAlign: 'center' }}>
+              We read every note. Share a submission, pitch a collaboration, or simply say hello.
             </Typography>
-          </Box>
+          </motion.div>
+        </Container>
+      </Box>
 
-          <Grid container spacing={6}>
-            <Grid item xs={12} md={8}>
-              <Card sx={{ p: 4 }}>
+      <Container maxWidth="lg" sx={{ py: 8 }}>
+        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
+          <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '2fr 1fr' }, gap: 6, alignItems: 'stretch' }}>
+            <Box>
+              <Card sx={{ p: { xs: 3, md: 4 }, height: '100%' }}>
                 <Typography
                   variant="h4"
                   sx={{
@@ -134,12 +136,12 @@ const ContactPage: React.FC = () => {
                     mb: 4,
                   }}
                 >
-                  Send us a Message
+                  Send us a message
                 </Typography>
                 
                 <Box component="form" onSubmit={handleSubmit(onSubmit)}>
-                  <Grid container spacing={3}>
-                    <Grid item xs={12} sm={6}>
+                  <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, gap: 3 }}>
+                    <Box>
                       <TextField
                         fullWidth
                         label="Name"
@@ -147,9 +149,9 @@ const ContactPage: React.FC = () => {
                         error={!!errors.name}
                         helperText={errors.name?.message}
                       />
-                    </Grid>
+                    </Box>
                     
-                    <Grid item xs={12} sm={6}>
+                    <Box>
                       <TextField
                         fullWidth
                         label="Email"
@@ -158,9 +160,9 @@ const ContactPage: React.FC = () => {
                         error={!!errors.email}
                         helperText={errors.email?.message}
                       />
-                    </Grid>
+                    </Box>
                     
-                    <Grid item xs={12}>
+                    <Box sx={{ gridColumn: '1 / -1' }}>
                       <TextField
                         fullWidth
                         label="Subject"
@@ -168,127 +170,120 @@ const ContactPage: React.FC = () => {
                         error={!!errors.subject}
                         helperText={errors.subject?.message}
                       />
-                    </Grid>
+                    </Box>
                     
-                    <Grid item xs={12}>
+                    <Box sx={{ gridColumn: '1 / -1' }}>
                       <TextField
                         fullWidth
                         label="Message"
                         multiline
-                        rows={6}
+                        rows={7}
                         {...register('message')}
                         error={!!errors.message}
                         helperText={errors.message?.message}
                       />
-                    </Grid>
+                    </Box>
                     
-                    <Grid item xs={12}>
+                    <Box sx={{ gridColumn: '1 / -1' }}>
                       <Button
                         type="submit"
                         variant="contained"
                         size="large"
                         disabled={isSubmitting}
-                        sx={{ px: 4, py: 1.5 }}
+                        endIcon={<ArrowForward />}
+                        sx={{ px: 4, py: 1.5, borderRadius: 2 }}
                       >
-                        {isSubmitting ? 'Sending...' : 'Send Message'}
+                        {isSubmitting ? 'Sending…' : "Let's Connect"}
                       </Button>
-                    </Grid>
-                  </Grid>
+                      <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 1.5 }}>
+                        We respect your privacy. Your information will only be used to respond to your message.
+                      </Typography>
+                    </Box>
+                  </Box>
                 </Box>
               </Card>
-            </Grid>
+            </Box>
 
-            <Grid item xs={12} md={4}>
-              <Box sx={{ mb: 4 }}>
-                <Typography
-                  variant="h5"
-                  sx={{
-                    fontFamily: '"Playfair Display", serif',
-                    fontWeight: 600,
-                    mb: 3,
-                  }}
-                >
-                  Contact Information
-                </Typography>
-                
-                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+            <Box>
+              <Card sx={{ p: 3, height: '100%', display: 'flex', flexDirection: 'column', gap: 3 }}>
+                <Box>
+                  <Typography
+                    variant="h5"
+                    sx={{
+                      fontFamily: '"Playfair Display", serif',
+                      fontWeight: 600,
+                      mb: 1.5,
+                    }}
+                  >
+                    Contact information
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Prefer email or a quick call? We’re available on the channels below.
+                  </Typography>
+                </Box>
+
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
                   {contactInfo.map((info, index) => (
-                    <motion.div
-                      key={info.title}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.1 }}
-                    >
+                    <motion.div key={info.title} initial={{ opacity: 0, x: -12 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: index * 0.08 }}>
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                        <Box
-                          sx={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            width: 48,
-                            height: 48,
-                            borderRadius: '50%',
-                            bgcolor: 'primary.main',
-                            color: 'white',
-                          }}
-                        >
+                        <Box sx={{ width: 44, height: 44, borderRadius: '50%', bgcolor: 'primary.main', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                           {info.icon}
                         </Box>
                         <Box>
-                          <Typography variant="subtitle1" fontWeight={600}>
-                            {info.title}
-                          </Typography>
+                          <Typography variant="subtitle1" fontWeight={600}>{info.title}</Typography>
                           {info.link ? (
-                            <Typography
-                              component="a"
-                              href={info.link}
-                              variant="body2"
-                              color="text.secondary"
-                              sx={{ textDecoration: 'none', '&:hover': { color: 'primary.main' } }}
-                            >
+                            <Typography component="a" href={info.link} variant="body2" color="text.secondary" sx={{ textDecoration: 'none', '&:hover': { color: 'primary.main' } }}>
                               {info.content}
                             </Typography>
                           ) : (
-                            <Typography variant="body2" color="text.secondary">
-                              {info.content}
-                            </Typography>
+                            <Typography variant="body2" color="text.secondary">{info.content}</Typography>
                           )}
                         </Box>
                       </Box>
                     </motion.div>
                   ))}
                 </Box>
-              </Box>
 
-              <Card sx={{ p: 3 }}>
-                <Typography
-                  variant="h6"
-                  sx={{
-                    fontFamily: '"Playfair Display", serif',
-                    fontWeight: 600,
-                    mb: 2,
-                  }}
-                >
-                  Follow Us
-                </Typography>
-                <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-                  Stay connected with our literary community
-                </Typography>
-                <Box sx={{ display: 'flex', gap: 1 }}>
-                  <IconButton color="primary" href="https://twitter.com" target="_blank">
-                    <Twitter />
-                  </IconButton>
-                  <IconButton color="primary" href="https://instagram.com" target="_blank">
-                    <Instagram />
-                  </IconButton>
-                  <IconButton color="primary" href="https://linkedin.com" target="_blank">
-                    <LinkedIn />
-                  </IconButton>
+                <Box>
+                  <Typography variant="h6" sx={{ fontFamily: '"Playfair Display", serif', fontWeight: 600, mb: 1.5 }}>
+                    Follow us
+                  </Typography>
+                  <Box sx={{ display: 'flex', gap: 1 }}>
+                    <IconButton color="primary" href="https://twitter.com" target="_blank"><Twitter /></IconButton>
+                    <IconButton color="primary" href="https://instagram.com" target="_blank"><Instagram /></IconButton>
+                    <IconButton color="primary" href="https://linkedin.com" target="_blank"><LinkedIn /></IconButton>
+                  </Box>
                 </Box>
               </Card>
-            </Grid>
-          </Grid>
+            </Box>
+          </Box>
         </motion.div>
+
+        {/* FAQ Section */}
+        <Box sx={{ mt: 8 }}>
+          <Typography variant="h4" sx={{ fontFamily: '"Playfair Display", serif', fontWeight: 600, mb: 3, textAlign: 'center' }}>
+            Frequently asked questions
+          </Typography>
+          <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr 1fr' }, gap: 3 }}>
+            {[{
+              q: 'How soon will you get back to me?',
+              a: 'We aim to respond within 2–3 business days. Submissions may take longer while under review.'
+            },{
+              q: 'Do you accept simultaneous submissions?',
+              a: 'Yes. Please inform us promptly if your work is accepted elsewhere.'
+            },{
+              q: 'Can I pitch sponsored content?',
+              a: 'We consider partnerships that align with our editorial values. Share details in your message.'
+            }].map((item, i) => (
+              <Box key={i}>
+                <Card sx={{ p: 3, height: '100%' }}>
+                  <Typography variant="subtitle1" fontWeight={700} sx={{ mb: 1 }}>{item.q}</Typography>
+                  <Typography variant="body2" color="text.secondary">{item.a}</Typography>
+                </Card>
+              </Box>
+            ))}
+          </Box>
+        </Box>
       </Container>
     </>
   );

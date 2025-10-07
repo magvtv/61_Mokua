@@ -8,7 +8,6 @@ import {
   Button,
   Divider,
 } from '@mui/material';
-import Grid from '@mui/material/Grid';
 import { Twitter, Instagram, LinkedIn, Language, ArrowBack } from '@mui/icons-material';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
@@ -90,8 +89,13 @@ const AuthorDetailPage: React.FC = () => {
           transition={{ duration: 0.5 }}
         >
           <Box sx={{ mb: 6 }}>
-            <Grid container spacing={4} alignItems="center">
-              <Grid item xs={12} md={3}>
+            <Box sx={{
+              display: 'grid',
+              gridTemplateColumns: { xs: '1fr', md: 'auto 1fr' },
+              gap: 4,
+              alignItems: 'center'
+            }}>
+              <Box>
                 <Box sx={{ textAlign: 'center' }}>
                   <Avatar
                     src={author.avatar}
@@ -105,9 +109,9 @@ const AuthorDetailPage: React.FC = () => {
                     }}
                   />
                 </Box>
-              </Grid>
+              </Box>
               
-              <Grid item xs={12} md={9}>
+              <Box>
                 <Typography
                   variant="h1"
                   sx={{
@@ -161,8 +165,8 @@ const AuthorDetailPage: React.FC = () => {
                     ))}
                   </Box>
                 </Box>
-              </Grid>
-            </Grid>
+              </Box>
+            </Box>
           </Box>
         </motion.div>
 
@@ -184,19 +188,22 @@ const AuthorDetailPage: React.FC = () => {
         {postsLoading ? (
           <LoadingSpinner message="Loading stories..." />
         ) : authorPosts && authorPosts.length > 0 ? (
-          <Grid container spacing={4}>
+          <Box sx={{
+            display: 'grid',
+            gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', lg: '1fr 1fr 1fr' },
+            gap: 4
+          }}>
             {authorPosts.map((post, index) => (
-              <Grid item xs={12} sm={6} lg={4} key={post.id}>
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                >
-                  <CompactPostCard post={post} variant="medium" showExcerpt />
-                </motion.div>
-              </Grid>
+              <motion.div
+                key={post.id}
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+              >
+                <CompactPostCard post={post} variant="medium" showExcerpt />
+              </motion.div>
             ))}
-          </Grid>
+          </Box>
         ) : (
           <Box sx={{ textAlign: 'center', py: 8 }}>
             <Typography variant="h6" color="text.secondary">
