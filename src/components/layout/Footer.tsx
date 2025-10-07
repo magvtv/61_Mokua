@@ -3,12 +3,12 @@ import {
   Box,
   Container,
   Typography,
-  Grid,
   Link,
   IconButton,
   TextField,
   Button,
 } from '@mui/material';
+//
 import {
   Facebook,
   Twitter,
@@ -80,8 +80,14 @@ const Footer: React.FC = () => {
       }}
     >
       <Container maxWidth="lg">
-        <Grid container spacing={4}>
-          <Grid component="div" item xs={12} md={4}>
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: { xs: '1fr', md: '1fr 1fr 1fr' },
+            gap: 4,
+          }}
+        >
+          <Box>
             <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
               <IconButton sx={{ color: 'primary.main', p: 0, mr: 1 }}>
                 <MenuBook fontSize="large" />
@@ -113,29 +119,32 @@ const Footer: React.FC = () => {
                 <LinkedIn />
               </IconButton>
             </Box>
-          </Grid>
+          </Box>
 
-          <Grid item xs={12} sm={6} md={2}>
+          <Box>
             <Typography variant="h6" gutterBottom>
               Explore
             </Typography>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-              <Link component={RouterLink} to="/category/fiction" color="inherit" underline="hover">
-                Fiction
+              <Link component={RouterLink} to="/" color="inherit" underline="hover">
+                Home
+              </Link>
+              <Link component={RouterLink} to="/category/think-pieces" color="inherit" underline="hover">
+                Think-pieces
+              </Link>
+              <Link component={RouterLink} to="/category/short-stories" color="inherit" underline="hover">
+                Short stories
               </Link>
               <Link component={RouterLink} to="/category/poetry" color="inherit" underline="hover">
                 Poetry
               </Link>
-              <Link component={RouterLink} to="/category/essays" color="inherit" underline="hover">
-                Essays
-              </Link>
-              <Link component={RouterLink} to="/category/reviews" color="inherit" underline="hover">
-                Reviews
+              <Link component={RouterLink} to="/category/real-life" color="inherit" underline="hover">
+                Real Life
               </Link>
             </Box>
-          </Grid>
+          </Box>
 
-          <Grid item xs={12} sm={6} md={2}>
+          <Box>
             <Typography variant="h6" gutterBottom>
               Community
             </Typography>
@@ -153,14 +162,14 @@ const Footer: React.FC = () => {
                 About
               </Link>
             </Box>
-          </Grid>
+          </Box>
 
-          <Grid item xs={12} md={4}>
+          <Box>
             <Typography variant="h6" gutterBottom>
-              Stay Updated
+              Stay in the loop
             </Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-              Subscribe to our newsletter for the latest literary insights and featured content.
+              Subscribe for updates on new posts, events, and featured stories.
             </Typography>
             <Box component="form" onSubmit={handleNewsletterSubmit}>
               <TextField
@@ -193,8 +202,8 @@ const Footer: React.FC = () => {
                 {isSubmitting ? 'Subscribing...' : 'Subscribe'}
               </Button>
             </Box>
-          </Grid>
-        </Grid>
+          </Box>
+        </Box>
 
         <Box
           sx={{

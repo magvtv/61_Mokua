@@ -39,7 +39,6 @@ const Header: React.FC = () => {
     toggleTheme,
     isMobileMenuOpen,
     setMobileMenuOpen,
-    searchQuery,
     setSearchQuery,
     isSearchOpen,
     setSearchOpen,
@@ -64,11 +63,10 @@ const Header: React.FC = () => {
 
   const navigationItems = [
     { label: 'Home', path: '/' },
-    { label: 'Fiction', path: '/category/fiction' },
+    { label: 'Think-pieces', path: '/category/think-pieces' },
+    { label: 'Short stories', path: '/category/short-stories' },
     { label: 'Poetry', path: '/category/poetry' },
-    { label: 'Essays', path: '/category/essays' },
-    { label: 'Reviews', path: '/category/reviews' },
-    { label: 'Authors', path: '/authors' },
+    { label: 'Real Life', path: '/category/real-life' },
   ];
 
   return (
