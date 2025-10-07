@@ -122,21 +122,21 @@ const CategoryPage: React.FC = () => {
             {/* Featured Article Section */}
             {featuredPost && (
               <Box sx={{ mb: 5 }}>
-                <Paper 
-                  elevation={0} 
-                  sx={{ 
-                    p: 2, 
-                    bgcolor: 'background.paper', 
+                <Paper
+                  elevation={0}
+                  sx={{
+                    p: 2,
+                    bgcolor: 'background.paper',
                     borderRadius: 2,
                     border: '1px solid',
                     borderColor: 'divider'
                   }}
                 >
-                  <Grid container spacing={3}>
-                    <Box sx={{ gridColumn: { xs: 'span 12', md: 'span 7' } }}>
-                      <PostCard post={featuredPost} featured={true} />
+                  <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '7fr 5fr' }, gap: 3 }}>
+                    <Box>
+                      <PostCard post={featuredPost} featured />
                     </Box>
-                    <Box sx={{ gridColumn: { xs: 'span 12', md: 'span 5' } }}>
+                    <Box>
                       <Typography 
                         variant="h6" 
                         sx={{ 
@@ -165,7 +165,7 @@ const CategoryPage: React.FC = () => {
                         Read Full Story
                       </Button>
                     </Box>
-                  </Grid>
+                  </Box>
                 </Paper>
               </Box>
             )}
@@ -192,14 +192,14 @@ const CategoryPage: React.FC = () => {
               {/* Featured posts with larger cards */}
               {remainingPosts?.slice(0, 4).map((post) => (
                 <Box key={post.id} sx={{ gridColumn: { xs: 'span 12', sm: 'span 6', md: 'span 2' }, mb: 3 }}>
-                  <CompactPostCard post={post} imagePosition="top" size="medium" showExcerpt={true} />
+                  <CompactPostCard post={post} variant="medium" showExcerpt={true} />
                 </Box>
               ))}
               
               {/* Smaller cards in a more compact layout */}
               {remainingPosts?.slice(4).map((post) => (
                 <Box key={post.id} sx={{ gridColumn: 'span 1', mb: 3 }}>
-                  <CompactPostCard post={post} imagePosition="left" size="small" showExcerpt={false} />
+                  <CompactPostCard post={post} variant="small" showExcerpt={false} />
                 </Box>
               ))}
             </Grid>
