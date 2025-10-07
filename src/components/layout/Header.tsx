@@ -105,7 +105,7 @@ const Header: React.FC = () => {
                 fontWeight: 700,
               }}
             >
-              Mokua Literary
+              Rise Above
             </Typography>
 
             {!isMobile && (

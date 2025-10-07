@@ -93,12 +93,11 @@ const Footer: React.FC = () => {
                   fontWeight: 700,
                 }}
               >
-                Mokua Literary
+                Rise Above
               </Typography>
             </Box>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-              A curated space for contemporary literature, poetry, and literary criticism. 
-              Discover emerging voices and timeless works that shape our understanding of the world.
+              We live and die by the stories we tell
             </Typography>
             <Box sx={{ display: 'flex', gap: 1 }}>
               <IconButton size="small" color="primary">

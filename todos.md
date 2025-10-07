@@ -94,7 +94,7 @@ Alafu we could delete the 'Where stories come alive' and the subsequent caption.
 Then the menus on the top right could be: Home, Think-pieces, Short stories, Poetry and Real Life. I think we could add sub-menus to them over time.
 If we're able to put a calender somewhere on the side kwa homepage with highlighted dates when stuff is posted would be great (I've seen sth similar on Bikozulu's blog)
 Alafu kwa the footer where it reads: "A curated space for contemporary literature..." It could read instead "We live and die by the stories we tell"
-Then finally the subscription box could be "Stay in the loop" bila the literary😌
+Then finally the subscription box could be "Stay in the loop" bila the literary 😌
 After that I think we're ready to go
 Utanishow what we need to do next to have it on a domain that I can start posting on?
 
