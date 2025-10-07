@@ -75,11 +75,13 @@ const CalendarWidget: React.FC<CalendarWidgetProps> = ({ initialDate, onDateClic
       sx={{
         border: `1px solid ${alpha(theme.palette.divider, 0.1)}`,
         borderRadius: 3,
-        p: 3,
+        p: { xs: 2, sm: 3 },
         bgcolor: 'background.paper',
         background: `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.02)} 0%, ${alpha(theme.palette.secondary.main, 0.02)} 100%)`,
         position: 'relative',
         overflow: 'hidden',
+        width: '100%',
+        maxWidth: { xs: '100%', sm: 520 },
         '&::before': {
           content: '""',
           position: 'absolute',
@@ -152,7 +154,7 @@ const CalendarWidget: React.FC<CalendarWidgetProps> = ({ initialDate, onDateClic
             key={`${d}-${i}`}
             sx={{ 
               textAlign: 'center', 
-              fontSize: '0.7rem',
+              fontSize: { xs: '0.65rem', sm: '0.7rem' },
               fontWeight: 600,
               color: 'text.secondary',
               textTransform: 'uppercase',
@@ -168,7 +170,8 @@ const CalendarWidget: React.FC<CalendarWidgetProps> = ({ initialDate, onDateClic
       <Box sx={{ 
         display: 'grid', 
         gridTemplateColumns: 'repeat(7, 1fr)', 
-        gap: 1
+        gap: 1,
+        width: '100%',
       }}>
         {monthMatrix.map((day) => {
           const inMonth = isSameMonth(day, currentMonth);
@@ -191,11 +194,13 @@ const CalendarWidget: React.FC<CalendarWidgetProps> = ({ initialDate, onDateClic
                   alignItems: 'center',
                   justifyContent: 'center',
                   borderRadius: 1.5,
-                  fontSize: '0.85rem',
+                  fontSize: { xs: '0.8rem', sm: '0.85rem' },
                   fontWeight: hasPost ? 600 : 400,
                   position: 'relative',
                   cursor: hasPost ? 'pointer' : 'default',
                   transition: 'all 0.2s',
+                  minWidth: 0,
+                  userSelect: 'none',
                   bgcolor: hasPost 
                     ? theme.palette.primary.main
                     : isToday 
@@ -288,8 +293,15 @@ const CalendarWidget: React.FC<CalendarWidgetProps> = ({ initialDate, onDateClic
         <IconButton size="small" onClick={() => setOpen(true)} sx={{ border: 1, borderColor: 'divider', borderRadius: 2 }}>
           <Typography variant="caption">Open calendar</Typography>
         </IconButton>
-        <Dialog open={open} onClose={() => setOpen(false)} fullScreen>
-          <DialogContent sx={{ p: 2 }}>{calendarPaper}</DialogContent>
+        <Dialog open={open} onClose={() => setOpen(false)} fullScreen keepMounted>
+          <DialogContent sx={{ p: 2, bgcolor: 'background.default', overflowX: 'hidden' }}>
+            <Box sx={{ position: 'sticky', top: 0, zIndex: 1, mb: 2, display: 'flex', justifyContent: 'flex-end' }}>
+              <IconButton onClick={() => setOpen(false)} aria-label="Close calendar" sx={{ border: 1, borderColor: 'divider' }}>
+                <ChevronRight sx={{ transform: 'rotate(180deg)' }} />
+              </IconButton>
+            </Box>
+            {calendarPaper}
+          </DialogContent>
         </Dialog>
       </Box>
     );
