@@ -13,6 +13,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
+import { Skeleton } from '@mui/material';
 import { contentService } from '../services/contentService';
 import CompactPostCard from '../components/home/CompactPostCard';
 import LoadingSpinner from '../components/common/LoadingSpinner';
@@ -186,7 +187,19 @@ const AuthorDetailPage: React.FC = () => {
         </Box>
 
         {postsLoading ? (
-          <LoadingSpinner message="Loading stories..." />
+          <Box sx={{
+            display: 'grid',
+            gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', lg: '1fr 1fr 1fr' },
+            gap: 4
+          }}>
+            {Array.from({ length: 6 }).map((_, i) => (
+              <Box key={i}>
+                <Skeleton variant="rectangular" height={200} sx={{ borderRadius: 2, mb: 2 }} />
+                <Skeleton variant="text" width="80%" />
+                <Skeleton variant="text" width="60%" />
+              </Box>
+            ))}
+          </Box>
         ) : authorPosts && authorPosts.length > 0 ? (
           <Box sx={{
             display: 'grid',

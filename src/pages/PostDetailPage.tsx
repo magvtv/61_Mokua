@@ -13,9 +13,10 @@ import {
   useTheme,
   useMediaQuery,
   List,
-  ListItem,
+  ListItemButton,
   ListItemText,
 } from '@mui/material';
+import { Skeleton } from '@mui/material';
 import {
   Share,
   Facebook,
@@ -75,7 +76,16 @@ const PostDetailPage: React.FC = () => {
   });
 
   if (isLoading) {
-    return <LoadingSpinner message="Loading article..." />;
+    return (
+      <Container maxWidth="lg" sx={{ py: 4 }}>
+        <Skeleton variant="text" width="60%" height={56} sx={{ mb: 2 }} />
+        <Skeleton variant="text" width="80%" height={28} sx={{ mb: 3 }} />
+        <Skeleton variant="rectangular" height={420} sx={{ borderRadius: 2, mb: 4 }} />
+        <Skeleton variant="text" height={24} sx={{ mb: 1 }} />
+        <Skeleton variant="text" height={24} sx={{ mb: 1 }} />
+        <Skeleton variant="text" height={24} sx={{ mb: 1 }} />
+      </Container>
+    );
   }
 
   if (!post) {
@@ -432,23 +442,19 @@ const PostDetailPage: React.FC = () => {
                 </Typography>
                 <List dense>
                   {extractHeaders(post.content).map((header) => (
-                    <ListItem 
-                      key={header.id} 
-                      button 
-                      sx={{ 
-                        pl: header.level === 1 ? 1 : 3,
-                        py: 0.5,
-                      }}
-                      onClick={() => scrollToSection(header.id)}
-                    >
-                      <ListItemText 
-                        primary={header.text}
-                        primaryTypographyProps={{
-                          variant: header.level === 1 ? 'subtitle1' : 'body2',
-                          fontWeight: header.level === 1 ? 500 : 400,
-                        }}
-                      />
-                    </ListItem>
+                <ListItemButton
+                  key={header.id}
+                  sx={{ pl: header.level === 1 ? 1 : 3, py: 0.5 }}
+                  onClick={() => scrollToSection(header.id)}
+                >
+                  <ListItemText
+                    primary={header.text}
+                    primaryTypographyProps={{
+                      variant: header.level === 1 ? 'subtitle1' : 'body2',
+                      fontWeight: header.level === 1 ? 500 : 400,
+                    }}
+                  />
+                </ListItemButton>
                   ))}
                 </List>
               </Paper>

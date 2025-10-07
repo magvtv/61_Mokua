@@ -153,7 +153,7 @@ const Footer: React.FC = () => {
           }}
         >
           <Typography variant="body2" color="text.secondary">
-            {new Date().getFullYear()} © Rise Above. All rights reserved. Built with passion for literature. Crafted by magvtv
+            {new Date().getFullYear()} © Rise Above. All rights reserved. Built with passion for literature. Crafted by <Link href="https://github.com/magvtv" target="_blank" rel="noopener noreferrer" underline="hover">magvtv</Link>
           </Typography>
         </Box>
       </Container>

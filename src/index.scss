@@ -6,6 +6,11 @@
   --heading-font: 'Faculty Glyphic', sans-serif;
 }
 
+/* Prevent horizontal scroll on small screens */
+html, body, #root {
+  overflow-x: hidden;
+}
+
 /* Font Faces */
 @font-face {
   font-family: 'Faculty Glyphic';

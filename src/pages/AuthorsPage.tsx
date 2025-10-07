@@ -15,6 +15,7 @@ import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
+import { Skeleton } from '@mui/material';
 import { contentService } from '../services/contentService';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 
@@ -25,7 +26,30 @@ const AuthorsPage: React.FC = () => {
   });
 
   if (isLoading) {
-    return <LoadingSpinner message="Loading our voices..." />;
+    return (
+      <Container maxWidth="lg" sx={{ py: 8 }}>
+        <Box sx={{ textAlign: 'center', mb: 8 }}>
+          <Skeleton variant="text" width="40%" height={48} sx={{ mx: 'auto', mb: 2 }} />
+          <Skeleton variant="text" width="60%" sx={{ mx: 'auto' }} />
+        </Box>
+        <Grid container spacing={4}>
+          {Array.from({ length: 6 }).map((_, i) => (
+            <Grid item xs={12} sm={6} md={4} key={i}>
+              <Card sx={{ p: 4 }}>
+                <Box sx={{ textAlign: 'center', mb: 3 }}>
+                  <Skeleton variant="circular" width={100} height={100} sx={{ mx: 'auto', mb: 2 }} />
+                  <Skeleton variant="text" width="60%" sx={{ mx: 'auto' }} />
+                  <Skeleton variant="text" width="40%" sx={{ mx: 'auto' }} />
+                </Box>
+                <Skeleton variant="text" height={20} sx={{ mb: 1 }} />
+                <Skeleton variant="text" height={20} sx={{ mb: 1 }} />
+                <Skeleton variant="text" height={20} />
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      </Container>
+    );
   }
 
   const getSocialIcon = (platform: string) => {

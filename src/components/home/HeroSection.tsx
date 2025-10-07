@@ -140,7 +140,7 @@ const HeroSection: React.FC = () => {
                 <Box sx={{ display: 'flex', gap: { xs: 2, md: 1.5 }, flexWrap: 'wrap' }}>
                   <Button
                     component={Link}
-                    to="/category/fiction"
+                    to="/"
                     variant="contained"
                     size="medium"
                     endIcon={<ArrowForward />}
@@ -151,7 +151,7 @@ const HeroSection: React.FC = () => {
                       fontSize: { xs: '1.1rem', md: '1rem' },
                     }}
                   >
-                    Explore Fiction
+                    Browse Latest
                   </Button>
                   <Button
                     component={Link}
