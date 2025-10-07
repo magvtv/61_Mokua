@@ -135,6 +135,8 @@ const CategoryPage: React.FC = () => {
                   <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '7fr 5fr' }, gap: 3 }}>
                     <Box>
                       <PostCard post={featuredPost} featured />
+                      {/* Constrain featured image height within card via CSS override */}
+                      <Box sx={{ '& img': { maxHeight: { xs: 240, md: 320 }, objectFit: 'cover' } }} />
                     </Box>
                     <Box>
                       <Typography 

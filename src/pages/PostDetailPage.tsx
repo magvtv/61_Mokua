@@ -263,9 +263,10 @@ const PostDetailPage: React.FC = () => {
               style={{
                 width: '100%',
                 height: 'auto',
-                maxHeight: '520px',
+                maxHeight: '360px',
                 objectFit: 'cover',
               }}
+              loading="lazy"
             />
           </Box>
         )}
