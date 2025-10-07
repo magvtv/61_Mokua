@@ -94,10 +94,10 @@ const CategoryPage: React.FC = () => {
           <Typography
             variant="h1"
             sx={{
-              fontSize: { xs: '2.5rem', md: '3.5rem' },
+              fontSize: { xs: '2rem', md: '3rem' },
               fontFamily: '"Playfair Display", serif',
               fontWeight: 700,
-              mb: 2,
+              mb: { xs: 1.5, md: 2 },
               color: category.color,
             }}
           >
@@ -152,10 +152,10 @@ const CategoryPage: React.FC = () => {
                       >
                         Top Story
                       </Typography>
-                      <Typography variant="h4" gutterBottom sx={{ fontWeight: 700 }}>
+                      <Typography variant="h4" gutterBottom sx={{ fontWeight: 700, fontSize: { xs: '1.5rem', md: '1.75rem' } }}>
                         {featuredPost.title}
                       </Typography>
-                      <Typography variant="body1" paragraph>
+                      <Typography variant="body1" paragraph sx={{ fontSize: { xs: '0.95rem', md: '1rem' } }}>
                         {featuredPost.excerpt}
                       </Typography>
                       <Button 

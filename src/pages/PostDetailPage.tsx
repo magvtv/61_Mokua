@@ -155,7 +155,7 @@ const PostDetailPage: React.FC = () => {
           Back to Articles
         </Button>
 
-        <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', lg: isDesktop ? '2fr 1fr' : '1fr' }, gap: 4 }}>
+        <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', lg: '2fr 1fr' }, gap: { xs: 3, md: 4 } }}>
           {/* Main content */}
           <Box>
             <Box sx={{ mb: 4 }}>
@@ -171,11 +171,11 @@ const PostDetailPage: React.FC = () => {
           <Typography
             variant="h1"
             sx={{
-              fontSize: { xs: '2rem', md: '3rem' },
+              fontSize: { xs: '1.875rem', sm: '2.25rem', md: '2.75rem' },
               fontFamily: '"Playfair Display", serif',
               fontWeight: 700,
-              lineHeight: 1.2,
-              mb: 3,
+              lineHeight: 1.25,
+              mb: { xs: 2, md: 3 },
             }}
           >
             {post.title}
@@ -186,8 +186,9 @@ const PostDetailPage: React.FC = () => {
             color="text.secondary"
             sx={{
               fontWeight: 400,
-              lineHeight: 1.6,
-              mb: 4,
+              lineHeight: 1.7,
+              fontSize: { xs: '1rem', md: '1.125rem' },
+              mb: { xs: 3, md: 4 },
             }}
           >
             {post.excerpt}
@@ -274,26 +275,26 @@ const PostDetailPage: React.FC = () => {
         <Typography
           variant="body1"
           sx={{
-            lineHeight: 1.8,
-            fontSize: '1.125rem',
+            lineHeight: 1.85,
+            fontSize: { xs: '1.05rem', md: '1.125rem' },
             '& p': { mb: 3 },
             '& h2': {
               fontFamily: '"Playfair Display", serif',
               fontWeight: 600,
-              fontSize: '1.5rem',
-              mt: 4,
-              mb: 2,
+              fontSize: { xs: '1.35rem', md: '1.5rem' },
+              mt: { xs: 3, md: 4 },
+              mb: { xs: 1.5, md: 2 },
               scrollMarginTop: '80px',
             },
             '& h3': {
               fontFamily: '"Playfair Display", serif',
               fontWeight: 500,
-              fontSize: '1.25rem',
-              mt: 3,
-              mb: 1.5,
+              fontSize: { xs: '1.15rem', md: '1.25rem' },
+              mt: { xs: 2.5, md: 3 },
+              mb: { xs: 1.25, md: 1.5 },
               scrollMarginTop: '80px',
             },
-            mb: 6,
+            mb: { xs: 5, md: 6 },
           }}
         >
           {post.content.split('\n\n').map((paragraph, index) => {

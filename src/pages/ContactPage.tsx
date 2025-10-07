@@ -101,50 +101,51 @@ const ContactPage: React.FC = () => {
           borderColor: 'divider',
         })}
       >
-        <Container maxWidth="lg" sx={{ py: { xs: 8, md: 10 } }}>
+        <Container maxWidth="lg" sx={{ py: { xs: 6, md: 10 } }}>
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
             <Typography
               variant="h1"
               sx={{
-                fontSize: { xs: '2.5rem', md: '3.25rem', lg: '3.75rem' },
+                fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem', lg: '3.5rem' },
                 fontFamily: '"Playfair Display", serif',
                 fontWeight: 700,
-                lineHeight: 1.15,
-                mb: 2,
+                lineHeight: { xs: 1.2, md: 1.15 },
+                mb: { xs: 1.5, md: 2 },
                 textAlign: 'center',
               }}
             >
               Get in Touch
             </Typography>
-            <Typography variant="h6" color="text.secondary" sx={{ maxWidth: 800, mx: 'auto', textAlign: 'center' }}>
+            <Typography variant="h6" color="text.secondary" sx={{ maxWidth: 800, mx: 'auto', textAlign: 'center', px: { xs: 2, md: 0 }, fontSize: { xs: '1rem', md: '1.125rem' } }}>
               We read every note. Share a submission, pitch a collaboration, or simply say hello.
             </Typography>
           </motion.div>
         </Container>
       </Box>
 
-      <Container maxWidth="lg" sx={{ py: 8 }}>
+      <Container maxWidth="lg" sx={{ py: { xs: 6, md: 8 } }}>
         <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
-          <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '2fr 1fr' }, gap: 6, alignItems: 'stretch' }}>
+          <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '2fr 1fr' }, gap: { xs: 4, md: 6 }, alignItems: 'stretch' }}>
             <Box>
-              <Card sx={{ p: { xs: 3, md: 4 }, height: '100%' }}>
+              <Card sx={{ p: { xs: 2.5, sm: 3, md: 4 }, height: '100%' }}>
                 <Typography
                   variant="h4"
                   sx={{
                     fontFamily: '"Playfair Display", serif',
                     fontWeight: 600,
-                    mb: 4,
+                    mb: { xs: 3, md: 4 },
                   }}
                 >
                   Send us a message
                 </Typography>
                 
                 <Box component="form" onSubmit={handleSubmit(onSubmit)}>
-                  <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, gap: 3 }}>
+                  <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, gap: { xs: 2, sm: 3 } }}>
                     <Box>
                       <TextField
                         fullWidth
                         label="Name"
+                        size="medium"
                         {...register('name')}
                         error={!!errors.name}
                         helperText={errors.name?.message}
@@ -156,6 +157,7 @@ const ContactPage: React.FC = () => {
                         fullWidth
                         label="Email"
                         type="email"
+                        size="medium"
                         {...register('email')}
                         error={!!errors.email}
                         helperText={errors.email?.message}
@@ -166,6 +168,7 @@ const ContactPage: React.FC = () => {
                       <TextField
                         fullWidth
                         label="Subject"
+                        size="medium"
                         {...register('subject')}
                         error={!!errors.subject}
                         helperText={errors.subject?.message}
@@ -178,6 +181,7 @@ const ContactPage: React.FC = () => {
                         label="Message"
                         multiline
                         rows={7}
+                        size="medium"
                         {...register('message')}
                         error={!!errors.message}
                         helperText={errors.message?.message}
@@ -191,7 +195,7 @@ const ContactPage: React.FC = () => {
                         size="large"
                         disabled={isSubmitting}
                         endIcon={<ArrowForward />}
-                        sx={{ px: 4, py: 1.5, borderRadius: 2 }}
+                        sx={{ px: { xs: 2.5, md: 4 }, py: 1.5, borderRadius: 2, width: { xs: '100%', sm: 'auto' } }}
                       >
                         {isSubmitting ? 'Sending…' : "Let's Connect"}
                       </Button>
@@ -205,14 +209,14 @@ const ContactPage: React.FC = () => {
             </Box>
 
             <Box>
-              <Card sx={{ p: 3, height: '100%', display: 'flex', flexDirection: 'column', gap: 3 }}>
+              <Card sx={{ p: { xs: 2.5, sm: 3 }, height: '100%', display: 'flex', flexDirection: 'column', gap: { xs: 2.5, md: 3 } }}>
                 <Box>
                   <Typography
                     variant="h5"
                     sx={{
                       fontFamily: '"Playfair Display", serif',
                       fontWeight: 600,
-                      mb: 1.5,
+                      mb: { xs: 1, md: 1.5 },
                     }}
                   >
                     Contact information
@@ -222,11 +226,11 @@ const ContactPage: React.FC = () => {
                   </Typography>
                 </Box>
 
-                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: { xs: 2, md: 2.5 } }}>
                   {contactInfo.map((info, index) => (
                     <motion.div key={info.title} initial={{ opacity: 0, x: -12 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: index * 0.08 }}>
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                        <Box sx={{ width: 44, height: 44, borderRadius: '50%', bgcolor: 'primary.main', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <Box sx={{ width: { xs: 40, md: 44 }, height: { xs: 40, md: 44 }, borderRadius: '50%', bgcolor: 'primary.main', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                           {info.icon}
                         </Box>
                         <Box>
@@ -248,7 +252,7 @@ const ContactPage: React.FC = () => {
                   <Typography variant="h6" sx={{ fontFamily: '"Playfair Display", serif', fontWeight: 600, mb: 1.5 }}>
                     Follow us
                   </Typography>
-                  <Box sx={{ display: 'flex', gap: 1 }}>
+                  <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
                     <IconButton color="primary" href="https://twitter.com" target="_blank"><Twitter /></IconButton>
                     <IconButton color="primary" href="https://instagram.com" target="_blank"><Instagram /></IconButton>
                     <IconButton color="primary" href="https://linkedin.com" target="_blank"><LinkedIn /></IconButton>
@@ -261,10 +265,10 @@ const ContactPage: React.FC = () => {
 
         {/* FAQ Section */}
         <Box sx={{ mt: 8 }}>
-          <Typography variant="h4" sx={{ fontFamily: '"Playfair Display", serif', fontWeight: 600, mb: 3, textAlign: 'center' }}>
+          <Typography variant="h4" sx={{ fontFamily: '"Playfair Display", serif', fontWeight: 600, mb: { xs: 2.5, md: 3 }, textAlign: 'center', fontSize: { xs: '1.75rem', md: '2rem' } }}>
             Frequently asked questions
           </Typography>
-          <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr 1fr' }, gap: 3 }}>
+          <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr 1fr' }, gap: { xs: 2, md: 3 } }}>
             {[{
               q: 'How soon will you get back to me?',
               a: 'We aim to respond within 2–3 business days. Submissions may take longer while under review.'
@@ -276,9 +280,9 @@ const ContactPage: React.FC = () => {
               a: 'We consider partnerships that align with our editorial values. Share details in your message.'
             }].map((item, i) => (
               <Box key={i}>
-                <Card sx={{ p: 3, height: '100%' }}>
-                  <Typography variant="subtitle1" fontWeight={700} sx={{ mb: 1 }}>{item.q}</Typography>
-                  <Typography variant="body2" color="text.secondary">{item.a}</Typography>
+                <Card sx={{ p: { xs: 2.5, md: 3 }, height: '100%' }}>
+                  <Typography variant="subtitle1" fontWeight={700} sx={{ mb: { xs: 0.75, md: 1 } }}>{item.q}</Typography>
+                  <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.7 }}>{item.a}</Typography>
                 </Card>
               </Box>
             ))}
