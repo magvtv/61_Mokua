@@ -5,8 +5,6 @@ import {
   Typography,
   Link,
   IconButton,
-  TextField,
-  Button,
 } from '@mui/material';
 import {
   Facebook,
@@ -113,22 +111,7 @@ const Footer: React.FC = () => {
               </Box>
             </Box>
 
-            {/* Newsletter Section */}
-            <Box sx={{ minWidth: { xs: '100%', sm: '200px' } }}>
-              <Typography variant="h6" gutterBottom sx={{ fontWeight: 600 }}>
-                Stay in the loop
-              </Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                Subscribe for updates on new posts, events, and featured stories.
-              </Typography>
-              <Box component="form" action="/api/subscribe" method="post"
-                sx={{ display: 'flex', flexDirection: 'column', gap: 1.5, maxWidth: 360 }}
-              >
-                <TextField name="name" size="small" placeholder="Your name" required />
-                <TextField name="email" size="small" placeholder="Your email address" type="email" required />
-                <Button type="submit" variant="contained">Subscribe</Button>
-              </Box>
-            </Box>
+            {/* Newsletter Section removed (handled by NewsletterSignup component higher on page) */}
 
             {/* Legal Section */}
             <Box sx={{ minWidth: { xs: '100%', sm: '200px' } }}>

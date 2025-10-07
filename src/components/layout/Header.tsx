@@ -36,6 +36,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAppStore } from '../../stores/useAppStore';
 import { motion } from 'framer-motion';
 import { isFeatureEnabled } from '../../utils/featureFlags';
+import CalendarWidget from '../home/CalendarWidget';
+import Popover from '@mui/material/Popover';
 
 // Literature categories data
 const literatureCategories = [
@@ -303,6 +305,13 @@ const Header: React.FC = () => {
   } = useAppStore();
 
   const [localSearchQuery, setLocalSearchQuery] = useState('');
+  const [calendarAnchorEl, setCalendarAnchorEl] = useState<null | HTMLElement>(null);
+  const isCalendarOpen = Boolean(calendarAnchorEl);
+
+  const handleOpenCalendar = (e: React.MouseEvent<HTMLElement>) => {
+    setCalendarAnchorEl(e.currentTarget);
+  };
+  const handleCloseCalendar = () => setCalendarAnchorEl(null);
   
   const trigger = useScrollTrigger({
     disableHysteresis: true,
@@ -320,8 +329,10 @@ const Header: React.FC = () => {
   };
 
   const navigationItems = [
-    { label: 'Home', path: '/' },
-    { label: 'Authors', path: '/authors' },
+    { label: 'Think-pieces', path: '/category/think-pieces' },
+    { label: 'Short stories', path: '/category/short-stories' },
+    { label: 'Poetry', path: '/category/poetry' },
+    { label: 'Real Life', path: '/category/real-life' },
   ];
 
   // Filter navigation items based on feature flags
@@ -364,7 +375,7 @@ const Header: React.FC = () => {
                 fontWeight: 700,
               }}
             >
-              Mokua Literary
+              Rise Above
             </Typography>
 
             {!isMobile && (
@@ -383,9 +394,30 @@ const Header: React.FC = () => {
                     {item.label}
                   </Button>
                 ))}
-                
-                {/* Desktop Categories Dropdown */}
-                <DesktopCategoriesDropdown />
+
+                {/* Calendar dropdown */}
+                <Button
+                  color="inherit"
+                  onClick={handleOpenCalendar}
+                  sx={{ color: 'text.primary', '&:hover': { color: 'primary.main' } }}
+                >
+                  Calendar
+                </Button>
+                <Popover
+                  open={isCalendarOpen}
+                  anchorEl={calendarAnchorEl}
+                  onClose={handleCloseCalendar}
+                  anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+                  transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+                  PaperProps={{ sx: { p: 2, borderRadius: 2 } }}
+                >
+                  <Box sx={{ width: 280 }}>
+                    <CalendarWidget initialDate={new Date()} onDateClick={(d)=>{
+                      handleCloseCalendar();
+                      // Optional: navigate to filtered view by date in future
+                    }} />
+                  </Box>
+                </Popover>
                 
                 <Button
                   component={Link}

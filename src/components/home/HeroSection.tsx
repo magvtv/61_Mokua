@@ -6,7 +6,6 @@ import {
   Button,
   useTheme,
   useMediaQuery,
-  Paper,
 } from '@mui/material';
 
 import { ArrowForward } from '@mui/icons-material';
@@ -85,9 +84,9 @@ const HeroSection: React.FC = () => {
                     color: 'text.primary',
                   }}
                 >
-                  Where Stories
+                  Live and Die By
                   <Box component="span" sx={{ color: 'primary.main' }}>
-                    {' '}Come Alive
+                    {' '}Stories We Tell
                   </Box>
                 </Typography>
               </motion.div>
@@ -177,40 +176,7 @@ const HeroSection: React.FC = () => {
               <Box sx={{ width: { xs: '100%', md: '55%' }, display: 'flex', alignItems: 'flex-start' }}>
                 <motion.div variants={itemVariants} style={{ width: '100%' }}>
                   <Box sx={{ position: 'relative' }}>
-                    <Paper
-                      elevation={8}
-                      sx={{
-                        p: 3,
-                        borderRadius: 3,
-                        background: `linear-gradient(135deg, ${theme.palette.background.paper} 0%, ${theme.palette.primary.main}08 100%)`,
-                        border: 1,
-                        borderColor: 'divider',
-                        position: 'relative',
-                        '&::before': {
-                          content: '""',
-                          position: 'absolute',
-                          top: 0,
-                          left: 0,
-                          right: 0,
-                          height: '4px',
-                          background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
-                          borderRadius: '12px 12px 0 0',
-                        }
-                      }}
-                    >
-                      <Typography
-                        variant="h6"
-                        sx={{
-                          fontFamily: '"Playfair Display", serif',
-                          fontWeight: 600,
-                          mb: 2,
-                          color: 'primary.main',
-                        }}
-                      >
-                        Featured Story
-                      </Typography>
-                      <CompactPostCard post={featuredPosts[0]} variant="medium" />
-                    </Paper>
+                    <CompactPostCard post={featuredPosts[0]} variant="medium" />
                   </Box>
                 </motion.div>
               </Box>

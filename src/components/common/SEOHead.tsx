@@ -15,7 +15,7 @@ interface SEOHeadProps {
 }
 
 const SEOHead: React.FC<SEOHeadProps> = ({
-  title = 'Mokua Literary Blog - Contemporary Literature & Poetry',
+  title = 'Rise Above - Contemporary Literature & Poetry',
   description = 'Discover contemporary literature, poetry, and essays. A curated space for emerging voices and timeless works that celebrate the art of storytelling.',
   keywords = ['literature', 'poetry', 'essays', 'fiction', 'contemporary writing', 'literary blog'],
   image,
@@ -41,7 +41,7 @@ const SEOHead: React.FC<SEOHeadProps> = ({
       <meta property="og:description" content={description} />
       <meta property="og:type" content={type} />
       <meta property="og:url" content={fullUrl} />
-      <meta property="og:site_name" content="Mokua Literary Blog" />
+      <meta property="og:site_name" content="Rise Above" />
       {image && <meta property="og:image" content={image} />}
       
       {/* Twitter Card */}

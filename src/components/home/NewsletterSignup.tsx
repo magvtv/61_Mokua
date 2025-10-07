@@ -115,7 +115,7 @@ const NewsletterSignup: React.FC = () => {
                   mb: 2,
                 }}
               >
-                Stay in the Literary Loop
+                Stay in the Loop
               </Typography>
               
               <Typography
