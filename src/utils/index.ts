@@ -50,3 +50,15 @@ export const calculateReadingTime = (content: string): number => {
   export const generateSEODescription = (excerpt: string, maxLength: number = 160): string => {
     return truncateText(excerpt, maxLength);
   };
+
+const categoryLabels: Record<string, string> = {
+  'think-pieces': 'piece',
+  'short-stories': 'story',
+  'poetry': 'poem',
+  'real-life': 'story',
+};
+
+export const getReadFullLabel = (categorySlug?: string): string => {
+  const noun = categorySlug ? categoryLabels[categorySlug] ?? 'story' : 'story';
+  return `Read full ${noun}`;
+};
