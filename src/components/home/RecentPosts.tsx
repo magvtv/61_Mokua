@@ -10,12 +10,12 @@ import {
 } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { contentService } from '../../services/contentService';
-import CompactPostCard from './CompactPostCard';
+import OverlayPostCard from './OverlayPostCard';
 
 const RecentPosts: React.FC = () => {
   const [page, setPage] = useState(1);
   const [categoryFilter, setCategoryFilter] = useState('all');
-  const postsPerPage = 9; // Increased to show more posts
+  const postsPerPage = 6;
 
   const { data: categories } = useQuery({
     queryKey: ['categories'],
@@ -100,11 +100,20 @@ const RecentPosts: React.FC = () => {
           </Box>
         ) : postsData && postsData.posts.length > 0 ? (
           <>
-            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3, mb: 6, alignItems: 'stretch' }}>
+            <Box
+              sx={{
+                display: 'grid',
+                gridTemplateColumns: {
+                  xs: 'repeat(1, minmax(0, 1fr))',
+                  sm: 'repeat(2, minmax(0, 1fr))',
+                  lg: 'repeat(3, minmax(0, 1fr))',
+                },
+                gap: { xs: 3, md: 3.5 },
+                mb: 6,
+              }}
+            >
               {postsData.posts.map((post) => (
-                <Box sx={{ width: { xs: '100%', sm: '45%', md: '30%' }, display: 'flex' }} key={post.id}>
-                  <CompactPostCard post={post} variant="small" />
-                </Box>
+                <OverlayPostCard key={post.id} post={post} />
               ))}
             </Box>
 

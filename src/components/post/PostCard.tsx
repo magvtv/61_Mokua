@@ -43,6 +43,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, featured = false }) => {
           borderRadius: 2,
           overflow: 'hidden',
           boxShadow: theme.shadows[1],
+          minHeight: featured ? 320 : 260,
           '&:hover': {
             boxShadow: theme.shadows[8],
           },
@@ -56,7 +57,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, featured = false }) => {
             alt={post.title}
             sx={{
               width: '100%',
-              height: { xs: featured ? 220 : 180, md: featured ? 320 : 220 },
+              height: { xs: featured ? 180 : 140, md: featured ? 260 : 200 },
               objectFit: 'cover',
               display: 'block',
             }}
@@ -77,7 +78,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, featured = false }) => {
           </Box>
           
           <Typography
-            variant={featured ? 'h4' : 'h6'}
+            variant={featured ? 'h5' : 'subtitle1'}
             component="h2"
             gutterBottom
             sx={{

@@ -57,6 +57,35 @@ const FeaturedPosts: React.FC = () => {
     return null;
   }
 
+  const bentoLayout = [
+    {
+      gridColumn: { xs: 'span 1', md: 'span 2' },
+      gridRow: { xs: 'span 1', md: 'span 2' },
+      variant: 'large' as const,
+    },
+    {
+      gridColumn: { xs: 'span 1', md: 'span 2' },
+      gridRow: { xs: 'span 1', md: 'span 1' },
+      variant: 'medium' as const,
+    },
+    {
+      gridColumn: { xs: 'span 1', md: 'span 1' },
+      gridRow: { xs: 'span 1', md: 'span 1' },
+      variant: 'medium' as const,
+    },
+    {
+      gridColumn: { xs: 'span 1', md: 'span 1' },
+      gridRow: { xs: 'span 1', md: 'span 2' },
+      variant: 'large' as const,
+    },
+  ];
+
+  const defaultLayout = {
+    gridColumn: { xs: 'span 1', md: 'span 1' },
+    gridRow: { xs: 'span 1', md: 'span 1' },
+    variant: 'medium' as const,
+  };
+
   return (
     <Box sx={{ py: 8, bgcolor: 'background.default' }}>
       <Container maxWidth="lg">
@@ -111,24 +140,37 @@ const FeaturedPosts: React.FC = () => {
             display: 'grid',
             gridTemplateColumns: {
               xs: 'repeat(1, minmax(0, 1fr))',
-              sm: 'repeat(2, minmax(0, 1fr))',
-              md: 'repeat(3, minmax(0, 1fr))',
-              lg: 'repeat(4, minmax(0, 1fr))',
+              md: 'repeat(4, minmax(0, 1fr))',
             },
+            gridAutoRows: { xs: 'auto', md: '240px' },
             gap: { xs: 3, md: 3.5 },
           }}
         >
-          {filteredPosts.map((post, index) => (
-            <motion.div
-              key={post.id}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.08 }}
-            >
-              <CompactPostCard post={post} variant="medium" />
-            </motion.div>
-          ))}
+          {filteredPosts.map((post, index) => {
+            const layout = bentoLayout[index] ?? defaultLayout;
+
+            return (
+              <Box
+                key={post.id}
+                component={motion.div}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.08 }}
+                sx={{
+                  gridColumn: layout.gridColumn,
+                  gridRow: layout.gridRow,
+                  display: 'flex',
+                }}
+              >
+                <CompactPostCard
+                  post={post}
+                  variant={layout.variant}
+                  showExcerpt={layout.variant !== 'small'}
+                />
+              </Box>
+            );
+          })}
         </Box>
 
         {/* No results message */}
