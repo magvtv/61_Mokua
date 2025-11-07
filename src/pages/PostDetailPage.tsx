@@ -29,7 +29,7 @@ import { useQuery } from '@tanstack/react-query';
 import { contentService } from '../services/contentService';
 import { formatDate } from '../utils';
 // LoadingSpinner no longer used after skeletons
-import PostCard from '../components/post/PostCard';
+import OverlayPostCard from '../components/home/OverlayPostCard';
 import BackToTop from '../components/common/BackToTop';
 
 const PostDetailPage: React.FC = () => {
@@ -396,18 +396,17 @@ const PostDetailPage: React.FC = () => {
             </Typography>
             <Box
               sx={{
-                display: 'grid',
-                gridTemplateColumns: {
-                  xs: 'repeat(1, minmax(0, 1fr))',
-                  sm: 'repeat(2, minmax(0, 1fr))',
-                  md: 'repeat(3, minmax(0, 1fr))',
-                },
-                gap: { xs: 3, md: 3.5 },
+                display: 'flex',
+                gap: { xs: 2.5, md: 3 },
+                overflowX: 'auto',
+                pb: 1,
+                scrollSnapType: 'x mandatory',
+                '& > *': { scrollSnapAlign: 'start' },
               }}
             >
               {relatedPosts.map((relatedPost) => (
-                <Box key={relatedPost.id}>
-                  <PostCard post={relatedPost} />
+                <Box key={relatedPost.id} sx={{ flex: '0 0 auto' }}>
+                  <OverlayPostCard post={relatedPost} variant="compact" />
                 </Box>
               ))}
             </Box>

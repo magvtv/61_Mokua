@@ -6,23 +6,39 @@ import { motion } from 'framer-motion';
 import { Post } from '../../types';
 import { formatDate, getReadFullLabel } from '../../utils';
 
+type OverlayVariant = 'default' | 'compact';
+
 interface OverlayPostCardProps {
   post: Post;
+  variant?: OverlayVariant;
 }
 
-const OverlayPostCard: React.FC<OverlayPostCardProps> = ({ post }) => {
+const variantPresets: Record<OverlayVariant, {
+  minHeight: { xs: number; sm: number };
+  excerptLines: number;
+  maxWidth: { xs: string | number; md: string | number };
+}> = {
+  default: {
+    minHeight: { xs: 300, sm: 320 },
+    excerptLines: 3,
+    maxWidth: { xs: '100%', md: 420 },
+  },
+  compact: {
+    minHeight: { xs: 240, sm: 260 },
+    excerptLines: 2,
+    maxWidth: { xs: '100%', md: 360 },
+  },
+};
+
+const OverlayPostCard: React.FC<OverlayPostCardProps> = ({ post, variant = 'default' }) => {
   const theme = useTheme();
   const [isBookmarked, setIsBookmarked] = React.useState(false);
 
   const backgroundImage = post.featuredImage || 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1200&q=80';
+  const { minHeight, excerptLines, maxWidth } = variantPresets[variant];
 
-  return (
-    <motion.div
-      whileHover={{ y: -6 }}
-      transition={{ duration: 0.25, ease: 'easeOut' }}
-      style={{ width: '100%', height: '100%' }}
-    >
-      <Box
+  const cardContent = (
+    <Box
         component={Link}
         to={`/post/${post.slug}`}
         sx={{
@@ -30,7 +46,10 @@ const OverlayPostCard: React.FC<OverlayPostCardProps> = ({ post }) => {
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'space-between',
-          minHeight: { xs: 300, sm: 320 },
+        width: '100%',
+        maxWidth,
+        mx: 'auto',
+          minHeight,
           borderRadius: 3,
           overflow: 'hidden',
           textDecoration: 'none',
@@ -106,7 +125,7 @@ const OverlayPostCard: React.FC<OverlayPostCardProps> = ({ post }) => {
               maxWidth: 520,
               textShadow: '0 6px 16px rgba(0, 0, 0, 0.45)',
               display: '-webkit-box',
-              WebkitLineClamp: 3,
+              WebkitLineClamp: excerptLines,
               WebkitBoxOrient: 'vertical',
               overflow: 'hidden',
             }}
@@ -142,6 +161,19 @@ const OverlayPostCard: React.FC<OverlayPostCardProps> = ({ post }) => {
           </Box>
         </Box>
       </Box>
+  );
+
+  if (variant === 'compact') {
+    return cardContent;
+  }
+
+  return (
+    <motion.div
+      whileHover={{ y: -6 }}
+      transition={{ duration: 0.25, ease: 'easeOut' }}
+      style={{ width: '100%', height: '100%' }}
+    >
+      {cardContent}
     </motion.div>
   );
 };

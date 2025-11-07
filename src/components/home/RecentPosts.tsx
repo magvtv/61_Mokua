@@ -88,13 +88,23 @@ const RecentPosts: React.FC = () => {
         )}
 
         {isLoading ? (
-          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3, mb: 6, alignItems: 'stretch' }}>
+          <Box
+            sx={{
+              display: 'grid',
+              gridTemplateColumns: {
+                xs: 'repeat(1, minmax(0, 1fr))',
+                sm: 'repeat(2, minmax(0, 1fr))',
+                lg: 'repeat(3, minmax(0, 1fr))',
+              },
+              gap: { xs: 3, md: 3.5 },
+              mb: 6,
+            }}
+          >
             {Array.from({ length: postsPerPage }).map((_, i) => (
-              <Box sx={{ width: { xs: '100%', sm: '45%', md: '30%' }, display: 'flex', flexDirection: 'column' }} key={i}>
-                <Skeleton variant="rectangular" height={180} sx={{ mb: 2, borderRadius: 2 }} />
-                <Skeleton variant="text" width="60%" sx={{ mb: 1 }} />
-                <Skeleton variant="text" width="80%" />
-                <Skeleton variant="text" width="40%" sx={{ mt: 1 }} />
+              <Box key={i}>
+                <Skeleton variant="rectangular" height={260} sx={{ mb: 2, borderRadius: 3 }} />
+                <Skeleton variant="text" width="70%" sx={{ mb: 1 }} />
+                <Skeleton variant="text" width="50%" />
               </Box>
             ))}
           </Box>
