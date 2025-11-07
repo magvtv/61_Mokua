@@ -7,12 +7,14 @@ import {
   Box,
   Chip,
   Avatar,
+  Button,
   useTheme,
 } from '@mui/material';
+import { ArrowForward } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Post } from '../../types';
-import { formatDate } from '../../utils';
+import { formatDate, getReadFullLabel } from '../../utils';
 
 interface PostCardProps {
   post: Post;
@@ -26,6 +28,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, featured = false }) => {
     <motion.div
       whileHover={{ y: -4 }}
       transition={{ duration: 0.2 }}
+      style={{ height: '100%' }}
     >
       <Card
         component={Link}
@@ -48,16 +51,18 @@ const PostCard: React.FC<PostCardProps> = ({ post, featured = false }) => {
         {post.featuredImage && (
           <CardMedia
             component="img"
-            height={featured ? 300 : 200}
             image={post.featuredImage}
             alt={post.title}
             sx={{
+              width: '100%',
+              height: { xs: featured ? 220 : 180, md: featured ? 320 : 220 },
               objectFit: 'cover',
+              display: 'block',
             }}
           />
         )}
         
-        <CardContent sx={{ flexGrow: 1, p: 3 }}>
+        <CardContent sx={{ flexGrow: 1, p: 3, display: 'flex', flexDirection: 'column', gap: 2 }}>
           <Box sx={{ mb: 2 }}>
             <Chip
               label={post.category.name}
@@ -130,6 +135,16 @@ const PostCard: React.FC<PostCardProps> = ({ post, featured = false }) => {
               {post.readingTime} min read
             </Typography>
           </Box>
+
+          <Button
+            component="span"
+            variant="contained"
+            size="small"
+            endIcon={<ArrowForward />}
+            sx={{ alignSelf: 'flex-start', borderRadius: 2 }}
+          >
+            {getReadFullLabel(post.category.slug)}
+          </Button>
         </CardContent>
       </Card>
     </motion.div>

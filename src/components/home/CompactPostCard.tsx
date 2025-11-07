@@ -7,15 +7,16 @@ import {
   Box,
   Chip,
   Avatar,
+  Button,
   useTheme,
   alpha,
   IconButton,
 } from '@mui/material';
-import { BookmarkBorder, AccessTime, TrendingUp } from '@mui/icons-material';
+import { BookmarkBorder, AccessTime, TrendingUp, ArrowForward } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Post } from '../../types';
-import { formatDate } from '../../utils';
+import { formatDate, getReadFullLabel } from '../../utils';
 
 interface CompactPostCardProps {
   post: Post;
@@ -195,6 +196,7 @@ const CompactPostCard: React.FC<CompactPostCardProps> = ({
             p: config.padding,
             display: 'flex',
             flexDirection: 'column',
+            gap: 1.5,
           }}
         >
           {/* Category & Reading Time */}
@@ -327,6 +329,16 @@ const CompactPostCard: React.FC<CompactPostCardProps> = ({
               </Typography>
             </Box>
           </Box>
+
+          <Button
+            component="span"
+            variant="contained"
+            size="small"
+            endIcon={<ArrowForward />}
+            sx={{ alignSelf: 'flex-start', borderRadius: 2 }}
+          >
+            {getReadFullLabel(post.category?.slug)}
+          </Button>
         </CardContent>
       </Card>
     </motion.div>
