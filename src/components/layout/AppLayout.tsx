@@ -8,6 +8,7 @@ import Header from './Header';
 import Footer from './Footer';
 import NotificationManager from '../common/NotificationManager';
 import BackToTop from '../common/BackToTop';
+import { useLocation } from 'react-router-dom';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -26,6 +27,7 @@ interface AppLayoutProps {
 const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
   const { isDarkMode } = useAppStore();
   const theme = isDarkMode ? darkTheme : lightTheme;
+  const location = useLocation();
 
   // Ensure new route renders start at top
   useEffect(() => {
@@ -33,6 +35,12 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
       window.history.scrollRestoration = 'manual';
     }
   }, []);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+  }, [location.pathname]);
+
+  const shouldShowBackToTop = location.pathname !== '/';
 
   return (
     <HelmetProvider>
@@ -59,7 +67,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
               </Box>
               <Footer />
               <NotificationManager />
-            <BackToTop />
+            {shouldShowBackToTop && <BackToTop />}
             </Box>
           </ThemeProvider>
       </QueryClientProvider>

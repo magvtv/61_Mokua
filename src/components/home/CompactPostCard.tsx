@@ -59,12 +59,13 @@ const CompactPostCard: React.FC<CompactPostCardProps> = ({
     <motion.div
       whileHover={{ y: -8 }}
       transition={{ duration: 0.3, type: 'spring', stiffness: 300 }}
-      style={{ height: '100%' }}
+      style={{ height: '100%', width: '100%' }}
     >
       <Card
         component={Link}
         to={`/post/${post.slug}`}
         sx={{
+          width: '100%',
           height: '100%',
           display: 'flex',
           flexDirection: 'column',

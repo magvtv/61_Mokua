@@ -105,34 +105,30 @@ const FeaturedPosts: React.FC = () => {
           onCategoryChange={setSelectedCategory}
         />
 
-        {/* Posts horizontal scroll */}
+        {/* Posts Grid */}
         <Box
           sx={{
-            overflowX: 'auto',
-            WebkitOverflowScrolling: 'touch',
-            px: 1,
+            display: 'grid',
+            gridTemplateColumns: {
+              xs: 'repeat(1, minmax(0, 1fr))',
+              sm: 'repeat(2, minmax(0, 1fr))',
+              md: 'repeat(3, minmax(0, 1fr))',
+              lg: 'repeat(4, minmax(0, 1fr))',
+            },
+            gap: { xs: 3, md: 3.5 },
           }}
         >
-          <Box
-            sx={{
-              display: 'grid',
-              gridAutoFlow: 'column',
-              gridAutoColumns: { xs: '80%', sm: '50%', md: '33%', lg: '28%' },
-              gap: 2.5,
-            }}
-          >
-            {filteredPosts.map((post, index) => (
-              <motion.div
-                key={post.id}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.08 }}
-              >
-                <CompactPostCard post={post} variant="medium" />
-              </motion.div>
-            ))}
-          </Box>
+          {filteredPosts.map((post, index) => (
+            <motion.div
+              key={post.id}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.08 }}
+            >
+              <CompactPostCard post={post} variant="medium" />
+            </motion.div>
+          ))}
         </Box>
 
         {/* No results message */}

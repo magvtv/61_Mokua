@@ -396,25 +396,20 @@ const PostDetailPage: React.FC = () => {
             </Typography>
             <Box
               sx={{
-                overflowX: 'auto',
-                pb: 2,
-                WebkitOverflowScrolling: 'touch',
+                display: 'grid',
+                gridTemplateColumns: {
+                  xs: 'repeat(1, minmax(0, 1fr))',
+                  sm: 'repeat(2, minmax(0, 1fr))',
+                  md: 'repeat(3, minmax(0, 1fr))',
+                },
+                gap: { xs: 3, md: 3.5 },
               }}
             >
-              <Box
-                sx={{
-                  display: 'grid',
-                  gridAutoFlow: 'column',
-                  gridAutoColumns: { xs: '80%', sm: '320px' },
-                  gap: 2,
-                }}
-              >
-                {relatedPosts.map((relatedPost) => (
-                  <Box key={relatedPost.id}>
-                    <PostCard post={relatedPost} />
-                  </Box>
-                ))}
-              </Box>
+              {relatedPosts.map((relatedPost) => (
+                <Box key={relatedPost.id}>
+                  <PostCard post={relatedPost} />
+                </Box>
+              ))}
             </Box>
           </Box>
         )}
