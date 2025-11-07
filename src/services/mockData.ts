@@ -94,7 +94,7 @@ Solutions being implemented include increased police patrols, community awarenes
     author: mockAuthors[0],
     category: mockCategories[0],
     tags: ["drug abuse", "mombasa county", "youth crisis", "rehabilitation"],
-    publishedAt: "2024-01-15T10:00:00Z",
+    publishedAt: "2025-03-12T10:00:00Z",
     readingTime: 8,
     featured: true,
     seo: {
@@ -129,7 +129,7 @@ The long-term impact of this digital divide could be devastating for rural commu
     author: mockAuthors[4],
     category: mockCategories[3],
     tags: ["digital divide", "online education", "rural counties", "education technology"],
-    publishedAt: "2024-01-12T14:30:00Z",
+    publishedAt: "2025-03-08T14:30:00Z",
     readingTime: 6,
     featured: true
   },
@@ -161,7 +161,7 @@ The situation highlights broader issues of economic inequality and lack of oppor
     author: mockAuthors[3],
     category: mockCategories[0],
     tags: ["sex work", "nairobi", "public health", "underground economy"],
-    publishedAt: "2024-01-10T09:15:00Z",
+    publishedAt: "2025-03-05T09:15:00Z",
     readingTime: 7,
     featured: false
   },
@@ -197,7 +197,7 @@ The crisis calls for a comprehensive response involving the government, healthca
     author: mockAuthors[1],
     category: mockCategories[2],
     tags: ["mental health", "depression", "suicide", "youth crisis", "kenya"],
-    publishedAt: "2024-01-08T11:45:00Z",
+    publishedAt: "2025-02-28T11:45:00Z",
     readingTime: 9,
     featured: false
   },
@@ -233,7 +233,7 @@ The success of these young entrepreneurs demonstrates the potential of Kenya's y
     author: mockAuthors[2],
     category: mockCategories[0],
     tags: ["entrepreneurship", "digital business", "gen z", "kenya", "innovation"],
-    publishedAt: "2024-01-05T16:20:00Z",
+    publishedAt: "2025-02-25T16:20:00Z",
     readingTime: 5,
     featured: false
   },
@@ -271,7 +271,264 @@ The rise of tech hubs in Kisumu demonstrates the potential of county-level innov
     author: mockAuthors[4],
     category: mockCategories[3],
     tags: ["tech hubs", "kisumu county", "technology", "innovation", "digital economy"],
-    publishedAt: "2024-01-03T13:10:00Z",
+    publishedAt: "2025-02-20T13:10:00Z",
+    readingTime: 6,
+    featured: false
+  },
+  // Additional posts to ensure each category has at least 5 items
+  {
+    id: "7",
+    title: "Letters From Nairobi: A City Growing Between Hope and Hustle",
+    slug: "letters-from-nairobi-hope-and-hustle",
+    content: `Every dawn in 2025 begins with a soundtrack of hawkers, matatus, and construction drills across Nairobi. Young creatives and hustlers spill into the city from Kayole, Githurai, Rongai, and beyond, stitching together gigs to cover rent for a single-room mabati flat. They share breakfast updates on community WhatsApp groups—who is hiring animators, who needs a photographer, where to find reliable internet for a remote interview.
+
+In between the frenzy are small, tender moments that hold the city together. A boda rider returns a lost phone after tracking its owner for three estates; a group of students in Kibera crowdfund transport for their friend’s first day at university; the Buruburu art scene hosts a pop-up that raises money for flood victims in Budalang'i. The hustle is relentless, but so is the hope that Nairobi can feel gentler when neighbours choose kindness.
+
+By night, the city exhales. Rooftop poetry nights fill Ngara warehouses with vulnerability, and DJs stitch cultural memory into amapiano sets. Nairobi’s youth know the headlines are rarely written for them, so they write their own—blog posts, zines, podcasts, and deliberate acts of care that insist the city is worth staying for.`,
+    excerpt: "Dispatches from Nairobi’s youth on balancing hustle, tenderness, and the dream of a liveable city.",
+    featuredImage: "https://images.pexels.com/photos/936722/pexels-photo-936722.jpeg?auto=compress&cs=tinysrgb&w=800",
+    author: mockAuthors[0],
+    category: mockCategories[0],
+    tags: ["nairobi", "essays", "youth"],
+    publishedAt: "2025-02-18T09:00:00Z",
+    readingTime: 7,
+    featured: true
+  },
+  {
+    id: "8",
+    title: "The Quiet Politics of Water in Northern Kenya",
+    slug: "quiet-politics-of-water-northern-kenya",
+    content: `Marsabit’s youth councils have turned water points into negotiation tables. In 2025, the county counts 19 community dams rehabilitated by youth cooperatives who map water flow using open-source tools and drone imagery. Conflicts that once led to months-long feuds are being resolved by WhatsApp mediators who organise shared schedules, ensuring pastoralists from different communities access boreholes without escalation.
+
+Water remains a political bargaining chip. County budgets are contested every quarter, and the national government’s climate adaptation fund still delays disbursement. Yet, young organisers like Halima Guyo are archiving promises and livestreaming public participation forums, making it harder for leaders to backtrack. Their micro-podcasts—recorded under acacia shade using solar kits—document stories of resilience and demand investment that matches the urgency of a heating north.
+
+The essay tracks these conversations across Marsabit, Isiolo, and Samburu, following caravan routes that now carry both water tanks and legal awareness brochures. Youth discuss how every aquifer unlocked is not just a livelihood issue but a way to keep migration voluntary instead of forced.`,
+    excerpt: "How youth-led water boards in Marsabit and Samburu are rewriting resource politics in 2025.",
+    featuredImage: "https://images.pexels.com/photos/461194/pexels-photo-461194.jpeg?auto=compress&cs=tinysrgb&w=800",
+    author: mockAuthors[3],
+    category: mockCategories[0],
+    tags: ["water", "marsabit", "policy", "climate"],
+    publishedAt: "2025-02-12T08:00:00Z",
+    readingTime: 6,
+    featured: false
+  },
+  {
+    id: "9",
+    title: "Dust Roads",
+    slug: "dust-roads-short-story",
+    content: `Mutiso knows the pulse of Thika Road better than any timetable. His matatu, christened *Ngamia Express*, is wrapped in graffiti of Boniface Mwangi, Lupita Nyong’o, and a verse from E-Sir. On this Monday morning, he is racing the sunrise to deliver a promise—he must reach Roysambu by 7:30am to hand Brenda the sketchbook she forgot on Friday.
+
+Traffic stalls near Allsops, and the passengers groan. Mutiso steps out, directing motorists like a conductor guiding an orchestra. A vendor hands him steaming tea, muttering, “You saved my daughter’s school notebook last week.” When he finally reaches Brenda, she is weeping with relief. The sketches inside are her portfolio for a scholarship interview that could take her to design school in Cape Town.
+
+On the return trip, Mutiso allows the usually chaotic playlist to quiet down. The road hums as he watches Nairobi awaken—a reminder that every ride is more than a fare; it is a choreography of strangers holding each other’s futures in transit.`,
+    excerpt: "A matatu conductor discovers how a forgotten sketchbook can reroute a life.",
+    featuredImage: "https://images.pexels.com/photos/460672/pexels-photo-460672.jpeg?auto=compress&cs=tinysrgb&w=800",
+    author: mockAuthors[2],
+    category: mockCategories[1],
+    tags: ["short story", "nairobi", "matatu"],
+    publishedAt: "2025-02-15T10:00:00Z",
+    readingTime: 8,
+    featured: true
+  },
+  {
+    id: "10",
+    title: "Sugarcane Smoke",
+    slug: "sugarcane-smoke-short-story",
+    content: `In Mumias, the smokestacks came back to life early in 2025, but so did the memories of what the factory once took. Achieng’ and her cousin Biko sneak onto the factory grounds at dusk, weaving through the cutting teams to record oral histories for a school archive project. They search for their grandfather’s name among the rusted plaques of union organisers.
+
+They find an elder tending a small apiary between rows of cane. He recalls the scars from the 1980 strikes and the sweetness of paydays that bought bicycles and school uniforms. As night settles, Achieng’ realises the revival of the factory will only matter if it honours such histories. Her recording ends with laughter as the elder gifts them sugarcane shards, insisting, “Carry this smoke home, but remember who taught you to breathe.”`,
+    excerpt: "Two cousins trespass into the revived Mumias factory to archive the workers’ memories.",
+    featuredImage: "https://images.pexels.com/photos/167964/pexels-photo-167964.jpeg?auto=compress&cs=tinysrgb&w=800",
+    author: mockAuthors[4],
+    category: mockCategories[1],
+    tags: ["short story", "mumias", "heritage"],
+    publishedAt: "2025-02-11T10:00:00Z",
+    readingTime: 7,
+    featured: false
+  },
+  {
+    id: "11",
+    title: "Borrowed Umbrellas",
+    slug: "borrowed-umbrellas-short-story",
+    content: `When the April rains batter the Nairobi CBD, Mara ducks into a bookshop on Moi Avenue with nothing but a sketchpad. A stranger—Kamau, an accountant—offers to share his umbrella for the walk to the bus stage. They talk about everything except the weight they both carry: Mara’s fear of showing her art to the world, Kamau’s secret plan to quit auditing and open a vinyl bar in Dagoretti.
+
+After three shared rides and several rainstorms, the umbrella becomes a ritual. The story crescendos when Mara paints the umbrella on a wall in the GoDown Arts Centre, this time with a neon sign that reads, “Borrowed safety should still feel like home.” Kamau finally invites her to see the half-renovated bar, and together they imagine the playlists that will bless strangers seeking shelter.`,
+    excerpt: "A shared umbrella becomes the start of an improbable partnership in Nairobi.",
+    featuredImage: "https://images.pexels.com/photos/110874/pexels-photo-110874.jpeg?auto=compress&cs=tinysrgb&w=800",
+    author: mockAuthors[0],
+    category: mockCategories[1],
+    tags: ["short story", "rain", "nairobi"],
+    publishedAt: "2025-02-09T10:00:00Z",
+    readingTime: 6,
+    featured: false
+  },
+  {
+    id: "12",
+    title: "A Prayer for Westlands",
+    slug: "a-prayer-for-westlands-short-story",
+    content: `David, a night guard at a new tech campus in Westlands, keeps a notebook of prayers for strangers. He notes the license plates of ride-hailing drivers who fall asleep in the parking lot, the badge numbers of engineers who forget to eat, and the names of delivery riders who leave with empty bags because orders are cancelled after midnight.
+
+One night he meets Aroji, a janitor pursuing a cybersecurity diploma online. Their conversations become quiet sermons on dignity, safety, and the cost of belonging in a city that rewards speed over care. When a suspicious blackout hits the complex, David and Aroji’s vigilance prevents a data breach. The gratitude from management is minimal, but the community of workers crown them guardians of the campus dawn.`,
+    excerpt: "Two night-shift workers guard more than a building—they guard each other.",
+    featuredImage: "https://images.pexels.com/photos/220444/pexels-photo-220444.jpeg?auto=compress&cs=tinysrgb&w=800",
+    author: mockAuthors[1],
+    category: mockCategories[1],
+    tags: ["short story", "westlands", "night shift"],
+    publishedAt: "2025-02-07T10:00:00Z",
+    readingTime: 6,
+    featured: false
+  },
+  {
+    id: "13",
+    title: "The Boda Rider Who Read Neruda",
+    slug: "boda-rider-who-read-neruda-short-story",
+    content: `Otis ferries parcels across Kisumu by day and delivers poetry by night. In 2025, he starts slipping handwritten Neruda verses into courier envelopes, curious whether anyone notices. When a law student leaves a reply thanking him for “returning softness to deadline days,” Otis begins a city-wide chain of anonymous poems.
+
+Soon, boda riders meet weekly at Impala Park to exchange translated verses in Dholuo, Kiswahili, and Sheng. Their poetry club funds a library-on-wheels that now visits schools from Nyalenda to Ahero. Otis finally signs his name under a poem about Lake Victoria’s moonlit tides, accepting that joy can be the loudest rebellion against a demanding gig economy.`,
+    excerpt: "In Kisumu, a courier’s secret poetry project grows into a city-wide book movement.",
+    featuredImage: "https://images.pexels.com/photos/3771830/pexels-photo-3771830.jpeg?auto=compress&cs=tinysrgb&w=800",
+    author: mockAuthors[2],
+    category: mockCategories[1],
+    tags: ["short story", "kisumu", "poetry"],
+    publishedAt: "2025-02-05T10:00:00Z",
+    readingTime: 5,
+    featured: false
+  },
+  {
+    id: "14",
+    title: "When the City Sleeps",
+    slug: "when-the-city-sleeps-poem",
+    content: `Neon spills on wet tarmac,
+matatu horns fade to lullaby hums,
+hawkers fold dreams into gunias,
+and the city exhales.
+
+We count constellations through blackout windows,
+trace our names on fogged glass,
+trade secrets with security lights.
+When Nairobi sleeps,
+we stitch soft dawns
+for anyone too weary to dream alone.`,
+    excerpt: "Free verse on neon nights and the tenderness found after midnight.",
+    featuredImage: "https://images.pexels.com/photos/378570/pexels-photo-378570.jpeg?auto=compress&cs=tinysrgb&w=800",
+    author: mockAuthors[3],
+    category: mockCategories[2],
+    tags: ["poetry", "city"],
+    publishedAt: "2025-02-14T07:00:00Z",
+    readingTime: 2,
+    featured: true
+  },
+  {
+    id: "15",
+    title: "Ode to Tsavo",
+    slug: "ode-to-tsavo-poem",
+    content: `Red earth clings to dawn,
+trains cut slow hymns across savanna,
+elephants etch history into dust.
+
+We whisper prayers into baobab hollows,
+carry heat-waves in enamel cups,
+count the heartbeat of the park by hoofprints.
+Tsavo, teach our tired feet to remember
+the patience of migrating giants.`,
+    excerpt: "A pastoral ode to Tsavo’s heat, elephants, and patient horizons.",
+    featuredImage: "https://images.pexels.com/photos/45201/elephant-carcass-animals-ivory-45201.jpeg?auto=compress&cs=tinysrgb&w=800",
+    author: mockAuthors[4],
+    category: mockCategories[2],
+    tags: ["poetry", "nature"],
+    publishedAt: "2025-02-13T07:30:00Z",
+    readingTime: 2,
+    featured: false
+  },
+  {
+    id: "16",
+    title: "Mother Tongue",
+    slug: "mother-tongue-poem",
+    content: `Tongues we store in pockets,
+to swap when matatus cross county lines.
+I taste home in every vowel,
+in the lullabies hidden between Kamba clicks and Gikuyu whispers.
+
+Call me by all my names,
+let them gather like elders around a fire,
+let them bless the child who refuses to forget
+the language that held her first tears.`,
+    excerpt: "A poem about belonging, language, and the intimacy of being named.",
+    featuredImage: "https://images.pexels.com/photos/374756/pexels-photo-374756.jpeg?auto=compress&cs=tinysrgb&w=800",
+    author: mockAuthors[0],
+    category: mockCategories[2],
+    tags: ["poetry", "identity"],
+    publishedAt: "2025-02-11T07:30:00Z",
+    readingTime: 2,
+    featured: false
+  },
+  {
+    id: "17",
+    title: "The Weight of a Name",
+    slug: "the-weight-of-a-name-poem",
+    content: `Names are gourds filled with histories,
+heavy with expectation, fragrant with memory.
+We inherit syllables like land—
+to till, to protect, to question.
+
+If I rename myself,
+will my grandmother’s prayers still find me?
+I carry their hope like a drumbeat,
+steady, relentless, refusing silence.`,
+    excerpt: "Lines on inheritance, expectation, and the sacredness of names.",
+    featuredImage: "https://images.pexels.com/photos/267669/pexels-photo-267669.jpeg?auto=compress&cs=tinysrgb&w=800",
+    author: mockAuthors[1],
+    category: mockCategories[2],
+    tags: ["poetry", "family"],
+    publishedAt: "2025-02-10T07:30:00Z",
+    readingTime: 2,
+    featured: false
+  },
+  {
+    id: "18",
+    title: "The Price of Kerosene",
+    slug: "price-of-kerosene-real-life",
+    content: `Grace Wambui’s nights begin at 9pm when she clocks in at a Juja cold-storage facility. By morning she returns to a one-room house in Witeithie where her twins wait for breakfast. In 2025, the price of kerosene has doubled, forcing her to improvise with a solar cooker donated by a neighbourhood women’s collective.
+
+Grace keeps meticulous spreadsheets tracking every shilling—school lunch programs, chama contributions, a loan for her daughter’s coding bootcamp. The story follows her through night shifts, savings meetings, and the quiet pride she feels when the twins present a science project powered by recycled batteries. Her resilience is not framed as heroism but as a daily negotiation with systems that should be doing more.`,
+    excerpt: "A Juja mother budgets hope alongside soaring fuel prices.",
+    featuredImage: "https://images.pexels.com/photos/410999/pexels-photo-410999.jpeg?auto=compress&cs=tinysrgb&w=800",
+    author: mockAuthors[2],
+    category: mockCategories[3],
+    tags: ["real life", "economy", "family"],
+    publishedAt: "2025-02-16T12:00:00Z",
+    readingTime: 5,
+    featured: false
+  },
+  {
+    id: "19",
+    title: "Chokoraa, Not Invisible",
+    slug: "chokoraa-not-invisible-real-life",
+    content: `2025 finds Nairobi’s street families building their own safety nets. This feature spends a week with the Jacaranda Street Choir, a group of formerly homeless teens who busk outside the National Archives to fund night classes. The choir partners with lawyers offering pro-bono assistance to youths arrested for loitering, documenting abuses and challenging city by-laws.
+
+We follow Amina, a 19-year-old spoken word artist who coordinates meal rotations through a cashless kitty. She leads night walks to keep younger children safe from predatory gangs and to direct them to a new drop-in centre under the Globe Flyover. The piece highlights the community’s advocacy for dignified sanitation facilities and the national conversation their petitions have sparked.`,
+    excerpt: "Street families in Nairobi organise choirs, legal aid, and safety patrols to reclaim dignity.",
+    featuredImage: "https://images.pexels.com/photos/373289/pexels-photo-373289.jpeg?auto=compress&cs=tinysrgb&w=800",
+    author: mockAuthors[3],
+    category: mockCategories[3],
+    tags: ["real life", "nairobi", "community"],
+    publishedAt: "2025-02-15T12:30:00Z",
+    readingTime: 6,
+    featured: true
+  },
+  {
+    id: "20",
+    title: "Football on Red Soil",
+    slug: "football-on-red-soil-real-life",
+    content: `On the red soil pitches of Embu, the Mavuria Queens under-17 squad trains barefoot at sunrise. This longform narrative chronicles their journey to the national youth finals in 2025, coached by a former Harambee Starlets defender who returned home after an ACL injury.
+
+The team hustles for uniforms via a mango-farming cooperative, livestreams matches on TikTok to attract sponsors, and turns an abandoned tea buying centre into a clubhouse. Their success forces county officials to finally grade the pitch and install floodlights. Beyond sport, the Queens mentor primary school girls on menstrual health and financial literacy, demonstrating how community-run clubs can anchor rural economies.`,
+    excerpt: "An Embu girls’ team transforms a dusty field into a powerhouse of community pride.",
+    featuredImage: "https://images.pexels.com/photos/46798/the-ball-the-game-soccer-46798.jpeg?auto=compress&cs=tinysrgb&w=800",
+    author: mockAuthors[4],
+    category: mockCategories[3],
+    tags: ["real life", "sports", "girls"],
+    publishedAt: "2025-02-13T12:00:00Z",
     readingTime: 6,
     featured: false
   }
