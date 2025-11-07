@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   Container,
   Typography,
@@ -7,7 +7,6 @@ import {
   Pagination,
   Button,
   Divider,
-  Paper,
 } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -16,7 +15,10 @@ import { useQuery } from '@tanstack/react-query';
 import { contentService } from '../services/contentService';
 import PostCard from '../components/post/PostCard';
 import CompactPostCard from '../components/home/CompactPostCard';
+import SideStoryCard from '../components/post/SideStoryCard';
 import LoadingSpinner from '../components/common/LoadingSpinner';
+
+type LayoutVariant = 'left-dominant' | 'right-dominant' | 'stacked';
 
 const CategoryPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -45,6 +47,92 @@ const CategoryPage: React.FC = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const posts = postsData?.posts ?? [];
+  const featuredPost = posts[0];
+  const sidePost = posts[1];
+  const bottomRightPost = posts[2];
+  const consumedPosts = bottomRightPost ? 3 : sidePost ? 2 : featuredPost ? 1 : 0;
+  const remainingPosts = posts.slice(consumedPosts);
+
+  const layoutVariant = useMemo<LayoutVariant>(() => {
+    if (!slug) return 'left-dominant';
+    const variants: LayoutVariant[] = ['left-dominant', 'right-dominant', 'stacked'];
+    const index = slug
+      .split('')
+      .reduce((acc, char) => acc + char.charCodeAt(0), 0) % variants.length;
+    return variants[index];
+  }, [slug]);
+
+  const effectiveVariant: LayoutVariant = sidePost ? layoutVariant : 'left-dominant';
+
+  const gridSettings = useMemo(() => {
+    if (!featuredPost) {
+      return {};
+    }
+
+    if (!sidePost) {
+      return {
+        display: 'grid',
+        gap: { xs: 3, md: 4 },
+        gridTemplateColumns: '1fr',
+        gridTemplateAreas: '"featured"',
+      };
+    }
+
+    const hasThird = Boolean(bottomRightPost);
+    const xsAreas = hasThird ? '"featured" "sideTop" "sideBottom"' : '"featured" "sideTop"';
+    const base = {
+      display: 'grid',
+      gap: { xs: 3, md: 4 },
+      alignItems: { md: 'stretch' as const },
+    };
+
+    if (effectiveVariant === 'right-dominant') {
+      return {
+        ...base,
+        gridTemplateColumns: { xs: '1fr', md: 'minmax(0, 1.05fr) minmax(0, 2fr)' },
+        gridTemplateRows: {
+          xs: hasThird ? 'repeat(3, auto)' : 'repeat(2, auto)',
+          md: hasThird ? 'auto auto' : 'auto',
+        },
+        gridTemplateAreas: {
+          xs: xsAreas,
+          md: hasThird
+            ? '"sideTop featured" "sideBottom featured"'
+            : '"sideTop featured"',
+        },
+      };
+    }
+
+    if (effectiveVariant === 'stacked' && hasThird) {
+      return {
+        ...base,
+        gridTemplateColumns: { xs: '1fr', md: 'minmax(0, 1fr) minmax(0, 1fr)' },
+        gridTemplateRows: { xs: 'repeat(3, auto)', md: 'auto auto' },
+        gridTemplateAreas: {
+          xs: xsAreas,
+          md: '"featured featured" "sideTop sideBottom"',
+        },
+      };
+    }
+
+    // default left-dominant
+    return {
+      ...base,
+      gridTemplateColumns: { xs: '1fr', md: 'minmax(0, 2fr) minmax(0, 1.1fr)' },
+      gridTemplateRows: {
+        xs: hasThird ? 'repeat(3, auto)' : 'repeat(2, auto)',
+        md: hasThird ? 'auto auto' : 'auto',
+      },
+      gridTemplateAreas: {
+        xs: xsAreas,
+        md: hasThird
+          ? '"featured sideTop" "featured sideBottom"'
+          : '"featured sideTop"',
+      },
+    };
+  }, [featuredPost, sidePost, bottomRightPost, effectiveVariant]);
+
   if (isLoading) {
     return <LoadingSpinner message="Loading category..." />;
   }
@@ -66,10 +154,6 @@ const CategoryPage: React.FC = () => {
   }
 
   const totalPages = postsData ? Math.ceil(postsData.total / postsPerPage) : 0;
-  
-  // Get the featured post (first post) and remaining posts
-  const featuredPost = postsData?.posts[0];
-  const remainingPosts = postsData?.posts.slice(1);
 
   return (
     <>
@@ -122,53 +206,30 @@ const CategoryPage: React.FC = () => {
             {/* Featured Article Section */}
             {featuredPost && (
               <Box sx={{ mb: 5 }}>
-                <Paper
-                  elevation={0}
-                  sx={{
-                    p: 2,
-                    bgcolor: 'background.paper',
-                    borderRadius: 2,
-                    border: '1px solid',
-                    borderColor: 'divider'
-                  }}
-                >
-                  <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '7fr 5fr' }, gap: 3 }}>
-                    <Box>
-                      <PostCard post={featuredPost} featured />
-                      {/* Constrain featured image height within card via CSS override */}
-                      <Box sx={{ '& img': { maxHeight: { xs: 240, md: 320 }, objectFit: 'cover' } }} />
-                    </Box>
-                    <Box>
-                      <Typography 
-                        variant="h6" 
-                        sx={{ 
-                          mb: 2, 
-                          fontWeight: 600,
-                          borderBottom: '2px solid',
-                          borderColor: category.color,
-                          pb: 1,
-                          display: 'inline-block'
-                        }}
-                      >
-                        Top Story
-                      </Typography>
-                      <Typography variant="h4" gutterBottom sx={{ fontWeight: 700, fontSize: { xs: '1.5rem', md: '1.75rem' } }}>
-                        {featuredPost.title}
-                      </Typography>
-                      <Typography variant="body1" paragraph sx={{ fontSize: { xs: '0.95rem', md: '1rem' } }}>
-                        {featuredPost.excerpt}
-                      </Typography>
-                      <Button 
-                        variant="contained" 
-                        color="primary"
-                        onClick={() => navigate(`/post/${featuredPost.slug}`)}
-                        sx={{ mt: 2 }}
-                      >
-                        Read Full Story
-                      </Button>
-                    </Box>
+                <Box sx={gridSettings}>
+                  <Box sx={{ gridArea: 'featured', display: 'flex', flexDirection: 'column', height: '100%' }}>
+                    <PostCard post={featuredPost} featured />
                   </Box>
-                </Paper>
+
+                  {sidePost && (
+                    <Box sx={{ gridArea: 'sideTop', display: 'flex', flexDirection: 'column', height: '100%' }}>
+                      <SideStoryCard post={sidePost} accentColor={category.color} />
+                    </Box>
+                  )}
+
+                  {bottomRightPost && (
+                    <Box
+                      sx={{
+                        gridArea: 'sideBottom',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        height: '100%',
+                      }}
+                    >
+                      <CompactPostCard post={bottomRightPost} variant="small" showExcerpt={false} />
+                    </Box>
+                  )}
+                </Box>
               </Box>
             )}
 
