@@ -5,10 +5,16 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
   plugins: [react()],
   server: {
+    port: 5173,
     proxy: {
       '/api': {
         target: 'http://localhost:3001',
         changeOrigin: true,
+      },
+      '/strapi': {
+        target: 'http://localhost:1337',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/strapi/, ''),
       },
     },
   },
@@ -27,8 +33,8 @@ export default defineConfig({
         },
       },
     },
-    chunkSizeWarningLimit: 1000, // Increase warning limit
-    sourcemap: false, // Disable sourcemaps for production
+    chunkSizeWarningLimit: 1000,
+    sourcemap: false,
   },
   optimizeDeps: {
     include: [

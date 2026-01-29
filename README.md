@@ -1,13 +1,14 @@
 # Mokua Literary Blog
 
-A modern, responsive literary blog built with React, TypeScript, and Material-UI. Features a modular monolith architecture with feature flags for easy deployment management.
+A modern, responsive literary blog built with React, TypeScript, and Material-UI. Features a clear frontend/backend separation with Strapi CMS for content management.
 
 ## 🚀 Quick Start
 
 ### Prerequisites
 - Node.js 18+ 
 - pnpm (recommended) or npm
-- MongoDB (for newsletter subscriptions)
+- PostgreSQL (for Strapi CMS) or SQLite (for development)
+- MongoDB (for newsletter subscriptions - optional)
 
 ### Installation
 
@@ -19,34 +20,55 @@ A modern, responsive literary blog built with React, TypeScript, and Material-UI
 
 2. **Install dependencies**
    ```bash
-   pnpm install:all
+   pnpm install
    ```
 
 3. **Set up environment variables**
-   Create a `.env` file in the root directory:
-   ```bash
-   # Feature Flags
+   
+   **Frontend** (`frontend/.env`):
+   ```env
+   VITE_API_URL=http://localhost:3001
+   VITE_STRAPI_URL=http://localhost:1337
    VITE_SHOW_COMING_SOON=false
    VITE_ENABLE_NEWSLETTER_SIGNUP=true
-   VITE_ENABLE_SEARCH=true
-   VITE_ENABLE_SUBMISSIONS=true
+   ```
    
-   # API Configuration
-   VITE_API_BASE_URL=http://localhost:3001
-   
-   # Database Configuration
+   **API Server** (`backend/api-server/.env`):
+   ```env
+   PORT=3001
    MONGODB_URI=mongodb://localhost:27017/mokua
    ```
+   
+   **Strapi** (`backend/strapi/.env`):
+   ```env
+   HOST=0.0.0.0
+   PORT=1337
+   DATABASE_CLIENT=sqlite
+   DATABASE_FILENAME=.tmp/data.db
+   ```
 
-4. **Start development servers**
+4. **Initialize Strapi CMS** (first time only)
    ```bash
-   pnpm start:all
+   cd backend/strapi
+   npx create-strapi-app@latest . --quickstart --no-run
+   ```
+
+5. **Start all development servers**
+   ```bash
+   pnpm dev:all
+   ```
+   
+   Or start individually:
+   ```bash
+   pnpm dev:frontend    # Frontend on :5173
+   pnpm dev:api        # API Server on :3001
+   pnpm dev:strapi     # Strapi CMS on :1337
    ```
 
 ## 🏗️ Architecture
 
-### Modular Monolith
-This project follows a **modular monolith** architecture pattern:
+### Frontend/Backend Separation
+This project follows a **monorepo structure** with clear separation:
 
 - **Single Repository**: All code in one place for easy maintenance
 - **Feature-Based Organization**: Each feature has its own folder
@@ -55,18 +77,32 @@ This project follows a **modular monolith** architecture pattern:
 
 ### Project Structure
 ```
-src/
-├── components/          # Reusable UI components
-│   ├── common/         # Shared components (Header, Footer, etc.)
-│   ├── home/           # Home page specific components
-│   ├── layout/         # Layout components
-│   └── post/           # Post-related components
-├── pages/              # Page components
-├── stores/             # State management (Zustand)
-├── services/           # API and data services
-├── utils/              # Utility functions and feature flags
-└── types/              # TypeScript type definitions
+61_Mokua/
+├── frontend/              # React frontend application
+│   ├── src/
+│   │   ├── components/    # UI components
+│   │   ├── pages/         # Page components
+│   │   ├── services/      # API services
+│   │   └── types/         # TypeScript types
+│   ├── public/            # Static assets
+│   └── package.json
+│
+├── backend/
+│   ├── api-server/        # Express API Gateway
+│   │   ├── src/
+│   │   └── package.json
+│   │
+│   └── strapi/           # Strapi CMS
+│       ├── config/
+│       ├── src/
+│       └── package.json
+│
+├── api/                  # Vercel serverless functions
+├── docs/                 # Documentation
+└── package.json          # Root workspace config
 ```
+
+See `PROJECT_STRUCTURE.md` for detailed structure documentation.
 
 ## 🎛️ Feature Flags
 
@@ -118,12 +154,21 @@ VITE_ENABLE_SUBMISSIONS=true
 
 ### Available Scripts
 
-- `pnpm dev` - Start frontend development server
-- `pnpm server:dev` - Start backend development server
-- `pnpm start:all` - Start both frontend and backend
-- `pnpm build` - Build for production
-- `pnpm lint` - Run ESLint
-- `pnpm preview` - Preview production build
+**Root Level:**
+- `pnpm dev:all` - Start all services (frontend, API, Strapi)
+- `pnpm dev:frontend` - Start frontend only
+- `pnpm dev:api` - Start API server only
+- `pnpm dev:strapi` - Start Strapi CMS only
+- `pnpm build:all` - Build all services
+- `pnpm install:all` - Install all dependencies
+
+**Frontend:**
+- `pnpm --filter frontend dev` - Start dev server
+- `pnpm --filter frontend build` - Build for production
+
+**Backend:**
+- `pnpm --filter api-server dev` - Start API server
+- `pnpm --filter strapi develop` - Start Strapi CMS
 
 ### Adding New Features
 
@@ -154,12 +199,17 @@ VITE_ENABLE_SUBMISSIONS=true
 - **UI Framework**: Material-UI (MUI)
 - **State Management**: Zustand
 - **Styling**: Tailwind CSS + MUI
-- **Backend**: Express.js, Mongoose
-- **Database**: MongoDB
-- **Deployment**: Vercel
+- **Backend API**: Express.js, Mongoose
+- **CMS**: Strapi v4 (Headless CMS)
+- **Database**: MongoDB (API), PostgreSQL/SQLite (Strapi)
+- **Deployment**: Vercel (Frontend), Railway/Render (Backend)
 
 ## 📖 Documentation
 
+- [Project Structure](./PROJECT_STRUCTURE.md) - Overview of frontend/backend structure
+- [Strapi Setup Guide](./docs/STRAPI_SETUP.md) - CMS configuration and setup
+- [Migration Guide](./docs/MIGRATION_GUIDE.md) - Moving to new structure
+- [Frontend/Backend Setup](./docs/FRONTEND_BACKEND_SETUP.md) - Setup instructions
 - [Feature Flags Configuration](./docs/FEATURE_FLAGS.md)
 - [Architecture Decisions](./docs/ARCHITECTURE_DECISIONS.md)
 - [Deployment Guide](./docs/DEPLOYMENT.md)
