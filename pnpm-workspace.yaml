@@ -1,4 +1,0 @@
-packages:
-  - 'frontend'
-  - 'backend/api-server'
-  - 'backend/strapi'

@@ -6,7 +6,7 @@ A modern, responsive literary blog built with React, TypeScript, and Material-UI
 
 ### Prerequisites
 - Node.js 18+ 
-- pnpm (recommended) or npm
+- npm (built-in with Node.js)
 - PostgreSQL (for Strapi CMS) or SQLite (for development)
 - MongoDB (for newsletter subscriptions - optional)
 
@@ -20,7 +20,7 @@ A modern, responsive literary blog built with React, TypeScript, and Material-UI
 
 2. **Install dependencies**
    ```bash
-   pnpm install
+   npm install
    ```
 
 3. **Set up environment variables**
@@ -55,14 +55,14 @@ A modern, responsive literary blog built with React, TypeScript, and Material-UI
 
 5. **Start all development servers**
    ```bash
-   pnpm dev:all
+   npm run dev:all
    ```
    
    Or start individually:
    ```bash
-   pnpm dev:frontend    # Frontend on :5173
-   pnpm dev:api        # API Server on :3001
-   pnpm dev:strapi     # Strapi CMS on :1337
+   npm run dev:frontend    # Frontend on :5173
+   npm run dev:api        # API Server on :3001
+   npm run dev:strapi     # Strapi CMS on :1337
    ```
 
 ## 🏗️ Architecture
@@ -155,20 +155,20 @@ VITE_ENABLE_SUBMISSIONS=true
 ### Available Scripts
 
 **Root Level:**
-- `pnpm dev:all` - Start all services (frontend, API, Strapi)
-- `pnpm dev:frontend` - Start frontend only
-- `pnpm dev:api` - Start API server only
-- `pnpm dev:strapi` - Start Strapi CMS only
-- `pnpm build:all` - Build all services
-- `pnpm install:all` - Install all dependencies
+- `npm run dev:all` - Start all services (frontend, API, Strapi)
+- `npm run dev:frontend` - Start frontend only
+- `npm run dev:api` - Start API server only
+- `npm run dev:strapi` - Start Strapi CMS only
+- `npm run build:all` - Build all services
+- `npm run install:all` - Install all dependencies
 
 **Frontend:**
-- `pnpm --filter frontend dev` - Start dev server
-- `pnpm --filter frontend build` - Build for production
+- `npm run dev --workspace=frontend` - Start dev server
+- `npm run build --workspace=frontend` - Build for production
 
 **Backend:**
-- `pnpm --filter api-server dev` - Start API server
-- `pnpm --filter strapi develop` - Start Strapi CMS
+- `npm run dev --workspace=api-server` - Start API server
+- `npm run develop --workspace=strapi` - Start Strapi CMS
 
 ### Adding New Features
 

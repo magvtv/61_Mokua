@@ -3,20 +3,24 @@
     "private": true,
     "version": "0.0.0",
     "type": "module",
+    "workspaces": [
+        "frontend",
+        "backend/api-server",
+        "backend/strapi"
+    ],
     "scripts": {
-        "dev:all": "concurrently \"pnpm --filter frontend dev\" \"pnpm --filter api-server dev\" \"pnpm --filter strapi develop\"",
-        "dev:frontend": "pnpm --filter frontend dev",
-        "dev:api": "pnpm --filter api-server dev",
-        "dev:strapi": "pnpm --filter strapi develop",
-        "build:frontend": "pnpm --filter frontend build",
-        "build:api": "pnpm --filter api-server build",
-        "build:all": "pnpm build:frontend && pnpm build:api",
-        "install:all": "pnpm install",
-        "lint": "pnpm --filter frontend lint && pnpm --filter api-server lint"
+        "dev:all": "concurrently \"npm run dev --workspace=frontend\" \"npm run dev --workspace=api-server\" \"npm run develop --workspace=strapi\"",
+        "dev:frontend": "npm run dev --workspace=frontend",
+        "dev:api": "npm run dev --workspace=api-server",
+        "dev:strapi": "npm run develop --workspace=strapi",
+        "build:frontend": "npm run build --workspace=frontend",
+        "build:api": "npm run build --workspace=api-server",
+        "build:all": "npm run build:frontend && npm run build:api",
+        "install:all": "npm install",
+        "lint": "npm run lint --workspace=frontend && npm run lint --workspace=api-server"
     },
     "dependencies": {},
     "devDependencies": {
         "concurrently": "^9.1.2"
-    },
-    "packageManager": "pnpm@8.14.2+sha256.a2dd287205a53bb4322937530d4a17f86269f63fe00a62a03e9e458d3ad027ff"
+    }
 }

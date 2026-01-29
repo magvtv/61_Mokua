@@ -28,8 +28,7 @@ This project follows a monorepo structure with clear separation between frontend
 │   └── unsubscribe.ts
 │
 ├── docs/                     # Project documentation
-├── package.json             # Root workspace configuration
-├── pnpm-workspace.yaml      # pnpm workspace config
+├── package.json             # Root workspace configuration (with npm workspaces)
 └── .gitignore
 ```
 
@@ -63,19 +62,19 @@ This project follows a monorepo structure with clear separation between frontend
 
 ### Start All Services
 ```bash
-pnpm dev:all
+npm run dev:all
 ```
 
 ### Start Individual Services
 ```bash
 # Frontend only
-pnpm --filter frontend dev
+npm run dev --workspace=frontend
 
 # API Server only
-pnpm --filter api-server dev
+npm run dev --workspace=api-server
 
 # Strapi CMS only
-pnpm --filter strapi develop
+npm run develop --workspace=strapi
 ```
 
 ## Environment Variables
