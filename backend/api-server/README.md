@@ -23,9 +23,9 @@ server/
 
 ### Local Development (Express Server)
 ```bash
-cd server
-pnpm install
-pnpm dev  # Runs with hot reload
+cd backend/api-server
+npm install
+npm run dev  # Runs with hot reload
 ```
 
 ### Production (Vercel Functions)

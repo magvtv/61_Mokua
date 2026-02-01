@@ -1,6 +1,7 @@
 import type { Request, Response } from 'express';
 import { Subscriber } from '../models/Subscriber.js';
 import { connectToDatabase, disconnectFromDatabase } from '../utils/database.js';
+import { sendWelcomeEmail } from '../services/emailService.js';
 
 export async function handleSubscribe(req: Request, res: Response) {
   try {
@@ -26,6 +27,20 @@ export async function handleSubscribe(req: Request, res: Response) {
 
     // Save the subscriber (validation and middleware will run automatically)
     await subscriber.save();
+
+    // Send welcome email asynchronously (don't block the response)
+    // If email fails, log the error but still return success for the subscription
+    sendWelcomeEmail(email, name)
+      .then((result) => {
+        if (result.success) {
+          console.log(`Welcome email sent to ${email}`);
+        } else {
+          console.error(`Failed to send welcome email to ${email}:`, result.error);
+        }
+      })
+      .catch((error) => {
+        console.error(`Unexpected error sending welcome email to ${email}:`, error);
+      });
 
     // Disconnect from MongoDB (for serverless functions)
     await disconnectFromDatabase();

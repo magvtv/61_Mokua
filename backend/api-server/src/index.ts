@@ -12,6 +12,7 @@ import { connectToDatabase, setupGracefulShutdown } from './utils/database.js';
 import { rateLimiter } from './utils/rateLimiter.js';
 import { handleSubscribe } from './routes/subscribe.js';
 import { Subscriber } from './models/Subscriber.js';
+import { sendUnsubscribeConfirmation } from './services/emailService.js';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -59,6 +60,19 @@ app.post('/api/unsubscribe', async (req, res) => {
     subscriber.status = 'unsubscribed';
     subscriber.metadata.lastModified = new Date();
     await subscriber.save();
+
+    // Send unsubscribe confirmation email asynchronously
+    sendUnsubscribeConfirmation(subscriber.email, subscriber.name)
+      .then((result) => {
+        if (result.success) {
+          console.log(`Unsubscribe confirmation sent to ${subscriber.email}`);
+        } else {
+          console.error(`Failed to send unsubscribe confirmation to ${subscriber.email}:`, result.error);
+        }
+      })
+      .catch((error) => {
+        console.error(`Unexpected error sending unsubscribe confirmation to ${subscriber.email}:`, error);
+      });
 
     return res.status(200).json({ message: 'Successfully unsubscribed' });
   } catch (error) {
