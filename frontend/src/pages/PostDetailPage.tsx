@@ -76,10 +76,10 @@ const PostDetailPage: React.FC = () => {
 
   if (isLoading) {
     return (
-      <Container maxWidth="lg" sx={{ px: { xs: 2, sm: 2, md: 3 }, py: { xs: 3, md: 4 } }}>
+      <Container maxWidth="xl" sx={{ px: { xs: 2, sm: 2, md: 3 }, py: { xs: 3, md: 4 } }}>
         <Skeleton variant="text" height={56} sx={{ mb: 2, width: { xs: '90%', sm: '60%' } }} />
         <Skeleton variant="text" width="100%" height={28} sx={{ mb: 3 }} />
-        <Skeleton variant="rectangular" height={{ xs: 220, sm: 280, md: 360 }} sx={{ borderRadius: 2, mb: 4, width: '100%' }} />
+        <Skeleton variant="rectangular" sx={{ borderRadius: 2, mb: 4, width: '100%', height: { xs: 220, sm: 280, md: 360 } }} />
         <Skeleton variant="text" height={24} sx={{ mb: 1 }} />
         <Skeleton variant="text" height={24} sx={{ mb: 1 }} />
         <Skeleton variant="text" height={24} sx={{ mb: 1 }} />
@@ -147,7 +147,7 @@ const PostDetailPage: React.FC = () => {
       </Helmet>
 
       <Container
-        maxWidth="lg"
+        maxWidth="xl"
         disableGutters={false}
         sx={{
           px: { xs: 2, sm: 2, md: 3 },
@@ -275,9 +275,9 @@ const PostDetailPage: React.FC = () => {
               overflow: 'hidden',
               boxShadow: 2,
               width: '100%',
-              maxWidth: 960,
+              maxWidth: { lg: 960, xl: 1200 },
               mx: 'auto',
-              height: { xs: 220, sm: 280, md: 360 },
+              height: { xs: 220, sm: 280, md: 360, xl: 400 },
             }}
           >
             <img
