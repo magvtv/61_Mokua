@@ -47,7 +47,7 @@ const SearchPage: React.FC = () => {
         category: selectedCategory !== 'all' ? selectedCategory : undefined,
       }
     ),
-    enabled: localQuery.length > 0,
+    enabled: true,
   });
 
   useEffect(() => {
@@ -192,46 +192,56 @@ const SearchPage: React.FC = () => {
         </Box>
 
         {isLoading ? (
-          <LoadingSpinner message="Searching..." />
-        ) : localQuery && postsData ? (
-          postsData.posts.length > 0 ? (
-            <>
-              <Grid container spacing={4} sx={{ mb: 6 }}>
-                {postsData.posts.map((post, index) => (
-                  <Grid item xs={12} sm={6} lg={4} key={post.id}>
-                    <motion.div
-                      initial={{ opacity: 0, y: 30 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.1 }}
-                    >
-                      <PostCard post={post} />
-                    </motion.div>
-                  </Grid>
-                ))}
-              </Grid>
+          <LoadingSpinner message={localQuery ? 'Searching...' : 'Loading posts...'} />
+        ) : postsData && postsData.posts.length > 0 ? (
+          <>
+            {!localQuery && (
+              <Box sx={{ textAlign: 'center', mb: 4 }}>
+                <Typography variant="body1" color="text.secondary">
+                  {postsData.total} {postsData.total === 1 ? 'article' : 'articles'}
+                  {selectedCategory !== 'all' && categories?.find(c => c.slug === selectedCategory) && (
+                    <> in {categories.find(c => c.slug === selectedCategory)?.name}</>
+                  )}
+                </Typography>
+              </Box>
+            )}
+            <Grid container spacing={4} sx={{ mb: 6 }}>
+              {postsData.posts.map((post, index) => (
+                <Grid item xs={12} sm={6} lg={4} key={post.id}>
+                  <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                  >
+                    <PostCard post={post} />
+                  </motion.div>
+                </Grid>
+              ))}
+            </Grid>
 
-              {totalPages > 1 && (
-                <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                  <Pagination
-                    count={totalPages}
-                    page={page}
-                    onChange={handlePageChange}
-                    color="primary"
-                    size="large"
-                  />
-                </Box>
-              )}
-            </>
-          ) : (
-            <Box sx={{ textAlign: 'center', py: 8 }}>
-              <Typography variant="h6" color="text.secondary" gutterBottom>
-                No results found
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                Try adjusting your search terms or browse our categories
-              </Typography>
-            </Box>
-          )
+            {totalPages > 1 && (
+              <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                <Pagination
+                  count={totalPages}
+                  page={page}
+                  onChange={handlePageChange}
+                  color="primary"
+                  size="large"
+                />
+              </Box>
+            )}
+          </>
+        ) : postsData && postsData.posts.length === 0 ? (
+          <Box sx={{ textAlign: 'center', py: 8 }}>
+            <Typography variant="h6" color="text.secondary" gutterBottom>
+              No results found
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              {localQuery
+                ? 'Try adjusting your search terms or browse our categories'
+                : 'No articles match the selected category'}
+            </Typography>
+          </Box>
         ) : (
           <Box sx={{ textAlign: 'center', py: 8 }}>
             <Typography variant="h6" color="text.secondary">

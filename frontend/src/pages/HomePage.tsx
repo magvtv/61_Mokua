@@ -51,7 +51,7 @@ const HomePage: React.FC = () => {
   return (
     <>
       <Helmet>
-        <title>Mokua Youth Platform - Kenyan Youth Affairs & County News</title>
+        <title>Rise Above | Kenyan Youth Affairs & County News</title>
         <meta
           name="description"
           content="Discover current affairs, county news, and social issues affecting Kenyan youth. A platform for authentic voices covering youth affairs, health, education, and community development across Kenya's 47 counties."
@@ -60,7 +60,7 @@ const HomePage: React.FC = () => {
           name="keywords"
           content="kenyan youth, county news, youth affairs, mental health, drug abuse, education, social issues, kenya"
         />
-        <meta property="og:title" content="Mokua Youth Platform - Kenyan Youth Affairs & County News" />
+        <meta property="og:title" content="Rise Above | Kenyan Youth Affairs & County News" />
         <meta
           property="og:description"
           content="Discover current affairs, county news, and social issues affecting Kenyan youth. A platform for authentic voices covering youth affairs, health, education, and community development."
