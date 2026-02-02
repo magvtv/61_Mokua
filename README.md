@@ -18,9 +18,11 @@ A modern, responsive literary blog built with React, TypeScript, and Material-UI
    cd 61_Mokua
    ```
 
-2. **Install dependencies**
+2. **Install dependencies** (run in each app directory)
    ```bash
-   npm install
+   cd frontend && npm install && cd ..
+   cd backend/api-server && npm install && cd ../..
+   cd backend/strapi && npm install && cd ../..
    ```
 
 3. **Set up environment variables**
@@ -53,16 +55,11 @@ A modern, responsive literary blog built with React, TypeScript, and Material-UI
    npx create-strapi-app@latest . --quickstart --no-run
    ```
 
-5. **Start all development servers**
+5. **Start development servers** (run each in its own terminal)
    ```bash
-   npm run dev:all
-   ```
-   
-   Or start individually:
-   ```bash
-   npm run dev:frontend    # Frontend on :5173
-   npm run dev:api        # API Server on :3001
-   npm run dev:strapi     # Strapi CMS on :1337
+   cd frontend && npm run dev           # Frontend on :5173
+   cd backend/api-server && npm run dev # API Server on :3001
+   cd backend/strapi && npm run develop # Strapi CMS on :1337
    ```
 
 ## 🏗️ Architecture
@@ -88,18 +85,16 @@ This project follows a **monorepo structure** with clear separation:
 │   └── package.json
 │
 ├── backend/
-│   ├── api-server/        # Express API Gateway
+│   ├── api-server/        # Express API (newsletter, etc.)
 │   │   ├── src/
 │   │   └── package.json
 │   │
-│   └── strapi/           # Strapi CMS
+│   └── strapi/            # Strapi CMS
 │       ├── config/
 │       ├── src/
 │       └── package.json
 │
-├── api/                  # Vercel serverless functions
-├── docs/                 # Documentation
-└── package.json          # Root workspace config
+└── docs/                  # Documentation
 ```
 
 See `PROJECT_STRUCTURE.md` for detailed structure documentation.
@@ -154,21 +149,17 @@ VITE_ENABLE_SUBMISSIONS=true
 
 ### Available Scripts
 
-**Root Level:**
-- `npm run dev:all` - Start all services (frontend, API, Strapi)
-- `npm run dev:frontend` - Start frontend only
-- `npm run dev:api` - Start API server only
-- `npm run dev:strapi` - Start Strapi CMS only
-- `npm run build:all` - Build all services
-- `npm run install:all` - Install all dependencies
+Run from each directory:
 
-**Frontend:**
-- `npm run dev --workspace=frontend` - Start dev server
-- `npm run build --workspace=frontend` - Build for production
+**Frontend** (`frontend/`):
+- `npm run dev` - Start dev server
+- `npm run build` - Build for production
 
-**Backend:**
-- `npm run dev --workspace=api-server` - Start API server
-- `npm run develop --workspace=strapi` - Start Strapi CMS
+**API Server** (`backend/api-server/`):
+- `npm run dev` - Start API server
+
+**Strapi** (`backend/strapi/`):
+- `npm run develop` - Start Strapi CMS
 
 ### Adding New Features
 

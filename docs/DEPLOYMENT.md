@@ -30,11 +30,7 @@ MONGODB_URI=mongodb+srv://<username>:<password>@<cluster>.mongodb.net/newsletter
 
 ### 2. Project Structure
 
-Your project now has:
-- `api/subscribe.ts` - Newsletter subscription endpoint
-- `api/subscribers.ts` - Get all subscribers endpoint  
-- `api/unsubscribe.ts` - Unsubscribe endpoint
-- `vercel.json` - Vercel configuration
+Newsletter subscription is handled by the **backend api-server** (`backend/api-server/`). Deploy it separately (e.g. Railway, Render) and point the frontend `VITE_API_URL` to that API URL. There is no root `api/` folder; the Express server provides `/subscribe` and related routes.
 
 ### 3. Deployment Commands
 
@@ -46,31 +42,23 @@ vercel --prod
 vercel deploy --prod
 ```
 
-## Server Startup on Vercel
+## Server Startup
 
-**How the server starts:**
-1. Vercel automatically detects your API routes in the `api/` folder
-2. Each `.ts` file becomes a serverless function
-3. Functions are cold-started when first accessed
-4. MongoDB connection is established per request (serverless pattern)
-
-**No manual server startup needed** - Vercel handles everything automatically!
+- **Frontend**: Deploy to Vercel (or similar); set root directory to `frontend` if needed.
+- **API (newsletter)**: Deploy `backend/api-server` to Railway, Render, or another Node host. It runs as a single Express server; no serverless `api/` folder.
 
 ## Testing Production
 
-After deployment, test your endpoints:
+After deploying the API server, test the newsletter endpoints (replace `https://your-api.example.com` with your API base URL):
 
 ```bash
 # Test subscription
-curl -X POST https://your-domain.vercel.app/api/subscribe \
+curl -X POST https://your-api.example.com/subscribe \
   -H "Content-Type: application/json" \
   -d '{"email":"test@example.com","name":"Test User","source":"newsletter"}'
 
-# Test getting subscribers
-curl https://your-domain.vercel.app/api/subscribers
-
-# Test unsubscribe
-curl -X POST https://your-domain.vercel.app/api/unsubscribe \
+# Test unsubscribe (if you expose this route)
+curl -X POST https://your-api.example.com/unsubscribe \
   -H "Content-Type: application/json" \
   -d '{"email":"test@example.com"}'
 ```
