@@ -69,7 +69,7 @@ const SubmitPage: React.FC = () => {
       });
       
       reset();
-    } catch (error) {
+    } catch {
       addNotification({
         type: 'error',
         message: 'Failed to submit your work. Please try again.',
@@ -150,7 +150,7 @@ const SubmitPage: React.FC = () => {
           transition={{ duration: 0.4 }}
         >
           <Grid container spacing={{ xs: 4, md: 6 }} justifyContent="center">
-            <Grid item xs={12} lg={12}>
+            <Grid size={{ xs: 12, lg: 12 }}>
               <Box sx={{ width: '100%' }}>
                 <Card
                 elevation={0}
@@ -401,7 +401,7 @@ const SubmitPage: React.FC = () => {
               </Box>
             </Grid>
 
-            <Grid item xs={12} lg={12} sx={{ mt: { xs: 2, md: 0 } }}>
+            <Grid size={{ xs: 12, lg: 12 }} sx={{ mt: { xs: 2, md: 0 } }}>
               <Box sx={{ width: '100%' }}>
               <Card
                 elevation={0}
