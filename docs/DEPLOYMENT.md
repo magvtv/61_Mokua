@@ -44,7 +44,7 @@ vercel deploy --prod
 
 ## Server Startup
 
-- **Frontend**: Deploy to Vercel (or similar); set root directory to `frontend` if needed.
+- **Frontend**: Deploy to Vercel (or similar). The repo root has a `package.json` whose build script installs and builds the app in `frontend/`. In Vercel **Project Settings > Build & Development Settings**, set **Output Directory** to `frontend/dist` so Vercel serves the Vite build output. Alternatively, set **Root Directory** to `frontend` and leave Output Directory blank (Vite default is `dist`).
 - **API (newsletter)**: Deploy `backend/api-server` to Railway, Render, or another Node host. It runs as a single Express server; no serverless `api/` folder.
 
 ## Testing Production

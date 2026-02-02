@@ -1,0 +1,8 @@
+{
+  "name": "61-mokua",
+  "private": true,
+  "description": "Mokua Literary Blog – monorepo root; frontend app lives in frontend/",
+  "scripts": {
+    "build": "cd frontend && pnpm install --no-frozen-lockfile && pnpm run build"
+  }
+}
