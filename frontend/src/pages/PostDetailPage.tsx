@@ -76,10 +76,10 @@ const PostDetailPage: React.FC = () => {
 
   if (isLoading) {
     return (
-      <Container maxWidth="lg" sx={{ py: 4 }}>
-        <Skeleton variant="text" width="60%" height={56} sx={{ mb: 2 }} />
-        <Skeleton variant="text" width="80%" height={28} sx={{ mb: 3 }} />
-        <Skeleton variant="rectangular" height={420} sx={{ borderRadius: 2, mb: 4 }} />
+      <Container maxWidth="lg" sx={{ px: { xs: 2, sm: 2, md: 3 }, py: { xs: 3, md: 4 } }}>
+        <Skeleton variant="text" height={56} sx={{ mb: 2, width: { xs: '90%', sm: '60%' } }} />
+        <Skeleton variant="text" width="100%" height={28} sx={{ mb: 3 }} />
+        <Skeleton variant="rectangular" height={{ xs: 220, sm: 280, md: 360 }} sx={{ borderRadius: 2, mb: 4, width: '100%' }} />
         <Skeleton variant="text" height={24} sx={{ mb: 1 }} />
         <Skeleton variant="text" height={24} sx={{ mb: 1 }} />
         <Skeleton variant="text" height={24} sx={{ mb: 1 }} />
@@ -89,8 +89,8 @@ const PostDetailPage: React.FC = () => {
 
   if (!post) {
     return (
-      <Container maxWidth="md" sx={{ py: 8, textAlign: 'center' }}>
-        <Typography variant="h4" gutterBottom>
+      <Container maxWidth="md" sx={{ px: { xs: 2, sm: 2 }, py: { xs: 6, md: 8 }, textAlign: 'center' }}>
+        <Typography variant="h4" gutterBottom sx={{ fontSize: { xs: '1.5rem', sm: '2rem' } }}>
           Article Not Found
         </Typography>
         <Typography color="text.secondary" sx={{ mb: 4 }}>
@@ -146,18 +146,32 @@ const PostDetailPage: React.FC = () => {
         ))}
       </Helmet>
 
-      <Container maxWidth="lg" sx={{ py: 4 }}>
+      <Container
+        maxWidth="lg"
+        disableGutters={false}
+        sx={{
+          px: { xs: 2, sm: 2, md: 3 },
+          py: { xs: 3, md: 4 },
+          maxWidth: '100%',
+          overflow: 'hidden',
+        }}
+      >
         <Button
           startIcon={<ArrowBack />}
           onClick={() => navigate(-1)}
-          sx={{ mb: 4 }}
+          sx={{
+            mb: { xs: 2, md: 4 },
+            fontSize: { xs: '0.875rem', md: '1rem' },
+            px: { xs: 0 },
+            minHeight: 40,
+          }}
         >
           Back to Articles
         </Button>
 
         <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', lg: '2fr 1fr' }, gap: { xs: 3, md: 4 } }}>
           {/* Main content */}
-          <Box>
+          <Box sx={{ minWidth: 0, maxWidth: '100%' }}>
             <Box sx={{ mb: 4 }}>
           <Chip
             label={post.category.name}
@@ -201,20 +215,21 @@ const PostDetailPage: React.FC = () => {
           <Box
             sx={{
               display: 'flex',
-              alignItems: 'center',
+              flexDirection: { xs: 'column', sm: 'row' },
+              alignItems: { xs: 'flex-start', sm: 'center' },
               justifyContent: 'space-between',
               flexWrap: 'wrap',
-              gap: 2,
+              gap: { xs: 1.5, sm: 2 },
               mb: 4,
             }}
           >
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, minWidth: 0 }}>
               <Avatar
                 src={post.author.avatar}
                 alt={post.author.name}
-                sx={{ width: 48, height: 48 }}
+                sx={{ width: { xs: 40, sm: 48 }, height: { xs: 40, sm: 48 }, flexShrink: 0 }}
               />
-              <Box>
+              <Box sx={{ minWidth: 0 }}>
                 <Typography
                   component={Link}
                   to={`/author/${post.author.slug}`}
@@ -223,29 +238,30 @@ const PostDetailPage: React.FC = () => {
                     fontWeight: 600,
                     textDecoration: 'none',
                     color: 'text.primary',
+                    fontSize: { xs: '0.9375rem', sm: '1rem' },
                     '&:hover': { color: 'primary.main' },
                   }}
                 >
                   {post.author.name}
                 </Typography>
-                <Typography variant="body2" color="text.secondary">
+                <Typography variant="body2" color="text.secondary" sx={{ fontSize: { xs: '0.8125rem', sm: '0.875rem' } }}>
                   {formatDate(post.publishedAt)} • {post.readingTime} min read
                 </Typography>
               </Box>
             </Box>
 
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <IconButton onClick={() => handleShare('twitter')} size="small">
-                <Twitter />
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+              <IconButton onClick={() => handleShare('twitter')} size="small" sx={{ p: { xs: 0.75, sm: 1 } }}>
+                <Twitter fontSize="small" />
               </IconButton>
-              <IconButton onClick={() => handleShare('facebook')} size="small">
-                <Facebook />
+              <IconButton onClick={() => handleShare('facebook')} size="small" sx={{ p: { xs: 0.75, sm: 1 } }}>
+                <Facebook fontSize="small" />
               </IconButton>
-              <IconButton onClick={() => handleShare('linkedin')} size="small">
-                <LinkedIn />
+              <IconButton onClick={() => handleShare('linkedin')} size="small" sx={{ p: { xs: 0.75, sm: 1 } }}>
+                <LinkedIn fontSize="small" />
               </IconButton>
-              <IconButton onClick={() => handleShare()} size="small">
-                <Share />
+              <IconButton onClick={() => handleShare()} size="small" sx={{ p: { xs: 0.75, sm: 1 } }}>
+                <Share fontSize="small" />
               </IconButton>
             </Box>
           </Box>
@@ -254,12 +270,14 @@ const PostDetailPage: React.FC = () => {
         {post.featuredImage && (
           <Box
             sx={{
-              mb: 6,
-              borderRadius: 2,
+              mb: { xs: 4, md: 6 },
+              borderRadius: { xs: 1.5, md: 2 },
               overflow: 'hidden',
               boxShadow: 2,
+              width: '100%',
               maxWidth: 960,
-              mx: 'auto'
+              mx: 'auto',
+              height: { xs: 220, sm: 280, md: 360 },
             }}
           >
             <img
@@ -267,9 +285,9 @@ const PostDetailPage: React.FC = () => {
               alt={post.title}
               style={{
                 width: '100%',
-                height: 'auto',
-                maxHeight: '360px',
+                height: '100%',
                 objectFit: 'cover',
+                display: 'block',
               }}
               loading="lazy"
             />
@@ -280,23 +298,28 @@ const PostDetailPage: React.FC = () => {
           variant="body1"
           sx={{
             lineHeight: 1.85,
-            fontSize: { xs: '1.05rem', md: '1.125rem' },
-            '& p': { mb: 3 },
+            fontSize: { xs: '1rem', sm: '1.05rem', md: '1.125rem' },
+            wordBreak: 'break-word',
+            overflowWrap: 'break-word',
+            maxWidth: '100%',
+            '& p': { mb: 3, wordBreak: 'break-word', overflowWrap: 'break-word' },
             '& h2': {
               fontFamily: '"Playfair Display", serif',
               fontWeight: 600,
-              fontSize: { xs: '1.35rem', md: '1.5rem' },
+              fontSize: { xs: '1.25rem', sm: '1.35rem', md: '1.5rem' },
               mt: { xs: 3, md: 4 },
               mb: { xs: 1.5, md: 2 },
               scrollMarginTop: '80px',
+              wordBreak: 'break-word',
             },
             '& h3': {
               fontFamily: '"Playfair Display", serif',
               fontWeight: 500,
-              fontSize: { xs: '1.15rem', md: '1.25rem' },
+              fontSize: { xs: '1.1rem', sm: '1.15rem', md: '1.25rem' },
               mt: { xs: 2.5, md: 3 },
               mb: { xs: 1.25, md: 1.5 },
               scrollMarginTop: '80px',
+              wordBreak: 'break-word',
             },
             mb: { xs: 5, md: 6 },
           }}
@@ -358,25 +381,26 @@ const PostDetailPage: React.FC = () => {
         {/* Author credentials block */}
         <Box sx={{
           display: 'flex',
+          flexDirection: { xs: 'column', sm: 'row' },
           alignItems: { xs: 'flex-start', sm: 'center' },
           gap: 2,
-          p: 2,
+          p: { xs: 1.5, sm: 2 },
           border: '1px solid',
           borderColor: 'divider',
           borderRadius: 2,
-          mb: 6
+          mb: 6,
         }}>
-          <Avatar src={post.author.avatar} alt={post.author.name} sx={{ width: 56, height: 56 }} />
-          <Box sx={{ flex: 1 }}>
+          <Avatar src={post.author.avatar} alt={post.author.name} sx={{ width: { xs: 48, sm: 56 }, height: { xs: 48, sm: 56 }, flexShrink: 0 }} />
+          <Box sx={{ flex: 1, minWidth: 0 }}>
             <Typography
               component={Link}
               to={`/author/${post.author.slug}`}
               variant="subtitle1"
-              sx={{ textDecoration: 'none', color: 'text.primary', fontWeight: 700, '&:hover': { color: 'primary.main' } }}
+              sx={{ textDecoration: 'none', color: 'text.primary', fontWeight: 700, fontSize: { xs: '0.9375rem', sm: '1rem' }, '&:hover': { color: 'primary.main' } }}
             >
               {post.author.name}
             </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+            <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5, wordBreak: 'break-word', overflowWrap: 'break-word' }}>
               {post.author.bio}
             </Typography>
           </Box>
@@ -397,15 +421,26 @@ const PostDetailPage: React.FC = () => {
             <Box
               sx={{
                 display: 'flex',
-                gap: { xs: 2.5, md: 3 },
+                gap: { xs: 2, md: 3 },
                 overflowX: 'auto',
+                overflowY: 'hidden',
                 pb: 1,
                 scrollSnapType: 'x mandatory',
-                '& > *': { scrollSnapAlign: 'start' },
+                WebkitOverflowScrolling: 'touch',
+                mx: { xs: -2, sm: 0 },
+                px: { xs: 2, sm: 0 },
+                '& > *': { scrollSnapAlign: 'start', flex: '0 0 auto' },
               }}
             >
               {relatedPosts.map((relatedPost) => (
-                <Box key={relatedPost.id} sx={{ flex: '0 0 auto' }}>
+                <Box
+                  key={relatedPost.id}
+                  sx={{
+                    flex: '0 0 auto',
+                    width: { xs: '85vw', sm: 320 },
+                    maxWidth: { sm: 360 },
+                  }}
+                >
                   <OverlayPostCard post={relatedPost} variant="compact" />
                 </Box>
               ))}
