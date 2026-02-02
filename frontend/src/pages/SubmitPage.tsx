@@ -5,7 +5,6 @@ import {
   Box,
   Grid,
   Card,
-  CardContent,
   TextField,
   Button,
   FormControl,
@@ -13,9 +12,10 @@ import {
   Select,
   MenuItem,
   Alert,
+  alpha,
 } from '@mui/material';
 import { Helmet } from 'react-helmet-async';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { motion } from 'framer-motion';
@@ -44,6 +44,7 @@ const SubmitPage: React.FC = () => {
 
   const {
     register,
+    control,
     handleSubmit,
     formState: { errors, isSubmitting },
     reset,
@@ -53,7 +54,7 @@ const SubmitPage: React.FC = () => {
   });
 
   const contentValue = watch('content', '');
-  const wordCount = contentValue.split(/\s+/).filter(word => word.length > 0).length;
+  const characterCount = contentValue.length;
 
   const onSubmit = async (data: SubmissionFormData) => {
     try {
@@ -101,20 +102,25 @@ const SubmitPage: React.FC = () => {
         />
       </Helmet>
 
-      <Container maxWidth="lg" sx={{ py: 8 }}>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <Box sx={{ textAlign: 'center', mb: 8 }}>
+      {/* Hero Section */}
+      <Box
+        sx={(theme) => ({
+          background: `linear-gradient(135deg, ${theme.palette.primary.main}10 0%, ${theme.palette.secondary.main}08 100%)`,
+          borderBottom: 1,
+          borderColor: 'divider',
+        })}
+      >
+        <Container maxWidth="lg" sx={{ py: { xs: 6, md: 10 } }}>
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
             <Typography
               variant="h1"
               sx={{
-                fontSize: { xs: '2.5rem', md: '3.5rem' },
+                fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem', lg: '3.5rem' },
                 fontFamily: '"Playfair Display", serif',
                 fontWeight: 700,
-                mb: 3,
+                lineHeight: { xs: 1.2, md: 1.15 },
+                mb: { xs: 1.5, md: 2 },
+                textAlign: 'center',
               }}
             >
               Submit Your Work
@@ -122,131 +128,291 @@ const SubmitPage: React.FC = () => {
             <Typography
               variant="h6"
               color="text.secondary"
-              sx={{ maxWidth: 600, mx: 'auto', lineHeight: 1.6 }}
+              sx={{
+                maxWidth: 600,
+                mx: 'auto',
+                lineHeight: 1.6,
+                textAlign: 'center',
+                px: { xs: 2, md: 0 },
+                fontSize: { xs: '1rem', md: '1.125rem' },
+              }}
             >
               Share your literary voice with our community. We welcome original fiction, poetry, essays, and reviews.
             </Typography>
-          </Box>
+          </motion.div>
+        </Container>
+      </Box>
 
-          <Grid container spacing={6}>
-            <Grid item xs={12} md={8}>
-              <Card sx={{ p: 4 }}>
+      <Container maxWidth="lg" sx={{ py: { xs: 4, sm: 5, md: 8 } }}>
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+        >
+          <Grid container spacing={{ xs: 4, md: 6 }} justifyContent="center">
+            <Grid item xs={12} lg={12}>
+              <Box sx={{ width: '100%' }}>
+                <Card
+                elevation={0}
+                sx={(theme) => ({
+                  p: { xs: 2.5, sm: 3, md: 4 },
+                  borderRadius: 3,
+                  border: `1px solid ${alpha(theme.palette.divider, 0.8)}`,
+                  boxShadow: `0 2px 12px ${alpha(theme.palette.primary.main, 0.06)}`,
+                  position: 'relative',
+                  overflow: 'hidden',
+                  '&::before': {
+                    content: '""',
+                    position: 'absolute',
+                    left: 0,
+                    top: 0,
+                    bottom: 0,
+                    width: 4,
+                    background: `linear-gradient(180deg, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
+                    opacity: 0.9,
+                  },
+                })}
+              >
                 <Typography
                   variant="h4"
                   sx={{
                     fontFamily: '"Playfair Display", serif',
                     fontWeight: 600,
-                    mb: 4,
+                    mb: { xs: 3, md: 4 },
+                    pl: 1,
                   }}
                 >
                   Submission Form
                 </Typography>
-                
-                <Box component="form" onSubmit={handleSubmit(onSubmit)}>
-                  <Grid container spacing={3}>
-                    <Grid item xs={12} sm={6}>
+
+                <Box
+                  component="form"
+                  onSubmit={handleSubmit(onSubmit)}
+                  sx={{
+                    pl: 1,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 4,
+                  }}
+                >
+                  {/* 1. Author information */}
+                  <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                    <Typography
+                      variant="subtitle2"
+                      color="text.secondary"
+                      sx={{
+                        fontWeight: 600,
+                        letterSpacing: '0.04em',
+                        textTransform: 'uppercase',
+                      }}
+                    >
+                      Author information
+                    </Typography>
+                    <Box
+                      sx={{
+                        display: 'grid',
+                        gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' },
+                        gap: 2,
+                      }}
+                    >
                       <TextField
                         fullWidth
+                        size="medium"
                         label="Author Name"
                         {...register('authorName')}
                         error={!!errors.authorName}
                         helperText={errors.authorName?.message}
                       />
-                    </Grid>
-                    
-                    <Grid item xs={12} sm={6}>
                       <TextField
                         fullWidth
+                        size="medium"
                         label="Email"
                         type="email"
                         {...register('email')}
                         error={!!errors.email}
                         helperText={errors.email?.message}
                       />
-                    </Grid>
-                    
-                    <Grid item xs={12} sm={8}>
+                    </Box>
+                  </Box>
+
+                  {/* 2. Work details */}
+                  <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                    <Typography
+                      variant="subtitle2"
+                      color="text.secondary"
+                      sx={{
+                        fontWeight: 600,
+                        letterSpacing: '0.04em',
+                        textTransform: 'uppercase',
+                      }}
+                    >
+                      Work details
+                    </Typography>
+                    <Box
+                      sx={{
+                        display: 'grid',
+                        gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' },
+                        gap: 2,
+                      }}
+                    >
                       <TextField
                         fullWidth
+                        size="medium"
                         label="Title"
                         {...register('title')}
                         error={!!errors.title}
                         helperText={errors.title?.message}
                       />
-                    </Grid>
-                    
-                    <Grid item xs={12} sm={4}>
-                      <FormControl fullWidth error={!!errors.category}>
-                        <InputLabel>Category</InputLabel>
-                        <Select
-                          label="Category"
-                          {...register('category')}
-                        >
-                          {categories?.map((category) => (
-                            <MenuItem key={category.id} value={category.slug}>
-                              {category.name}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                        {errors.category && (
-                          <Typography variant="caption" color="error" sx={{ mt: 0.5, ml: 2 }}>
-                            {errors.category.message}
-                          </Typography>
+                      <Controller
+                        name="category"
+                        control={control}
+                        render={({ field }) => (
+                          <FormControl fullWidth size="medium" error={!!errors.category}>
+                            <InputLabel id="submit-category-label">Category</InputLabel>
+                            <Select
+                              labelId="submit-category-label"
+                              label="Category"
+                              value={field.value || ''}
+                              onChange={field.onChange}
+                              onBlur={field.onBlur}
+                              inputRef={field.ref}
+                            >
+                              {categories?.map((category) => (
+                                <MenuItem key={category.id} value={category.slug}>
+                                  {category.name}
+                                </MenuItem>
+                              ))}
+                            </Select>
+                            {errors.category && (
+                              <Typography variant="caption" color="error" sx={{ mt: 0.5, ml: 2 }} role="alert">
+                                {errors.category.message}
+                              </Typography>
+                            )}
+                          </FormControl>
                         )}
-                      </FormControl>
-                    </Grid>
-                    
-                    <Grid item xs={12}>
-                      <TextField
-                        fullWidth
-                        label="Content"
-                        multiline
-                        rows={12}
-                        {...register('content')}
-                        error={!!errors.content}
-                        helperText={
-                          errors.content?.message || 
-                          `Word count: ${wordCount} (minimum 500 words)`
-                        }
-                        placeholder="Paste your complete work here..."
                       />
-                    </Grid>
-                    
-                    <Grid item xs={12}>
-                      <TextField
-                        fullWidth
-                        label="Author Bio"
-                        multiline
-                        rows={4}
-                        {...register('bio')}
-                        error={!!errors.bio}
-                        helperText={errors.bio?.message || 'Brief biographical information (50-150 words)'}
-                        placeholder="Tell us about yourself, your writing background, and any relevant publications..."
-                      />
-                    </Grid>
-                    
-                    <Grid item xs={12}>
-                      <Alert severity="info" sx={{ mb: 3 }}>
-                        By submitting your work, you confirm that it is original, unpublished, and you own all rights to the content.
-                      </Alert>
-                      
-                      <Button
-                        type="submit"
-                        variant="contained"
-                        size="large"
-                        disabled={isSubmitting}
-                        sx={{ px: 4, py: 1.5 }}
-                      >
-                        {isSubmitting ? 'Submitting...' : 'Submit Work'}
-                      </Button>
-                    </Grid>
-                  </Grid>
+                    </Box>
+                  </Box>
+
+                  {/* 3. Your work */}
+                  <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                    <Typography
+                      variant="subtitle2"
+                      color="text.secondary"
+                      sx={{
+                        fontWeight: 600,
+                        letterSpacing: '0.04em',
+                        textTransform: 'uppercase',
+                      }}
+                    >
+                      Your work
+                    </Typography>
+                    <TextField
+                      fullWidth
+                      label="Content"
+                      multiline
+                      minRows={10}
+                      maxRows={16}
+                      {...register('content')}
+                      error={!!errors.content}
+                      helperText={
+                        errors.content?.message ||
+                        `Characters: ${characterCount} (minimum 500 characters)`
+                      }
+                      placeholder="Paste your complete work here..."
+                      sx={{
+                        '& .MuiInputBase-root': {
+                          minHeight: { xs: 240, md: 280 },
+                          borderRadius: 2,
+                          bgcolor: (t) => alpha(t.palette.primary.main, 0.02),
+                          '&.Mui-focused': { bgcolor: 'background.paper' },
+                        },
+                      }}
+                    />
+                  </Box>
+
+                  {/* 4. Author bio */}
+                  <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                    <Typography
+                      variant="subtitle2"
+                      color="text.secondary"
+                      sx={{
+                        fontWeight: 600,
+                        letterSpacing: '0.04em',
+                        textTransform: 'uppercase',
+                      }}
+                    >
+                      Author bio
+                    </Typography>
+                    <TextField
+                      fullWidth
+                      label="Author Bio"
+                      multiline
+                      rows={4}
+                      {...register('bio')}
+                      error={!!errors.bio}
+                      helperText={errors.bio?.message || 'Brief biographical information (50-150 words)'}
+                      placeholder="Tell us about yourself, your writing background, and any relevant publications..."
+                      sx={{
+                        '& .MuiInputBase-root': {
+                          borderRadius: 2,
+                          bgcolor: (t) => alpha(t.palette.primary.main, 0.02),
+                          '&.Mui-focused': { bgcolor: 'background.paper' },
+                        },
+                      }}
+                    />
+                  </Box>
+
+                  {/* 5. Disclaimer and submit */}
+                  <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, pt: 1 }}>
+                    <Alert
+                      severity="info"
+                      sx={{
+                        borderRadius: 2,
+                        border: (t) => `1px solid ${alpha(t.palette.info.main, 0.3)}`,
+                      }}
+                    >
+                      By submitting your work, you confirm that it is original, unpublished, and you own all rights to the content.
+                    </Alert>
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      size="large"
+                      disabled={isSubmitting}
+                      sx={(theme) => ({
+                        px: { xs: 2.5, md: 4 },
+                        py: 1.5,
+                        width: { xs: '100%', sm: 'auto' },
+                        alignSelf: { xs: 'stretch', sm: 'flex-start' },
+                        borderRadius: 2,
+                        fontWeight: 600,
+                        textTransform: 'none',
+                        boxShadow: `0 4px 14px ${alpha(theme.palette.primary.main, 0.35)}`,
+                        '&:hover': {
+                          boxShadow: `0 6px 20px ${alpha(theme.palette.primary.main, 0.4)}`,
+                        },
+                      })}
+                    >
+                      {isSubmitting ? 'Submitting...' : 'Submit Work'}
+                    </Button>
+                  </Box>
                 </Box>
               </Card>
+              </Box>
             </Grid>
 
-            <Grid item xs={12} md={4}>
-              <Card sx={{ p: 3, mb: 4 }}>
+            <Grid item xs={12} lg={12} sx={{ mt: { xs: 2, md: 0 } }}>
+              <Box sx={{ width: '100%' }}>
+              <Card
+                elevation={0}
+                sx={(theme) => ({
+                  p: { xs: 2.5, sm: 3 },
+                  mb: 4,
+                  borderRadius: 3,
+                  border: `1px solid ${alpha(theme.palette.divider, 0.8)}`,
+                  boxShadow: `0 2px 12px ${alpha(theme.palette.primary.main, 0.06)}`,
+                })}
+              >
                 <Typography
                   variant="h6"
                   sx={{
@@ -257,7 +423,7 @@ const SubmitPage: React.FC = () => {
                 >
                   Submission Guidelines
                 </Typography>
-                
+
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
                   {guidelines.map((guideline, index) => (
                     <Typography
@@ -282,7 +448,15 @@ const SubmitPage: React.FC = () => {
                 </Box>
               </Card>
 
-              <Card sx={{ p: 3 }}>
+              <Card
+                elevation={0}
+                sx={(theme) => ({
+                  p: { xs: 2.5, sm: 3 },
+                  borderRadius: 3,
+                  border: `1px solid ${alpha(theme.palette.divider, 0.8)}`,
+                  boxShadow: `0 2px 12px ${alpha(theme.palette.primary.main, 0.06)}`,
+                })}
+              >
                 <Typography
                   variant="h6"
                   sx={{
@@ -294,11 +468,12 @@ const SubmitPage: React.FC = () => {
                   What We're Looking For
                 </Typography>
                 <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.6 }}>
-                  We seek compelling, original voices that push boundaries and explore the human condition. 
-                  Whether you're an emerging writer or established author, we value quality, authenticity, 
+                  We seek compelling, original voices that push boundaries and explore the human condition.
+                  Whether you're an emerging writer or established author, we value quality, authenticity,
                   and fresh perspectives on contemporary themes.
                 </Typography>
               </Card>
+              </Box>
             </Grid>
           </Grid>
         </motion.div>
