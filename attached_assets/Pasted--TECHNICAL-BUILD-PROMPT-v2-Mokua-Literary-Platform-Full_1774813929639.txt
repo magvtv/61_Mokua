@@ -1,0 +1,528 @@
+# 🧠 TECHNICAL BUILD PROMPT — v2
+## Mokua Literary Platform (Full-Stack PWA)
+
+---
+
+## 🎯 Objective
+
+Build a **production-ready, scalable Progressive Web Application (PWA)** for **Nicolas Mokua** — a modern literary publishing platform for:
+
+- Short stories
+- Poetry
+- Essays
+- Reviews
+- Guest submissions
+
+This is **not a basic blog**. It is a **digital literary platform** where typography is the product, reading experience is the interface, and content workflow is the engine.
+
+---
+
+## 🧱 SYSTEM ARCHITECTURE
+
+Headless architecture with clearly separated concerns:
+
+```
+Frontend (React PWA @ Vercel)
+        ↓
+API Layer (Next.js API Routes — NOT Express, decision is final)
+        ↓  ← OpenAPI spec defines all contracts here
+Headless CMS (Strapi v4)
+        ↓
+PostgreSQL (with tsvector full-text search)
+        ↕
+Redis (caching layer — ISR + session store)
+        ↓
+External Services (Cloudinary, Resend, GA4, Sentry)
+```
+
+**Key architectural decisions:**
+- Next.js API routes are chosen over a separate Express server to reduce operational overhead and enable ISR
+- Strapi is the CMS and data authority; the API layer never bypasses it for writes
+- Redis is mandatory, not optional — it underpins page caching, rate limiting, and session management
+- The public blog is statically generated (ISR) wherever possible; admin is fully client-rendered (CSR)
+
+---
+
+## ⚙️ TECH STACK
+
+### Frontend — Public Blog (`apps/web`)
+
+| Layer | Choice |
+|---|---|
+| Framework | React 18 + TypeScript |
+| Build | Vite |
+| Package manager | pnpm (monorepo via Turborepo) |
+| UI library | Material UI v5 + MUI Icons |
+| Routing | React Router v6 |
+| Data fetching | TanStack Query v5 |
+| State | Zustand |
+| Forms | React Hook Form + Zod |
+| Animation | Framer Motion |
+| SEO | react-helmet-async + JSON-LD |
+| PWA | Workbox |
+
+### Frontend — Admin Dashboard (`apps/admin`)
+
+| Layer | Choice |
+|---|---|
+| Editor | TipTap v2 (with custom extensions) |
+| Same stack as `apps/web` except React Router is replaced with file-based routing via TanStack Router |
+
+### Backend
+
+| Layer | Choice |
+|---|---|
+| CMS | Strapi v4 |
+| Database | PostgreSQL 15 |
+| Cache | Redis 7 |
+| Media | Cloudinary (with transformation pipeline) |
+| Auth | JWT (HttpOnly cookies — NOT localStorage) |
+| API contract | OpenAPI 3.1 spec auto-generated from Strapi + API routes |
+
+### Infrastructure
+
+| Concern | Tool |
+|---|---|
+| Frontend | Vercel (ISR enabled) |
+| Backend | Railway (Strapi + PostgreSQL + Redis) |
+| CDN / DNS / SSL | Cloudflare |
+| CI/CD | GitHub Actions |
+| Secrets | Doppler (synced to Vercel + Railway envs) |
+| Monitoring | Sentry (frontend + backend) |
+| Analytics | Google Analytics 4 |
+| Email | Resend (transactional only; see Newsletter section) |
+| Newsletter | Mailchimp (campaign management; bidirectional subscriber sync) |
+| Comments | Disqus (optional, feature-flagged off by default) |
+
+### Monorepo
+
+```
+mokua-platform/
+├── apps/
+│   ├── web/              # public blog (React PWA, ISR)
+│   └── admin/            # admin dashboard (CSR only)
+├── packages/
+│   ├── ui/               # shared components (built via tsup)
+│   ├── types/            # shared TypeScript types + Zod schemas
+│   ├── utils/            # pure helpers (no side effects)
+│   └── config/           # shared ESLint, Prettier, tsconfig, Vitest config
+├── backend/              # Strapi CMS
+├── docs/
+│   └── openapi.yaml      # generated API contract
+├── .env.example          # template for all required env vars
+├── pnpm-workspace.yaml
+└── turbo.json            # Turborepo pipeline config
+```
+
+**Build pipeline (Turborepo):**
+```
+packages/types → packages/utils → packages/ui → apps/*
+```
+All apps depend on shared packages. No circular dependencies allowed.
+
+---
+
+## 🌐 FRONTEND — PUBLIC BLOG
+
+### Typography System (non-negotiable)
+
+Typography is the platform's primary aesthetic. These values are enforced via a global CSS token system:
+
+```css
+--font-display: 'Playfair Display', Georgia, serif;     /* headings, hero */
+--font-body: 'Source Serif 4', Georgia, serif;          /* article body text */
+--font-ui: 'DM Sans', system-ui, sans-serif;            /* nav, labels, UI chrome */
+--font-mono: 'JetBrains Mono', monospace;               /* code in essays */
+
+--prose-width: 68ch;          /* max width for all long-form content */
+--prose-line-height: 1.8;     /* comfortable for long reads */
+--prose-font-size: 1.125rem;  /* 18px base for reading */
+```
+
+Font loading: use `font-display: swap` + `<link rel="preload">` for above-the-fold fonts. Zero layout shift is required.
+
+---
+
+### Pages
+
+#### 1. Homepage
+- Hero: featured post with full-bleed image, display typography overlay
+- Latest posts grid (3-column desktop, 1-column mobile)
+- Category navigation strip
+- Newsletter signup (inline, minimal friction — email only)
+- Animations: staggered entry via Framer Motion; respect `prefers-reduced-motion`
+
+#### 2. Post Page
+- Constrained prose column (`--prose-width`): centered, generous margins
+- Reading time (auto-calculated from word count)
+- Progress indicator (scroll-based, subtle)
+- Author bio card (end of post)
+- Social sharing (Web Share API with clipboard fallback)
+- Related posts (3 max, same category or shared tags)
+- Print CSS: clean single-column, no nav, no sidebar
+- SEO: dynamic meta + OG + Twitter cards + Article JSON-LD schema
+
+#### 3. Poetry Page (distinct from prose)
+- Centered or left-flush layout (per-poem setting)
+- Preserved whitespace and line breaks (`white-space: pre-wrap`)
+- No justified text (ever)
+- Stanza spacing: `1.5× line-height` gap between stanzas
+- Font size slightly larger than prose default
+- No progress bar (poems are not long-form)
+
+#### 4. Category Pages
+- Filtered posts with pagination (cursor-based, not offset)
+- Category description header
+
+#### 5. Author Pages
+- Author bio + avatar
+- All posts by author (paginated)
+
+#### 6. Search
+- Full-text search backed by PostgreSQL `tsvector` (not Strapi filters)
+- Debounced input (300ms)
+- Filters: category, content type (story/poem/essay/review), date range
+- Algolia/Meilisearch flagged as migration path when post count exceeds 1,000
+
+#### 7. Static Pages
+- About, Contact
+- Contact form: Zod validation client-side + server-side, Resend notification on submit, honeypot field for spam
+
+---
+
+### UX Requirements
+- Mobile-first, responsive at 320px minimum
+- Dark/light mode: system preference default, manual toggle, persisted in `localStorage`
+- Reading mode: hides site header, footer, and sidebar; increases font size to `1.25rem`; applies sepia or true dark background; toggled per-post via floating button
+- LCP < 2.5s; CLS < 0.1; FID < 100ms
+- All interactive elements keyboard-accessible
+- WCAG 2.1 AA compliance required
+
+---
+
+## 🛠️ ADMIN DASHBOARD
+
+Deployed at `/admin`. Separate React app. Authentication required (redirect to `/admin/login` if unauthenticated).
+
+### Auth
+- JWT stored in HttpOnly, SameSite=Strict cookies
+- Refresh token rotation: 15-minute access token, 7-day refresh token
+- Session invalidation: token revocation list in Redis
+- Roles: `super-admin`, `editor`, `contributor` (contributor = draft only, no publish)
+
+---
+
+### Modules
+
+#### 1. Dashboard Overview
+- Stats: total posts, drafts, pending submissions, subscriber count, posts published this month
+- Activity feed: last 10 actions (published, submitted, approved, rejected)
+
+#### 2. Content Studio (Editor)
+
+**TipTap v2 extensions required:**
+- `StarterKit` (base)
+- `Image` (with Cloudinary upload handler)
+- `Typography` (smart quotes, dashes)
+- `Placeholder`
+- `CharacterCount`
+- `CodeBlock` (for essays referencing code)
+- Custom: `PoetryBlock` — preserves line breaks, disables justification, applies stanza spacing
+- Custom: `PullQuote` — styled blockquote with display font
+- Markdown import/export support
+
+**Post fields:**
+
+| Field | Type | Notes |
+|---|---|---|
+| title | text | required |
+| slug | text | auto-generated from title, editable, unique |
+| contentType | enum | `story`, `poem`, `essay`, `review` |
+| content | rich text | TipTap JSON |
+| excerpt | textarea | 160 chars max; used for SEO description + cards |
+| featuredImage | media | Cloudinary; required to publish |
+| gallery | media[] | optional |
+| author | relation | required |
+| category | relation | required |
+| tags | relation[] | optional |
+| readingTime | computed | auto from word count |
+| seo.title | text | overrides post title in `<title>` |
+| seo.description | text | overrides excerpt in meta description |
+| seo.ogImage | media | overrides featuredImage for OG |
+| status | enum | `draft`, `scheduled`, `published` |
+| publishedAt | datetime | manual or scheduled |
+
+#### 3. Content Manager
+- Paginated table of all posts
+- Filters: status, category, contentType, author, date range
+- Actions: edit, delete (soft delete), publish/unpublish, duplicate
+
+#### 4. Guest Submissions
+
+Submission lifecycle:
+```
+submitted → under_review → approved (→ draft post) | rejected (→ email sent)
+```
+
+- Inbox with status badges
+- Approve action: creates a draft post pre-populated from submission data
+- Reject action: triggers Resend email to submitter with optional custom note
+- Editor notes field (internal only, never visible to submitter)
+- **Spam protection**: Turnstile (Cloudflare) on public submission form + rate limiting (5 submissions per IP per 24h via Redis)
+- Submission confirmation email sent to submitter on receipt
+
+#### 5. Author Management
+- Create/edit author profiles
+- Fields: name, bio, avatar (Cloudinary), socialLinks (Twitter, Instagram, website)
+- Assign/reassign posts to authors
+
+#### 6. Newsletter Panel
+- Mailchimp integration (primary campaign tool)
+- View subscriber count synced from Mailchimp
+- Export subscriber CSV
+- "Trigger campaign" → opens Mailchimp campaign URL in new tab (do not rebuild Mailchimp's UI)
+- Resend handles transactional emails (submission confirmation, rejection notices) — keep these separate from Mailchimp
+
+#### 7. SEO Panel
+- Per-post meta editor (populated in Content Studio, reviewable here)
+- OG image preview
+- Sitemap: dynamically generated at `/sitemap.xml` via API route, updated via Strapi webhook on publish/unpublish
+- `robots.txt`: static file, managed in repo
+
+---
+
+## 🧠 CONTENT MODEL (STRAPI)
+
+### Post
+```
+title: String (required)
+slug: UID (from title, required, unique)
+contentType: Enumeration [story, poem, essay, review]
+content: RichText
+excerpt: Text (max 160 chars)
+featuredImage: Media
+gallery: Media[]
+author: Relation (Author, many-to-one)
+category: Relation (Category, many-to-one)
+tags: Relation (Tag, many-to-many)
+readingTime: Integer (computed, minutes)
+publishedAt: DateTime
+status: Enumeration [draft, scheduled, published]
+seo: Component (SEOMeta)
+```
+
+### SEOMeta (component)
+```
+title: String
+description: String
+ogImage: Media
+noIndex: Boolean (default false)
+```
+
+### Author
+```
+name: String (required)
+bio: Text
+avatar: Media
+socialLinks: JSON {twitter, instagram, website}
+```
+
+### Category
+```
+name: String (required)
+slug: UID
+description: Text
+```
+
+### Tag
+```
+name: String (required)
+slug: UID
+```
+
+### GuestSubmission
+```
+submitterName: String (required)
+submitterEmail: Email (required)
+title: String (required)
+content: LongText (required)
+contentType: Enumeration [story, poem, essay, review]
+status: Enumeration [submitted, under_review, approved, rejected]
+editorNotes: Text (internal)
+submittedAt: DateTime (auto)
+reviewedAt: DateTime
+```
+
+---
+
+## 📬 FORMS & INTERACTIONS
+
+### Contact Form
+- Fields: name, email, subject, message
+- Honeypot field (hidden, must be empty to submit)
+- Zod validation client + server
+- Resend notification to `contact@mokua.co.ke` on submit
+- Success/error state feedback (no page reload)
+
+### Guest Submission Form (public)
+- Fields: name, email, title, content type, content (textarea)
+- Cloudflare Turnstile CAPTCHA
+- Rate limited: 5/IP/24h (Redis)
+- Confirmation email via Resend on successful submission
+- Stored in Strapi `GuestSubmission` collection
+
+---
+
+## 📱 PWA
+
+- Web App Manifest: name, icons, theme color, display: standalone
+- Workbox strategy:
+  - Shell (HTML/CSS/JS): CacheFirst
+  - Post content: StaleWhileRevalidate
+  - Images: CacheFirst with 30-day expiry
+  - API responses: NetworkFirst with 5s timeout fallback
+- Offline fallback: branded `/offline` page shown when network fails and no cached route exists
+- Push notifications: architecture stubbed but not implemented in v1
+
+---
+
+## 🔍 SEO
+
+- `react-helmet-async`: dynamic `<title>`, `<meta>`, canonical URLs
+- Open Graph: per-post `og:title`, `og:description`, `og:image`, `og:type: article`
+- Twitter cards: `summary_large_image`
+- JSON-LD: `Article` schema for posts, `Person` schema for authors, `WebSite` schema on homepage
+- `sitemap.xml`: dynamic, generated by API route, triggered by Strapi publish webhook
+- `robots.txt`: static file in repo root, disallows `/admin`
+- Canonical URLs: enforced for all paginated and filtered views
+
+---
+
+## ⚡ PERFORMANCE
+
+- **ISR**: post pages revalidate every 60s (configurable per content type)
+- **Images**: Cloudinary transformation URL strategy — `w_auto,f_auto,q_auto` for responsive delivery; `blur_hash` placeholder on load
+- **Fonts**: preloaded, `font-display: swap`, subset to Latin characters
+- **Code splitting**: route-based via Vite dynamic imports
+- **Bundle analysis**: `vite-bundle-analyzer` run in CI; alert if main chunk > 200kb
+- **Targets**: Lighthouse > 90 (all categories), LCP < 2.5s, CLS < 0.1
+
+---
+
+## 🔒 SECURITY
+
+- JWT in HttpOnly cookies (not localStorage)
+- Refresh token rotation with Redis revocation list
+- RBAC: `super-admin` / `editor` / `contributor`
+- Rate limiting: Redis-backed, applied at API layer (not just Strapi)
+- Input validation: Zod on all API routes (not just forms)
+- XSS: TipTap output sanitized via `DOMPurify` before storage
+- CSRF: `SameSite=Strict` cookies + CSRF token for state-changing requests
+- Content Security Policy headers via Vercel config
+- Spam: Turnstile on all public forms
+
+---
+
+## 🗄️ DATA & OPERATIONS
+
+### Environment Management
+- All secrets in Doppler, synced to Vercel (frontend) and Railway (backend)
+- `.env.example` in repo root documents every required variable with descriptions
+- Three environments: `development`, `staging`, `production`
+
+### Database
+- Migrations: Strapi-managed, checked into version control
+- Seed script: `pnpm db:seed` — populates 3 authors, 2 categories, 10 sample posts for local dev
+- Backups: Railway automated daily backups, 30-day retention, tested monthly
+
+### Staging Environment
+- Full replica of production on Railway (separate project)
+- Separate Cloudinary folder (`/staging`)
+- Deployed automatically on merge to `develop` branch
+- Production deploys only from `main` via manual approval gate in GitHub Actions
+
+---
+
+## 🧪 TESTING
+
+- **Unit**: Vitest — all utility functions, Zod schemas, computed fields
+- **Component**: Testing Library — form validation states, editor interactions
+- **E2E** (future): Playwright — post creation → publish flow, submission → approval flow
+- **Accessibility**: `axe-core` integrated into Vitest component tests
+- **Responsive**: tested at 320px, 768px, 1280px, 1440px breakpoints
+
+---
+
+## 📊 ANALYTICS
+
+GA4 custom event taxonomy (implement from day 1):
+
+| Event | Trigger |
+|---|---|
+| `post_read` | User scrolls past 75% of post |
+| `post_share` | Share button clicked |
+| `search_performed` | Search query submitted |
+| `submission_started` | Guest submission form opened |
+| `submission_completed` | Guest submission successfully sent |
+| `newsletter_signup` | Email submitted on homepage form |
+| `reading_mode_toggled` | Reading mode activated |
+
+---
+
+## 🚀 DEPLOYMENT
+
+### Frontend (`apps/web`, `apps/admin`)
+- Vercel project, connected to GitHub `main` branch
+- Preview deployments on PRs
+- Environment variables synced from Doppler
+- `vercel.json`: configure ISR revalidation, security headers, redirects (`/admin` → admin app)
+
+### Backend (Strapi + PostgreSQL + Redis)
+- Railway project with three services: `strapi`, `postgres`, `redis`
+- Deploy on push to `main` (after staging validation)
+- Health check endpoint: `GET /api/health` → 200
+
+### Domain
+- `mokua.co.ke` → Cloudflare DNS
+- `www.mokua.co.ke` → redirects to apex
+- `api.mokua.co.ke` → Railway (Strapi)
+- SSL: Cloudflare Universal SSL (full strict mode)
+- Cloudflare WAF: enable OWASP ruleset
+
+---
+
+## 🧩 FUTURE EXTENSIONS (v2+)
+
+Architect v1 to accommodate these without rewrites:
+
+- **Membership / paywall** (Stripe) — design auth system to support member roles from day 1
+- **Audio narration** — Cloudinary supports audio; add `audioFile` field to Post model in v1 (nullable)
+- **Multi-language** (Swahili/English) — i18n-ready: use `react-i18next`; externalize all UI strings from day 1
+- **Editorial calendar** — extend admin dashboard; no backend changes needed
+- **Mobile app** — API-first architecture already supports this; document endpoints in OpenAPI spec
+
+---
+
+## ✅ SUCCESS CRITERIA
+
+The platform ships when:
+
+1. Mokua can draft, schedule, and publish a post without engineering involvement
+2. A guest can submit a piece; Mokua can approve it and publish it within 5 minutes
+3. Post pages score > 90 on Lighthouse across all four categories
+4. The reading experience on mobile at 320px is indistinguishable in quality from desktop
+5. The system survives a 10× traffic spike without manual intervention (Cloudflare + ISR)
+
+---
+
+## 🧠 BUILD PHILOSOPHY
+
+> Build for the reader first, the writer second, the administrator third.
+
+Prioritise in this order:
+1. Reading experience (typography, performance, focus)
+2. Content workflow (editor quality, submission pipeline)
+3. Reliability (caching, backups, staging)
+4. Developer experience (types, linting, seed data)
+
+Every technical decision should be answerable with: *"Does this make the platform better for the person reading a poem at midnight on a slow connection?"*

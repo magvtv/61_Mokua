@@ -1,22 +1,35 @@
 openapi: 3.1.0
 info:
-  # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: Mokua Literary Platform API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: posts
+    description: Literary posts (stories, poems, essays, reviews)
+  - name: categories
+    description: Post categories
+  - name: authors
+    description: Author profiles
+  - name: tags
+    description: Post tags
+  - name: submissions
+    description: Guest submissions
+  - name: newsletter
+    description: Newsletter subscriptions
+  - name: contact
+    description: Contact form
+
 paths:
   /healthz:
     get:
       operationId: healthCheck
       tags: [health]
       summary: Health check
-      description: Returns server health status
       responses:
         "200":
           description: Healthy
@@ -24,6 +37,355 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /posts:
+    get:
+      operationId: listPosts
+      tags: [posts]
+      summary: List published posts
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 12
+        - name: category
+          in: query
+          schema:
+            type: string
+        - name: contentType
+          in: query
+          schema:
+            type: string
+            enum: [story, poem, essay, review]
+        - name: tag
+          in: query
+          schema:
+            type: string
+        - name: author
+          in: query
+          schema:
+            type: integer
+        - name: cursor
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Paginated list of posts
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PostListResponse"
+
+  /posts/featured:
+    get:
+      operationId: getFeaturedPost
+      tags: [posts]
+      summary: Get the featured/hero post
+      responses:
+        "200":
+          description: Featured post
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PostDetail"
+        "404":
+          description: No featured post
+
+  /posts/search:
+    get:
+      operationId: searchPosts
+      tags: [posts]
+      summary: Full-text search posts
+      parameters:
+        - name: q
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: category
+          in: query
+          schema:
+            type: string
+        - name: contentType
+          in: query
+          schema:
+            type: string
+            enum: [story, poem, essay, review]
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 12
+      responses:
+        "200":
+          description: Search results
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PostListResponse"
+
+  /posts/{slug}:
+    get:
+      operationId: getPost
+      tags: [posts]
+      summary: Get a post by slug
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Post detail
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PostDetail"
+        "404":
+          description: Post not found
+
+  /posts/{slug}/related:
+    get:
+      operationId: getRelatedPosts
+      tags: [posts]
+      summary: Get related posts
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Related posts
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  posts:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/PostSummary"
+                required:
+                  - posts
+
+  /categories:
+    get:
+      operationId: listCategories
+      tags: [categories]
+      summary: List all categories
+      responses:
+        "200":
+          description: Categories list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  categories:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Category"
+                required:
+                  - categories
+
+  /authors:
+    get:
+      operationId: listAuthors
+      tags: [authors]
+      summary: List all authors
+      responses:
+        "200":
+          description: Authors list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  authors:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Author"
+                required:
+                  - authors
+
+  /authors/{id}:
+    get:
+      operationId: getAuthor
+      tags: [authors]
+      summary: Get author by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Author detail
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthorDetail"
+        "404":
+          description: Author not found
+
+  /authors/{id}/posts:
+    get:
+      operationId: getAuthorPosts
+      tags: [authors]
+      summary: Get posts by author
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 12
+      responses:
+        "200":
+          description: Author posts
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PostListResponse"
+
+  /tags:
+    get:
+      operationId: listTags
+      tags: [tags]
+      summary: List all tags
+      responses:
+        "200":
+          description: Tags list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tags:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Tag"
+                required:
+                  - tags
+
+  /submissions:
+    post:
+      operationId: createSubmission
+      tags: [submissions]
+      summary: Submit a guest piece
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateSubmissionRequest"
+      responses:
+        "201":
+          description: Submission received
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SubmissionResponse"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "429":
+          description: Too many submissions
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /newsletter:
+    post:
+      operationId: subscribeNewsletter
+      tags: [newsletter]
+      summary: Subscribe to the newsletter
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewsletterSubscribeRequest"
+      responses:
+        "200":
+          description: Subscribed successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "409":
+          description: Already subscribed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /contact:
+    post:
+      operationId: sendContactMessage
+      tags: [contact]
+      summary: Send a contact message
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ContactMessageRequest"
+      responses:
+        "200":
+          description: Message sent
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "429":
+          description: Too many requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
 components:
   schemas:
     HealthStatus:
@@ -34,3 +396,335 @@ components:
       required:
         - status
 
+    Author:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        bio:
+          type: string
+        avatarUrl:
+          type: string
+          nullable: true
+        twitterHandle:
+          type: string
+          nullable: true
+        instagramHandle:
+          type: string
+          nullable: true
+        website:
+          type: string
+          nullable: true
+        postCount:
+          type: integer
+      required:
+        - id
+        - name
+        - bio
+        - avatarUrl
+        - twitterHandle
+        - instagramHandle
+        - website
+        - postCount
+
+    AuthorDetail:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        bio:
+          type: string
+        avatarUrl:
+          type: string
+          nullable: true
+        twitterHandle:
+          type: string
+          nullable: true
+        instagramHandle:
+          type: string
+          nullable: true
+        website:
+          type: string
+          nullable: true
+        postCount:
+          type: integer
+      required:
+        - id
+        - name
+        - bio
+        - avatarUrl
+        - twitterHandle
+        - instagramHandle
+        - website
+        - postCount
+
+    Category:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        slug:
+          type: string
+        description:
+          type: string
+          nullable: true
+        postCount:
+          type: integer
+      required:
+        - id
+        - name
+        - slug
+        - description
+        - postCount
+
+    Tag:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        slug:
+          type: string
+        postCount:
+          type: integer
+      required:
+        - id
+        - name
+        - slug
+        - postCount
+
+    PostSummary:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        slug:
+          type: string
+        excerpt:
+          type: string
+          nullable: true
+        contentType:
+          type: string
+          enum: [story, poem, essay, review]
+        featuredImageUrl:
+          type: string
+          nullable: true
+        readingTime:
+          type: integer
+        publishedAt:
+          type: string
+          format: date-time
+        author:
+          $ref: "#/components/schemas/Author"
+        category:
+          $ref: "#/components/schemas/Category"
+        tags:
+          type: array
+          items:
+            $ref: "#/components/schemas/Tag"
+      required:
+        - id
+        - title
+        - slug
+        - excerpt
+        - contentType
+        - featuredImageUrl
+        - readingTime
+        - publishedAt
+        - author
+        - category
+        - tags
+
+    PostDetail:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        slug:
+          type: string
+        excerpt:
+          type: string
+          nullable: true
+        contentType:
+          type: string
+          enum: [story, poem, essay, review]
+        content:
+          type: string
+        featuredImageUrl:
+          type: string
+          nullable: true
+        readingTime:
+          type: integer
+        publishedAt:
+          type: string
+          format: date-time
+        author:
+          $ref: "#/components/schemas/Author"
+        category:
+          $ref: "#/components/schemas/Category"
+        tags:
+          type: array
+          items:
+            $ref: "#/components/schemas/Tag"
+        seoTitle:
+          type: string
+          nullable: true
+        seoDescription:
+          type: string
+          nullable: true
+        seoOgImageUrl:
+          type: string
+          nullable: true
+      required:
+        - id
+        - title
+        - slug
+        - excerpt
+        - contentType
+        - content
+        - featuredImageUrl
+        - readingTime
+        - publishedAt
+        - author
+        - category
+        - tags
+        - seoTitle
+        - seoDescription
+        - seoOgImageUrl
+
+    PostListResponse:
+      type: object
+      properties:
+        posts:
+          type: array
+          items:
+            $ref: "#/components/schemas/PostSummary"
+        total:
+          type: integer
+        page:
+          type: integer
+        limit:
+          type: integer
+        totalPages:
+          type: integer
+        nextCursor:
+          type: string
+          nullable: true
+      required:
+        - posts
+        - total
+        - page
+        - limit
+        - totalPages
+        - nextCursor
+
+    CreateSubmissionRequest:
+      type: object
+      properties:
+        submitterName:
+          type: string
+          minLength: 2
+          maxLength: 100
+        submitterEmail:
+          type: string
+          format: email
+        title:
+          type: string
+          minLength: 2
+          maxLength: 200
+        contentType:
+          type: string
+          enum: [story, poem, essay, review]
+        content:
+          type: string
+          minLength: 50
+        honeypot:
+          type: string
+      required:
+        - submitterName
+        - submitterEmail
+        - title
+        - contentType
+        - content
+
+    SubmissionResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        message:
+          type: string
+      required:
+        - id
+        - message
+
+    NewsletterSubscribeRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        name:
+          type: string
+          nullable: true
+      required:
+        - email
+
+    ContactMessageRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 2
+          maxLength: 100
+        email:
+          type: string
+          format: email
+        subject:
+          type: string
+          minLength: 2
+          maxLength: 200
+        message:
+          type: string
+          minLength: 10
+        honeypot:
+          type: string
+      required:
+        - name
+        - email
+        - subject
+        - message
+
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+      required:
+        - success
+        - message
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+        details:
+          type: string
+          nullable: true
+      required:
+        - error
+        - details

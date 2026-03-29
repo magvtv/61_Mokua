@@ -1,0 +1,24 @@
+packages:
+  "framer-motion": "Animations and staggered page transitions"
+  "date-fns": "Human-readable date formatting"
+  "dompurify": "Safe HTML rendering for rich text essays and posts"
+  "@types/dompurify": "TypeScript definitions for dompurify"
+  "react-hook-form": "Form state management"
+  "@hookform/resolvers": "Zod validation integration for forms"
+  "clsx": "Utility for constructing className strings conditionally"
+  "tailwind-merge": "Utility for merging Tailwind CSS classes without style conflicts"
+
+images:
+  - path: "artifacts/web/public/images/hero-abstract.png"
+    description: "Abstract elegant ink wash texture, muted cream and charcoal, literary and artistic editorial feel"
+    aspect_ratio: "16:9"
+  - path: "artifacts/web/public/images/empty-state.png"
+    description: "Minimalist fine line art illustration of an open book with floating leaves, elegant, editorial style on cream background"
+    aspect_ratio: "1:1"
+  - path: "artifacts/web/public/images/author-mokua.png"
+    description: "Black and white portrait of a thoughtful writer looking away, artistic, dramatic lighting, sharp focus"
+    aspect_ratio: "1:1"
+
+notes:
+  - "App relies on @workspace/api-client-react for all TanStack Query hooks and types."
+  - "Using a custom typography system with Playfair Display (display), Source Serif 4 (body), and DM Sans (sans)."
