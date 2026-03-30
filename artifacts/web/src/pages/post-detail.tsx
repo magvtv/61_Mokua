@@ -78,7 +78,7 @@ export default function PostDetail() {
       {/* Reading Progress Bar (hidden for poems) */}
       {!isPoem && (
         <motion.div 
-          className="fixed top-0 left-0 right-0 h-1.5 bg-primary z-[100] origin-left"
+          className="fixed top-0 left-0 right-0 h-1.5 bg-primary z-100 origin-left"
           style={{ scaleX }}
         />
       )}
@@ -146,7 +146,7 @@ export default function PostDetail() {
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3, duration: 0.8 }}
             className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-16"
           >
-            <div className="w-full aspect-[21/9] rounded-2xl overflow-hidden shadow-xl bg-muted">
+            <div className="w-full aspect-21/9 rounded-2xl overflow-hidden shadow-xl bg-muted">
               <img 
                 src={post.featuredImageUrl} 
                 alt={post.title} 
