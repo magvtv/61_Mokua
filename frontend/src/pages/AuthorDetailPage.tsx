@@ -1,0 +1,232 @@
+import React from 'react';
+import {
+  Container,
+  Typography,
+  Box,
+  Avatar,
+  IconButton,
+  Button,
+  Divider,
+} from '@mui/material';
+import { Twitter, Instagram, LinkedIn, Language, ArrowBack } from '@mui/icons-material';
+import { useParams, useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
+import { useQuery } from '@tanstack/react-query';
+import { motion } from 'framer-motion';
+import { Skeleton } from '@mui/material';
+import { contentService } from '../services/contentService';
+import CompactPostCard from '../components/home/CompactPostCard';
+import LoadingSpinner from '../components/common/LoadingSpinner';
+
+const AuthorDetailPage: React.FC = () => {
+  const { slug } = useParams<{ slug: string }>();
+  const navigate = useNavigate();
+
+  const { data: author, isLoading: authorLoading } = useQuery({
+    queryKey: ['author', slug],
+    queryFn: () => contentService.getAuthor(slug!),
+    enabled: !!slug,
+  });
+
+  const { data: authorPosts, isLoading: postsLoading } = useQuery({
+    queryKey: ['authorPosts', slug],
+    queryFn: () => contentService.getPostsByAuthor(slug!),
+    enabled: !!slug,
+  });
+
+  if (authorLoading) {
+    return <LoadingSpinner message="Loading voice profile..." />;
+  }
+
+  if (!author) {
+    return (
+      <Container maxWidth="lg" sx={{ py: 8, textAlign: 'center' }}>
+        <Typography variant="h4" gutterBottom>
+          Voice Not Found
+        </Typography>
+        <Typography color="text.secondary" sx={{ mb: 4 }}>
+          The voice you're looking for doesn't exist.
+        </Typography>
+        <Button onClick={() => navigate('/authors')} variant="contained">
+          View All Voices
+        </Button>
+      </Container>
+    );
+  }
+
+  const getSocialIcon = (platform: string) => {
+    switch (platform) {
+      case 'twitter': return <Twitter />;
+      case 'instagram': return <Instagram />;
+      case 'linkedin': return <LinkedIn />;
+      case 'website': return <Language />;
+      default: return <Language />;
+    }
+  };
+
+  return (
+    <>
+      <Helmet>
+        <title>{`${author.name} - Voice Profile | Mokua Youth Platform`}</title>
+        <meta name="description" content={author.bio} />
+        <meta property="og:title" content={`${author.name} - Voice Profile`} />
+        <meta property="og:description" content={author.bio} />
+        <meta property="og:type" content="profile" />
+        {author.avatar && <meta property="og:image" content={author.avatar} />}
+      </Helmet>
+
+      <Container maxWidth="lg" sx={{ py: 4 }}>
+        <Button
+          startIcon={<ArrowBack />}
+          onClick={() => navigate('/authors')}
+          sx={{ mb: 4 }}
+        >
+          Back to Voices
+        </Button>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <Box sx={{ mb: 6 }}>
+            <Box sx={{
+              display: 'grid',
+              gridTemplateColumns: { xs: '1fr', md: 'auto 1fr' },
+              gap: 4,
+              alignItems: 'center'
+            }}>
+              <Box>
+                <Box sx={{ textAlign: 'center' }}>
+                  <Avatar
+                    src={author.avatar}
+                    alt={author.name}
+                    sx={{
+                      width: { xs: 150, md: 200 },
+                      height: { xs: 150, md: 200 },
+                      mx: 'auto',
+                      mb: 2,
+                      boxShadow: 4,
+                    }}
+                  />
+                </Box>
+              </Box>
+              
+              <Box>
+                <Typography
+                  variant="h1"
+                  sx={{
+                    fontSize: { xs: '2.5rem', md: '3.5rem' },
+                    fontFamily: '"Playfair Display", serif',
+                    fontWeight: 700,
+                    mb: 2,
+                    textAlign: { xs: 'center', md: 'left' },
+                  }}
+                >
+                  {author.name}
+                </Typography>
+                
+                <Typography
+                  variant="h6"
+                  color="text.secondary"
+                  sx={{
+                    mb: 3,
+                    lineHeight: 1.6,
+                    textAlign: { xs: 'center', md: 'left' },
+                  }}
+                >
+                  {author.bio}
+                </Typography>
+
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 2,
+                    justifyContent: { xs: 'center', md: 'flex-start' },
+                    flexWrap: 'wrap',
+                  }}
+                >
+                  <Typography variant="body2" color="text.secondary">
+                    {author.postsCount} {author.postsCount === 1 ? 'story' : 'stories'}
+                  </Typography>
+                  
+                  <Box sx={{ display: 'flex', gap: 1 }}>
+                    {author.socialLinks.map((link) => (
+                      <IconButton
+                        key={link.platform}
+                        href={link.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        color="primary"
+                        size="small"
+                      >
+                        {getSocialIcon(link.platform)}
+                      </IconButton>
+                    ))}
+                  </Box>
+                </Box>
+              </Box>
+            </Box>
+          </Box>
+        </motion.div>
+
+        <Divider sx={{ mb: 6 }} />
+
+        <Box sx={{ mb: 4 }}>
+          <Typography
+            variant="h3"
+            sx={{
+              fontFamily: '"Playfair Display", serif',
+              fontWeight: 600,
+              mb: 2,
+            }}
+          >
+            Stories by {author.name}
+          </Typography>
+        </Box>
+
+        {postsLoading ? (
+          <Box sx={{
+            display: 'grid',
+            gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', lg: '1fr 1fr 1fr' },
+            gap: 4
+          }}>
+            {Array.from({ length: 6 }).map((_, i) => (
+              <Box key={i}>
+                <Skeleton variant="rectangular" height={200} sx={{ borderRadius: 2, mb: 2 }} />
+                <Skeleton variant="text" width="80%" />
+                <Skeleton variant="text" width="60%" />
+              </Box>
+            ))}
+          </Box>
+        ) : authorPosts && authorPosts.length > 0 ? (
+          <Box sx={{
+            display: 'grid',
+            gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', lg: '1fr 1fr 1fr' },
+            gap: 4
+          }}>
+            {authorPosts.map((post, index) => (
+              <motion.div
+                key={post.id}
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+              >
+                <CompactPostCard post={post} variant="medium" showExcerpt />
+              </motion.div>
+            ))}
+          </Box>
+        ) : (
+          <Box sx={{ textAlign: 'center', py: 8 }}>
+            <Typography variant="h6" color="text.secondary">
+              No stories published yet.
+            </Typography>
+          </Box>
+        )}
+      </Container>
+    </>
+  );
+};
+
+export default AuthorDetailPage;

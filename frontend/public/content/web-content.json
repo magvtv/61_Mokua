@@ -1,0 +1,38 @@
+{
+  "comingSoon": {
+    "date": "",
+    "navigation": [
+      {
+        "id": "instagram",
+        "label": "Follow Mokua",
+        "url": "https://instagram.com/mokua"
+      }
+    ],
+    "header": {
+      "title": "A New Chapter Awaits",
+      "subtitle": "Mokua's Voice — Stories that Linger Beyond A Page"
+    },
+    "content": {
+      "mainText": "Every great tale begins in silence before the world hears its echo. Mokua's platform is almost here — a place where prose breathes, poetry resonates, and every word feels like a heartbeat.",
+      "highlights": [
+        "Join his literary awakening — only the first 500 will witness the genesis.",
+        "Reserve your front-row seat to stories that will outlive the season."
+      ]
+    },
+    "form": {
+      "placeholder": "baldacci@gmail.com",
+      "buttonText": "get notified",
+      "successMessage": "Thank you for stepping into the story early — you'll be the first to know when we go live.",
+      "errorMessage": "We missed a page. Please try again."
+    },
+    "image": {
+      "src": "/images/coming-soon-main.jpg",
+      "alt": "Mokua Literary Platform — Coming Soon"
+    },
+    "footer": {
+      "tagline": "From Nairobi to the world — one story at a time.",
+      "copyright": "© 2025 Mokua. All rights reserved."
+    }
+  }
+}
+  

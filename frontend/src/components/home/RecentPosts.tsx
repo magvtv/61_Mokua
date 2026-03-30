@@ -1,0 +1,154 @@
+import React, { useState } from 'react';
+import {
+  Box,
+  Container,
+  Typography,
+  Pagination,
+  Tabs,
+  Tab,
+  Skeleton,
+} from '@mui/material';
+import { useQuery } from '@tanstack/react-query';
+import { contentService } from '../../services/contentService';
+import OverlayPostCard from './OverlayPostCard';
+
+const RecentPosts: React.FC = () => {
+  const [page, setPage] = useState(1);
+  const [categoryFilter, setCategoryFilter] = useState('all');
+  const postsPerPage = 6;
+
+  const { data: categories } = useQuery({
+    queryKey: ['categories'],
+    queryFn: contentService.getCategories,
+  });
+
+  const { data: postsData, isLoading } = useQuery({
+    queryKey: ['posts', page, categoryFilter],
+    queryFn: () => contentService.getPosts(
+      { page, limit: postsPerPage },
+      categoryFilter !== 'all' ? { category: categoryFilter } : undefined
+    ),
+  });
+
+  const handlePageChange = (_: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value);
+  };
+
+  const handleCategoryChange = (_: React.SyntheticEvent, newValue: string) => {
+    setCategoryFilter(newValue);
+    setPage(1);
+  };
+
+  const totalPages = postsData ? Math.ceil(postsData.total / postsPerPage) : 0;
+
+  return (
+    <Box sx={{ py: 8, bgcolor: 'background.default' }}>
+      <Container maxWidth="lg">
+        <Typography
+          variant="h2"
+          sx={{
+            fontSize: { xs: '2rem', md: '2.5rem' },
+            fontFamily: '"Playfair Display", serif',
+            fontWeight: 600,
+            mb: 1,
+            textAlign: 'center',
+          }}
+        >
+          Latest Articles
+        </Typography>
+        <Typography
+          variant="body1"
+          color="text.secondary"
+          sx={{ textAlign: 'center', mb: 6 }}
+        >
+          Stay updated with our newest literary content and insights
+        </Typography>
+
+        {categories && (
+          <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 6 }}>
+            <Tabs
+              value={categoryFilter}
+              onChange={handleCategoryChange}
+              variant="scrollable"
+              scrollButtons="auto"
+              sx={{
+                '& .MuiTab-root': {
+                  fontWeight: 500,
+                  fontSize: '1rem',
+                },
+              }}
+            >
+              <Tab label="All" value="all" />
+              <Tab label="Think-pieces" value="think-pieces" />
+              <Tab label="Short stories" value="short-stories" />
+              <Tab label="Poetry" value="poetry" />
+              <Tab label="Real Life" value="real-life" />
+            </Tabs>
+          </Box>
+        )}
+
+        {isLoading ? (
+          <Box
+            sx={{
+              display: 'grid',
+              gridTemplateColumns: {
+                xs: 'repeat(1, minmax(0, 1fr))',
+                sm: 'repeat(2, minmax(0, 1fr))',
+                lg: 'repeat(3, minmax(0, 1fr))',
+              },
+              gap: { xs: 3, md: 3.5 },
+              mb: 6,
+            }}
+          >
+            {Array.from({ length: postsPerPage }).map((_, i) => (
+              <Box key={i}>
+                <Skeleton variant="rectangular" height={260} sx={{ mb: 2, borderRadius: 3 }} />
+                <Skeleton variant="text" width="70%" sx={{ mb: 1 }} />
+                <Skeleton variant="text" width="50%" />
+              </Box>
+            ))}
+          </Box>
+        ) : postsData && postsData.posts.length > 0 ? (
+          <>
+            <Box
+              sx={{
+                display: 'grid',
+                gridTemplateColumns: {
+                  xs: 'repeat(1, minmax(0, 1fr))',
+                  sm: 'repeat(2, minmax(0, 1fr))',
+                  lg: 'repeat(3, minmax(0, 1fr))',
+                },
+                gap: { xs: 3, md: 3.5 },
+                mb: 6,
+              }}
+            >
+              {postsData.posts.map((post) => (
+                <OverlayPostCard key={post.id} post={post} />
+              ))}
+            </Box>
+
+            {totalPages > 1 && (
+              <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                <Pagination
+                  count={totalPages}
+                  page={page}
+                  onChange={handlePageChange}
+                  color="primary"
+                  size="large"
+                />
+              </Box>
+            )}
+          </>
+        ) : (
+          <Box sx={{ textAlign: 'center', py: 8 }}>
+            <Typography variant="h6" color="text.secondary">
+              No posts found in this category
+            </Typography>
+          </Box>
+        )}
+      </Container>
+    </Box>
+  );
+};
+
+export default RecentPosts;
